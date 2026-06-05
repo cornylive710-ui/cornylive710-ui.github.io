@@ -50,8 +50,7 @@
     }
 
     @keyframes float1 {
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0) scale(1);
       }
       50% {
@@ -60,8 +59,7 @@
     }
 
     @keyframes float2 {
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0) translateX(0);
       }
       25% {
@@ -76,8 +74,7 @@
     }
 
     @keyframes float3 {
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0) scale(1);
       }
       33% {
@@ -93,7 +90,7 @@
     ======================= */
     .container {
       max-width: 1400px;
-      margin: auto;
+      margin: 0 auto;
       padding: 60px 20px;
     }
 
@@ -103,26 +100,28 @@
     }
 
     .title h1 {
-      font-size: 54px;
+      font-size: clamp(32px, 8vw, 54px);
       font-weight: 800;
       margin-bottom: 10px;
     }
 
     .title p {
       color: #6b7280;
-      font-size: 18px;
+      font-size: clamp(14px, 2.5vw, 18px);
+      padding: 0 10px;
     }
 
     .cards {
       display: flex;
       justify-content: center;
-      gap: 40px;
+      gap: clamp(20px, 4vw, 40px);
       flex-wrap: wrap;
     }
 
     .main-card {
-      width: 420px;
-      height: 180px;
+      width: min(420px, 90vw);
+      height: auto;
+      min-height: 160px;
       background: linear-gradient(135deg, #3b82f6, #2563eb);
       border-radius: 36px;
       color: white;
@@ -131,25 +130,33 @@
       justify-content: center;
       align-items: center;
       cursor: pointer;
-      transition: 0.45s;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 30px 70px rgba(37, 99, 235, 0.25);
       border: none;
       outline: none;
       font-family: inherit;
+      padding: 30px 20px;
+      text-align: center;
     }
 
-    .main-card:hover {
-      transform: translateY(-10px) scale(1.03);
+    @media (hover: hover) {
+      .main-card:hover {
+        transform: translateY(-10px) scale(1.03);
+      }
+    }
+
+    .main-card:active {
+      transform: scale(0.98);
     }
 
     .main-card h2 {
-      font-size: 34px;
-      text-align: center;
+      font-size: clamp(24px, 6vw, 34px);
     }
 
     .main-card span {
       opacity: 0.9;
       margin-top: 10px;
+      font-size: clamp(13px, 2.5vw, 16px);
     }
 
     /* =======================
@@ -170,8 +177,8 @@
     }
 
     .center-node {
-      width: 340px;
-      margin: auto;
+      width: min(340px, 85vw);
+      margin: 0 auto;
       background: white;
       border: 1px solid #e5e7eb;
       border-radius: 26px;
@@ -181,7 +188,7 @@
     }
 
     .center-node h3 {
-      font-size: 26px;
+      font-size: clamp(20px, 5vw, 26px);
     }
 
     .common {
@@ -193,26 +200,28 @@
     }
 
     .common span {
-      padding: 10px 14px;
+      padding: 8px 14px;
       border-radius: 999px;
       background: #eff6ff;
       color: #2563eb;
       font-weight: 600;
+      font-size: clamp(12px, 2.5vw, 14px);
     }
 
     .branch-title {
       text-align: center;
       margin: 60px 0 30px;
-      font-size: 30px;
+      font-size: clamp(22px, 5vw, 30px);
       font-weight: 800;
     }
 
     .nodes {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
       gap: 22px;
       max-width: 1000px;
       margin: 0 auto;
+      padding: 0 10px;
     }
 
     .node {
@@ -220,26 +229,33 @@
       border: 1px solid #e5e7eb;
       border-radius: 24px;
       padding: 24px;
-      transition: all 0.35s ease;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
       cursor: pointer;
       position: relative;
     }
 
-    .node:hover {
-      transform: translateY(-6px);
-      border-color: #93c5fd;
+    @media (hover: hover) {
+      .node:hover {
+        transform: translateY(-6px);
+        border-color: #93c5fd;
+      }
+    }
+
+    .node:active {
+      transform: scale(0.98);
     }
 
     .node h4 {
       margin-bottom: 10px;
       color: #2563eb;
-      font-size: 20px;
+      font-size: clamp(18px, 4vw, 20px);
     }
 
     .node p {
       color: #6b7280;
       line-height: 1.5;
+      font-size: clamp(14px, 2.5vw, 16px);
     }
 
     /* Подсветка выбранного узла */
@@ -257,12 +273,12 @@
       max-height: 0;
       opacity: 0;
       overflow: hidden;
-      transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.5s ease;
+      transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.5s ease, padding 0.5s ease;
       margin-top: 0;
       background: white;
       border-radius: 24px;
       border: 1px solid #e5e7eb;
-      padding: 0 30px;
+      padding: 0 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
       width: 100%;
       max-width: 800px;
@@ -274,18 +290,18 @@
       max-height: 600px;
       opacity: 1;
       margin-top: 30px;
-      padding: 30px;
+      padding: 30px 20px;
     }
 
     .info-panel h3 {
-      font-size: 28px;
+      font-size: clamp(22px, 5vw, 28px);
       margin-bottom: 15px;
       color: #111827;
     }
 
     .info-panel .info-description {
       color: #4b5563;
-      font-size: 18px;
+      font-size: clamp(15px, 2.5vw, 18px);
       line-height: 1.6;
       margin-bottom: 20px;
     }
@@ -301,30 +317,70 @@
     .info-panel li {
       background: #eff6ff;
       color: #1e40af;
-      padding: 8px 18px;
+      padding: 6px 16px;
       border-radius: 30px;
       font-weight: 500;
-      font-size: 15px;
+      font-size: clamp(13px, 2.5vw, 15px);
     }
 
     /* =======================
-       МОБИЛЬНЫЕ СТИЛИ
+       АДАПТИВНЫЕ СТИЛИ
     ======================= */
     @media (max-width: 768px) {
-      .title h1 {
-        font-size: 38px;
+      .container {
+        padding: 40px 16px;
+      }
+
+      .title {
+        margin-bottom: 40px;
       }
 
       .main-card {
         width: 100%;
+        min-height: 140px;
+      }
+
+      .graph.active {
+        margin-top: 50px;
       }
 
       .branch-title {
-        font-size: 24px;
+        margin: 40px 0 20px;
+      }
+
+      .nodes {
+        gap: 16px;
+      }
+
+      .node {
+        padding: 18px;
       }
 
       .info-panel.visible {
-        padding: 20px;
+        padding: 20px 15px;
+        margin-top: 25px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .nodes {
+        grid-template-columns: 1fr;
+      }
+
+      .center-node {
+        padding: 16px;
+      }
+
+      .common span {
+        padding: 6px 12px;
+      }
+
+      .info-panel ul {
+        gap: 8px;
+      }
+
+      .info-panel li {
+        padding: 5px 12px;
       }
     }
   </style>
@@ -436,18 +492,23 @@
 
   <script>
     // =======================
-    // ГЕНЕРАЦИЯ ФОНОВЫХ ШАРИКОВ
+    // ГЕНЕРАЦИЯ ФОНОВЫХ ШАРИКОВ (адаптивный размер)
     // =======================
     (function generateBalls() {
       const bg = document.getElementById('bg');
-      const count = 24; // больше шариков
+      const isMobile = window.innerWidth < 768;
+      const count = isMobile ? 14 : 24; // меньше шаров на телефонах
       const animNames = ['float1', 'float2', 'float3'];
 
       for (let i = 0; i < count; i++) {
         const ball = document.createElement('div');
         ball.className = 'ball';
 
-        const size = Math.floor(Math.random() * 80) + 40; // 40–120px
+        // Размер шаров меньше на мобильных
+        const maxSize = isMobile ? 60 : 120;
+        const minSize = isMobile ? 20 : 40;
+        const size = Math.floor(Math.random() * (maxSize - minSize)) + minSize;
+
         const left = Math.random() * 100;
         const top = Math.random() * 100;
         const dur = Math.random() * 12 + 12; // 12–24s
@@ -576,6 +637,11 @@
             ${tagsHTML}
           `;
           infoPanel.classList.add('visible');
+
+          // Прокрутка к информационной панели (особенно удобно на мобильных)
+          setTimeout(() => {
+            infoPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }, 100);
         }
       });
     });
