@@ -2,575 +2,4351 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Casino Royale X</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0a0a12">
+<title>Casino Royale X Premium</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <style>
+
 :root{
---g1:#ff2d2d;
---g2:#ff0055;
---g3:#9c27b0;
+
+--bg:#06060c;
+
+--red:#ff2d2d;
+--pink:#ff0055;
+--rose:#ff3366;
+--magenta:#d81b60;
+--purple:#9c27b0;
+--violet:#7b1fa2;
+--deep:#5e35b1;
+
 --glass:rgba(255,255,255,.08);
+--glass2:rgba(255,255,255,.05);
+--glass3:rgba(255,255,255,.03);
+
 --border:rgba(255,255,255,.14);
+
+--shadow:
+0 10px 40px rgba(0,0,0,.35);
+
+--gradient:
+linear-gradient(
+135deg,
+#ff2d2d,
+#ff0055,
+#ff3366,
+#d81b60,
+#9c27b0,
+#7b1fa2,
+#5e35b1
+);
+
 }
-*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Inter,sans-serif;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+html,
 body{
-background:#06060d;
-color:#fff;
+width:100%;
+height:100%;
 overflow:hidden;
-height:100vh;
+background:var(--bg);
+color:white;
 }
-.bg{
-position:fixed;inset:0;overflow:hidden;z-index:-5;
-background:
-radial-gradient(circle at 15% 20%,rgba(255,0,85,.18),transparent 35%),
-radial-gradient(circle at 80% 20%,rgba(156,39,176,.18),transparent 35%),
-radial-gradient(circle at 50% 90%,rgba(255,45,45,.15),transparent 40%),
-#06060d;
-}
-.orb{
-position:absolute;
-border-radius:50%;
-filter:blur(100px);
-opacity:.5;
-}
-.o1{width:500px;height:500px;background:#ff0055;left:-120px;top:-120px}
-.o2{width:400px;height:400px;background:#9c27b0;right:-100px;top:20%}
-.o3{width:350px;height:350px;background:#ff3366;bottom:-100px;left:30%}
-.cursor{
+
+/* ===================================
+BACKGROUND SYSTEM
+=================================== */
+
+.background{
+
 position:fixed;
-width:280px;height:280px;
+
+inset:0;
+
+overflow:hidden;
+
+z-index:-100;
+
+}
+
+.mesh{
+
+position:absolute;
+
+inset:0;
+
+background:
+
+radial-gradient(
+circle at 10% 20%,
+rgba(255,0,85,.20),
+transparent 35%
+),
+
+radial-gradient(
+circle at 90% 10%,
+rgba(156,39,176,.18),
+transparent 35%
+),
+
+radial-gradient(
+circle at 80% 90%,
+rgba(255,45,45,.16),
+transparent 40%
+),
+
+radial-gradient(
+circle at 30% 80%,
+rgba(94,53,177,.15),
+transparent 45%
+),
+
+#06060c;
+
+}
+
+.orb{
+
+position:absolute;
+
 border-radius:50%;
+
+filter:blur(100px);
+
+mix-blend-mode:screen;
+
+opacity:.55;
+
+will-change:transform;
+
+}
+
+.orb-1{
+
+width:600px;
+height:600px;
+
+background:#ff0055;
+
+left:-180px;
+top:-180px;
+
+}
+
+.orb-2{
+
+width:500px;
+height:500px;
+
+background:#9c27b0;
+
+right:-160px;
+top:15%;
+
+}
+
+.orb-3{
+
+width:420px;
+height:420px;
+
+background:#ff3366;
+
+bottom:-120px;
+left:25%;
+
+}
+
+.orb-4{
+
+width:350px;
+height:350px;
+
+background:#5e35b1;
+
+top:55%;
+right:25%;
+
+}
+
+.glass-shape{
+
+position:absolute;
+
+background:
+rgba(255,255,255,.03);
+
+border:
+1px solid rgba(255,255,255,.04);
+
+backdrop-filter:
+blur(30px);
+
+}
+
+.shape-1{
+
+width:260px;
+height:260px;
+
+border-radius:70px;
+
+top:10%;
+left:70%;
+
+transform:
+rotate(25deg);
+
+}
+
+.shape-2{
+
+width:180px;
+height:180px;
+
+border-radius:50%;
+
+bottom:10%;
+left:8%;
+
+}
+
+.shape-3{
+
+width:220px;
+height:220px;
+
+border-radius:50px;
+
+right:10%;
+bottom:15%;
+
+transform:
+rotate(-18deg);
+
+}
+
+/* ===================================
+NOISE
+=================================== */
+
+.noise{
+
+position:fixed;
+
+inset:0;
+
 pointer-events:none;
-background:radial-gradient(circle,rgba(255,0,120,.25),transparent 70%);
-filter:blur(40px);
-z-index:99;
+
+opacity:.04;
+
+background-image:
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+
+z-index:999;
+
 }
+
+/* ===================================
+CURSOR GLOW
+=================================== */
+
+.cursor-glow{
+
+position:fixed;
+
+width:320px;
+height:320px;
+
+border-radius:50%;
+
+pointer-events:none;
+
+background:
+
+radial-gradient(
+circle,
+rgba(255,0,120,.25),
+rgba(156,39,176,.15),
+transparent 72%
+);
+
+filter:blur(50px);
+
+z-index:100;
+
+}
+
+/* ===================================
+APP LAYOUT
+=================================== */
+
 .app{
-display:flex;
+
+width:100%;
 height:100vh;
-padding:20px;
-gap:20px;
+
+padding:22px;
+
+display:flex;
+
+gap:22px;
+
 }
+
+/* ===================================
+SIDEBAR
+=================================== */
+
 .sidebar{
-width:250px;
-background:var(--glass);
-backdrop-filter:blur(35px);
-border:1px solid var(--border);
-border-radius:28px;
-padding:20px;
+
+width:290px;
+
+height:100%;
+
+background:
+var(--glass);
+
+backdrop-filter:
+blur(40px);
+
+border:
+1px solid var(--border);
+
+border-radius:34px;
+
+box-shadow:
+var(--shadow);
+
+padding:22px;
+
 display:flex;
 flex-direction:column;
-box-shadow:0 10px 40px rgba(0,0,0,.35);
+
+position:relative;
+
+overflow:hidden;
+
 }
+
+.sidebar::before{
+
+content:"";
+
+position:absolute;
+
+width:300px;
+height:300px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(
+circle,
+rgba(255,255,255,.12),
+transparent 70%
+);
+
+top:-180px;
+right:-120px;
+
+pointer-events:none;
+
+}
+
 .logo{
-font-size:1.8rem;
+
+font-size:2rem;
+
 font-weight:900;
-margin-bottom:25px;
-background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));
+
+letter-spacing:.5px;
+
+background:
+var(--gradient);
+
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
+
+margin-bottom:24px;
+
 }
-.balance{
-padding:16px;
-border-radius:18px;
-background:rgba(255,255,255,.05);
-margin-bottom:20px;
+
+.balance-card{
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:24px;
+
+padding:18px;
+
+margin-bottom:24px;
+
 }
-.balance span{
-font-size:1.8rem;
-font-weight:800;
-display:block;
+
+.balance-label{
+
+font-size:.8rem;
+
+opacity:.6;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+}
+
+.balance-value{
+
+font-size:2.1rem;
+
+font-weight:900;
+
 margin-top:6px;
+
 }
-.menu{
+
+.balance-profit{
+
+margin-top:8px;
+
+font-size:.9rem;
+
+color:#67ff9d;
+
+}
+
+.nav{
+
 display:flex;
 flex-direction:column;
+
 gap:10px;
+
 }
-.item{
-padding:14px 16px;
-border-radius:16px;
-cursor:pointer;
-transition:.3s;
-}
-.item:hover,.item.active{
-background:rgba(255,255,255,.08);
-transform:translateX(6px);
-}
-.main{
-flex:1;
-background:var(--glass);
-backdrop-filter:blur(35px);
-border:1px solid var(--border);
-border-radius:28px;
-padding:25px;
-position:relative;
-overflow:hidden;
-}
-.screen{
-display:none;
-height:100%;
-}
-.screen.active{
-display:block;
-animation:fade .4s ease;
-}
-@keyframes fade{
-from{opacity:0;transform:translateY(15px)}
-to{opacity:1;transform:none}
-}
-h1{
-font-size:2rem;
-margin-bottom:20px;
-}
-.hero{
-height:220px;
-border-radius:24px;
-background:
-linear-gradient(135deg,
-rgba(255,0,85,.2),
-rgba(156,39,176,.2));
-border:1px solid rgba(255,255,255,.1);
-padding:25px;
+
+.nav-item{
+
+height:58px;
+
 display:flex;
+align-items:center;
+
+padding:0 18px;
+
+border-radius:18px;
+
+cursor:pointer;
+
+transition:
+.35s ease;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.nav-item:hover{
+
+transform:
+translateX(8px);
+
+background:
+rgba(255,255,255,.08);
+
+}
+
+.nav-item.active{
+
+background:
+
+linear-gradient(
+135deg,
+rgba(255,0,85,.22),
+rgba(156,39,176,.22)
+);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+}
+
+.nav-icon{
+
+width:28px;
+
+font-size:1.1rem;
+
+margin-right:12px;
+
+display:flex;
+justify-content:center;
+
+}
+
+.nav-label{
+
+font-weight:600;
+
+}
+
+.sidebar-spacer{
+
+flex:1;
+
+}
+
+.profile-card{
+
+padding:16px;
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:22px;
+
+display:flex;
+align-items:center;
+
+gap:12px;
+
+}
+
+.avatar{
+
+width:48px;
+height:48px;
+
+border-radius:50%;
+
+background:
+var(--gradient);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-weight:800;
+
+}
+
+.profile-info{
+
+display:flex;
+flex-direction:column;
+
+}
+
+.profile-name{
+
+font-weight:700;
+
+}
+
+.profile-level{
+
+opacity:.6;
+
+font-size:.85rem;
+
+}
+
+/* ===================================
+MAIN CONTENT
+=================================== */
+
+.main{
+
+flex:1;
+
+height:100%;
+
+background:
+var(--glass);
+
+backdrop-filter:
+blur(40px);
+
+border:
+1px solid var(--border);
+
+border-radius:34px;
+
+box-shadow:
+var(--shadow);
+
+position:relative;
+
+overflow:hidden;
+
+padding:26px;
+
+}
+
+.main::before{
+
+content:"";
+
+position:absolute;
+
+width:420px;
+height:420px;
+
+border-radius:50%;
+
+background:
+radial-gradient(
+circle,
+rgba(255,255,255,.08),
+transparent 70%
+);
+
+right:-180px;
+top:-180px;
+
+pointer-events:none;
+
+}
+
+.topbar{
+
+height:70px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+}
+
+.page-title{
+
+font-size:2rem;
+
+font-weight:900;
+
+}
+
+.top-actions{
+
+display:flex;
+
+gap:12px;
+
+}
+
+.glass-button{
+
+height:48px;
+
+padding:0 18px;
+
+border:none;
+
+border-radius:16px;
+
+cursor:pointer;
+
+color:white;
+
+background:
+rgba(255,255,255,.08);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+backdrop-filter:
+blur(20px);
+
+transition:.3s;
+
+}
+
+.glass-button:hover{
+
+transform:
+translateY(-2px);
+
+box-shadow:
+
+0 0 10px rgba(255,0,85,.3),
+0 0 20px rgba(255,0,85,.2);
+
+}
+
+.content{
+
+position:absolute;
+
+left:26px;
+right:26px;
+
+top:110px;
+bottom:26px;
+
+overflow:hidden;
+
+}
+
+.screen{
+
+position:absolute;
+
+inset:0;
+
+opacity:0;
+
+pointer-events:none;
+
+transform:
+translateY(25px)
+scale(.98);
+
+transition:
+.45s ease;
+
+}
+
+.screen.active{
+
+opacity:1;
+
+pointer-events:auto;
+
+transform:none;
+
+}
+
+/* ===================================
+DASHBOARD HERO
+=================================== */
+
+.hero{
+
+height:260px;
+
+border-radius:32px;
+
+background:
+
+linear-gradient(
+135deg,
+rgba(255,0,85,.18),
+rgba(156,39,176,.18)
+);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+display:flex;
+
 align-items:center;
 justify-content:space-between;
+
+padding:34px;
+
+position:relative;
+
+overflow:hidden;
+
 }
-.orb-ai{
-width:140px;
-height:140px;
+
+.hero::before{
+
+content:"";
+
+position:absolute;
+
+width:500px;
+height:500px;
+
 border-radius:50%;
-background:radial-gradient(circle at 30% 30%,#ff2d2d,#ff0055,#9c27b0);
+
+right:-220px;
+top:-220px;
+
+background:
+
+radial-gradient(
+circle,
+rgba(255,255,255,.18),
+transparent 70%
+);
+
+}
+
+.hero-left{
+
+max-width:650px;
+
+}
+
+.hero-title{
+
+font-size:3.3rem;
+
+font-weight:900;
+
+line-height:1.05;
+
+}
+
+.hero-subtitle{
+
+margin-top:14px;
+
+font-size:1rem;
+
+opacity:.75;
+
+max-width:500px;
+
+}
+
+.hero-orb{
+
+width:180px;
+height:180px;
+
+border-radius:50%;
+
+background:
+
+radial-gradient(
+circle at 30% 30%,
+#ff2d2d,
+#ff0055,
+#9c27b0,
+#5e35b1
+);
+
 box-shadow:
+
 0 0 30px #ff0055,
-0 0 60px rgba(255,0,85,.5);
-animation:float 5s ease-in-out infinite;
+0 0 60px rgba(255,0,85,.4),
+0 0 120px rgba(255,0,85,.2);
+
 }
-@keyframes float{
-50%{transform:translateY(-15px)}
-}
-.cards{
+
+/* ===================================
+STATS GRID
+=================================== */
+
+.stats-grid{
+
+margin-top:22px;
+
 display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-margin-top:20px;
+
+grid-template-columns:
+repeat(4,1fr);
+
+gap:18px;
+
 }
-.card{
-padding:20px;
-border-radius:20px;
-background:rgba(255,255,255,.05);
-border:1px solid rgba(255,255,255,.08);
+
+.stat-card{
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:24px;
+
+padding:22px;
+
+transition:.35s;
+
 }
-.card h2{
+
+.stat-card:hover{
+
+transform:
+translateY(-8px);
+
+box-shadow:
+
+0 0 25px rgba(255,0,120,.15);
+
+}
+
+.stat-label{
+
+font-size:.85rem;
+
+opacity:.6;
+
+}
+
+.stat-value{
+
 font-size:2rem;
+
+font-weight:900;
+
 margin-top:10px;
+
 }
-.center{
+
+/* ===================================
+GAME CONTAINERS
+=================================== */
+
+.game-layout{
+
+width:100%;
 height:100%;
+
 display:flex;
 flex-direction:column;
+
 align-items:center;
 justify-content:center;
+
 }
-.reels{
+
+.game-title{
+
+font-size:3rem;
+
+font-weight:900;
+
+margin-bottom:18px;
+
+}
+
+.game-sub{
+
+opacity:.7;
+
+margin-bottom:24px;
+
+}
+
+.panel{
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:30px;
+
+padding:28px;
+
+backdrop-filter:
+blur(30px);
+
+}
+
+/* ===================================
+SLOTS
+=================================== */
+
+.slots-machine{
+
 display:flex;
-gap:15px;
-margin:25px 0;
+
+gap:16px;
+
+margin-bottom:24px;
+
 }
+
 .reel{
+
+width:130px;
+height:130px;
+
+border-radius:28px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:4rem;
+
+background:
+rgba(255,255,255,.08);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+box-shadow:
+0 10px 30px rgba(0,0,0,.2);
+
+}
+
+.controls{
+
+display:flex;
+
+gap:12px;
+
+margin-top:10px;
+
+}
+
+.bet-input{
+
+width:180px;
+
+height:54px;
+
+border:none;
+
+outline:none;
+
+padding:0 18px;
+
+border-radius:18px;
+
+background:
+rgba(255,255,255,.08);
+
+color:white;
+
+font-size:1rem;
+
+}
+
+.neon-button{
+
+height:54px;
+
+padding:0 24px;
+
+border:none;
+
+cursor:pointer;
+
+border-radius:18px;
+
+font-weight:700;
+
+color:white;
+
+background:
+var(--gradient);
+
+transition:.3s;
+
+}
+
+.neon-button:hover{
+
+transform:
+scale(1.05);
+
+box-shadow:
+
+0 0 10px #ff4ecd,
+0 0 20px #ff4ecd,
+0 0 40px #ff4ecd,
+0 0 80px #ff4ecd;
+
+}
+
+.result{
+
+margin-top:18px;
+
+font-size:1rem;
+
+min-height:24px;
+
+}
+
+/* ===================================
+BLACKJACK
+=================================== */
+
+.blackjack-table{
+
+width:100%;
+
+max-width:900px;
+
+padding:30px;
+
+border-radius:30px;
+
+background:
+rgba(255,255,255,.04);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+}
+
+.cards-row{
+
+display:flex;
+
+gap:12px;
+
+flex-wrap:wrap;
+
+margin-top:12px;
+
+margin-bottom:18px;
+
+}
+
+.playing-card{
+
+width:90px;
+height:130px;
+
+border-radius:18px;
+
+background:white;
+
+color:black;
+
+display:flex;
+
+align-items:center;
+justify-content:center;
+
+font-weight:900;
+
+font-size:1.4rem;
+
+}
+
+/* ===================================
+PART 1 END
+CSS CONTINUES IN PART 2
+=================================== */
+  /* ===================================
+DICE
+=================================== */
+
+.dice-wrap{
+
+display:flex;
+flex-direction:column;
+
+align-items:center;
+justify-content:center;
+
+}
+
+.dice-box{
+
+width:180px;
+height:180px;
+
+border-radius:34px;
+
+background:
+rgba(255,255,255,.08);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:6rem;
+
+margin-bottom:24px;
+
+box-shadow:
+0 10px 40px rgba(0,0,0,.25);
+
+}
+
+.dice-value{
+
+font-size:1.2rem;
+opacity:.8;
+
+margin-bottom:16px;
+
+}
+
+/* ===================================
+COIN FLIP
+=================================== */
+
+.coin-area{
+
+display:flex;
+flex-direction:column;
+
+align-items:center;
+
+}
+
+.coin{
+
+width:180px;
+height:180px;
+
+border-radius:50%;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:4rem;
+
+font-weight:900;
+
+background:
+
+linear-gradient(
+135deg,
+#ffd700,
+#ffb300
+);
+
+color:#222;
+
+margin-bottom:24px;
+
+transform-style:preserve-3d;
+
+box-shadow:
+
+0 0 20px rgba(255,215,0,.3),
+0 0 60px rgba(255,215,0,.2);
+
+}
+
+.coin-buttons{
+
+display:flex;
+
+gap:12px;
+
+}
+
+/* ===================================
+CRASH GAME
+=================================== */
+
+.crash-layout{
+
+width:100%;
+max-width:1000px;
+
+}
+
+.crash-header{
+
+display:flex;
+
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:18px;
+
+}
+
+.crash-multiplier{
+
+font-size:4rem;
+
+font-weight:900;
+
+background:var(--gradient);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+}
+
+.crash-canvas{
+
+width:100%;
+height:420px;
+
+border-radius:28px;
+
+background:
+rgba(255,255,255,.04);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+overflow:hidden;
+
+position:relative;
+
+}
+
+canvas{
+
+display:block;
+
+width:100%;
+height:100%;
+
+}
+
+.crash-controls{
+
+margin-top:20px;
+
+display:flex;
+
+gap:12px;
+
+}
+
+/* ===================================
+ACHIEVEMENTS
+=================================== */
+
+.achievements-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:18px;
+
+}
+
+.achievement{
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:24px;
+
+padding:20px;
+
+transition:.3s;
+
+}
+
+.achievement:hover{
+
+transform:
+translateY(-8px);
+
+}
+
+.achievement-icon{
+
+font-size:2rem;
+
+margin-bottom:12px;
+
+}
+
+.achievement-title{
+
+font-weight:700;
+
+margin-bottom:6px;
+
+}
+
+.achievement-desc{
+
+font-size:.9rem;
+
+opacity:.65;
+
+}
+
+/* ===================================
+PROFILE
+=================================== */
+
+.profile-layout{
+
+display:grid;
+
+grid-template-columns:
+340px 1fr;
+
+gap:22px;
+
+height:100%;
+
+}
+
+.profile-left{
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:30px;
+
+padding:24px;
+
+}
+
+.profile-big-avatar{
+
 width:120px;
 height:120px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:4rem;
-border-radius:24px;
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.12);
-}
-.controls{
-display:flex;
-gap:10px;
-}
-input{
-padding:15px;
-width:160px;
-border:none;
-outline:none;
-border-radius:16px;
-background:rgba(255,255,255,.08);
-color:#fff;
-}
-button{
-padding:15px 20px;
-border:none;
-border-radius:16px;
-cursor:pointer;
-font-weight:700;
-color:#fff;
-background:linear-gradient(135deg,var(--g2),var(--g3));
-transition:.3s;
-}
-button:hover{
-transform:scale(1.05);
-box-shadow:
-0 0 10px currentColor,
-0 0 20px currentColor,
-0 0 40px currentColor;
-}
-.result{
-margin-top:18px;
-min-height:24px;
-}
-.coin{
-width:140px;
-height:140px;
+
 border-radius:50%;
+
+margin:auto;
+
+background:
+var(--gradient);
+
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:3rem;
-font-weight:900;
-background:linear-gradient(135deg,#ffd700,#ffb300);
-color:#222;
-margin-bottom:20px;
-transition:.8s;
-}
-.flip{
-transform:rotateY(1080deg);
-}
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
-margin-top:20px;
-}
-.stat{
-padding:18px;
-border-radius:20px;
-background:rgba(255,255,255,.05);
-text-align:center;
-}
-.stat h3{
+
 font-size:2rem;
+font-weight:900;
+
+margin-bottom:18px;
+
+}
+
+.profile-center{
+
+text-align:center;
+
+}
+
+.profile-center h2{
+
 margin-bottom:6px;
+
 }
-@media(max-width:900px){
-body{overflow:auto}
-.app{flex-direction:column;height:auto}
-.sidebar{width:100%}
-.cards,.stats{grid-template-columns:1fr}
-.reel{width:90px;height:90px;font-size:3rem}
+
+.profile-center p{
+
+opacity:.6;
+
 }
+
+.profile-stats{
+
+margin-top:24px;
+
+display:grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap:12px;
+
+}
+
+.profile-stat{
+
+padding:16px;
+
+border-radius:18px;
+
+background:
+rgba(255,255,255,.05);
+
+}
+
+.profile-stat-value{
+
+font-size:1.4rem;
+
+font-weight:800;
+
+margin-top:6px;
+
+}
+
+.profile-right{
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+border-radius:30px;
+
+padding:24px;
+
+overflow:auto;
+
+}
+
+.activity-item{
+
+padding:16px;
+
+border-radius:18px;
+
+margin-bottom:12px;
+
+background:
+rgba(255,255,255,.04);
+
+}
+
+/* ===================================
+LEADERBOARD
+=================================== */
+
+.leaderboard{
+
+display:flex;
+flex-direction:column;
+
+gap:12px;
+
+}
+
+.player-row{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+padding:18px;
+
+border-radius:20px;
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+}
+
+.player-left{
+
+display:flex;
+
+align-items:center;
+
+gap:14px;
+
+}
+
+.rank{
+
+width:38px;
+height:38px;
+
+border-radius:12px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-weight:800;
+
+background:
+rgba(255,255,255,.08);
+
+}
+
+.player-avatar{
+
+width:42px;
+height:42px;
+
+border-radius:50%;
+
+background:
+var(--gradient);
+
+}
+
+.player-profit{
+
+font-weight:800;
+
+color:#6eff9b;
+
+}
+
+/* ===================================
+DAILY REWARDS
+=================================== */
+
+.rewards-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(7,1fr);
+
+gap:14px;
+
+}
+
+.reward-day{
+
+height:130px;
+
+border-radius:22px;
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+display:flex;
+
+flex-direction:column;
+
+align-items:center;
+justify-content:center;
+
+transition:.3s;
+
+}
+
+.reward-day:hover{
+
+transform:
+translateY(-8px);
+
+}
+
+.reward-day.active{
+
+background:
+
+linear-gradient(
+135deg,
+rgba(255,0,85,.25),
+rgba(156,39,176,.25)
+);
+
+}
+
+.reward-day span{
+
+font-size:2rem;
+
+margin-bottom:8px;
+
+}
+
+/* ===================================
+SETTINGS
+=================================== */
+
+.settings-layout{
+
+display:grid;
+
+grid-template-columns:
+1fr 1fr;
+
+gap:20px;
+
+}
+
+.setting-card{
+
+padding:22px;
+
+border-radius:24px;
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+}
+
+.setting-title{
+
+font-weight:700;
+
+margin-bottom:12px;
+
+}
+
+.switch{
+
+width:60px;
+height:34px;
+
+border-radius:50px;
+
+background:
+rgba(255,255,255,.12);
+
+position:relative;
+
+cursor:pointer;
+
+}
+
+.switch::after{
+
+content:"";
+
+position:absolute;
+
+width:26px;
+height:26px;
+
+border-radius:50%;
+
+background:white;
+
+left:4px;
+top:4px;
+
+transition:.3s;
+
+}
+
+.switch.active::after{
+
+left:30px;
+
+}
+
+/* ===================================
+PARTICLES LAYER
+=================================== */
+
+.particles{
+
+position:fixed;
+
+inset:0;
+
+pointer-events:none;
+
+overflow:hidden;
+
+z-index:-50;
+
+}
+
+.particle{
+
+position:absolute;
+
+border-radius:50%;
+
+background:
+rgba(255,255,255,.18);
+
+filter:blur(2px);
+
+}
+
+/* ===================================
+SCROLLBAR
+=================================== */
+
+::-webkit-scrollbar{
+width:8px;
+height:8px;
+}
+
+::-webkit-scrollbar-track{
+background:transparent;
+}
+
+::-webkit-scrollbar-thumb{
+
+background:
+rgba(255,255,255,.12);
+
+border-radius:20px;
+
+}
+
+/* ===================================
+RESPONSIVE
+=================================== */
+
+@media(max-width:1400px){
+
+.stats-grid{
+grid-template-columns:
+repeat(2,1fr);
+}
+
+.achievements-grid{
+grid-template-columns:
+repeat(2,1fr);
+}
+
+}
+
+@media(max-width:1100px){
+
+html,
+body{
+overflow:auto;
+}
+
+.app{
+
+flex-direction:column;
+
+height:auto;
+
+overflow:visible;
+
+}
+
+.sidebar{
+
+width:100%;
+height:auto;
+
+}
+
+.main{
+
+height:1400px;
+
+}
+
+.profile-layout{
+
+grid-template-columns:
+1fr;
+
+}
+
+.rewards-grid{
+
+grid-template-columns:
+repeat(4,1fr);
+
+}
+
+}
+
+@media(max-width:768px){
+
+.hero{
+
+flex-direction:column;
+
+justify-content:center;
+
+text-align:center;
+
+gap:20px;
+
+height:auto;
+
+padding:30px;
+
+}
+
+.hero-title{
+
+font-size:2.2rem;
+
+}
+
+.stats-grid{
+
+grid-template-columns:
+1fr;
+
+}
+
+.achievements-grid{
+
+grid-template-columns:
+1fr;
+
+}
+
+.rewards-grid{
+
+grid-template-columns:
+repeat(2,1fr);
+
+}
+
+.slots-machine{
+
+flex-wrap:wrap;
+
+justify-content:center;
+
+}
+
+.reel{
+
+width:100px;
+height:100px;
+
+font-size:3rem;
+
+}
+
+.controls{
+
+flex-direction:column;
+
+width:100%;
+
+}
+
+.bet-input{
+
+width:100%;
+
+}
+
+.profile-stats{
+
+grid-template-columns:
+1fr;
+
+}
+
+.settings-layout{
+
+grid-template-columns:
+1fr;
+
+}
+
+}
+
+@keyframes floatY{
+
+0%,100%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-20px);
+}
+
+}
+
+@keyframes pulseGlow{
+
+0%,100%{
+
+box-shadow:
+0 0 15px rgba(255,0,85,.2);
+
+}
+
+50%{
+
+box-shadow:
+0 0 35px rgba(255,0,85,.45);
+
+}
+
+}
+
+@keyframes rotateSlow{
+
+from{
+transform:rotate(0deg);
+}
+
+to{
+transform:rotate(360deg);
+}
+
+}
+
 </style>
 </head>
 <body>
 
-<div class="bg">
-<div class="orb o1"></div>
-<div class="orb o2"></div>
-<div class="orb o3"></div>
+<div class="background">
+
+    <div class="mesh"></div>
+
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="orb orb-4"></div>
+
+    <div class="glass-shape shape-1"></div>
+    <div class="glass-shape shape-2"></div>
+    <div class="glass-shape shape-3"></div>
+
 </div>
 
-<div class="cursor"></div>
+<div class="particles" id="particles"></div>
+
+<div class="noise"></div>
+
+<div class="cursor-glow" id="cursorGlow"></div>
 
 <div class="app">
 
-<div class="sidebar">
-<div class="logo">ROYALE X</div>
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
 
-<div class="balance">
-Баланс
-<span id="balance">$1000</span>
-</div>
+    <aside class="sidebar">
 
-<div class="menu">
-<div class="item active" data="home">🏠 Главная</div>
-<div class="item" data="slots">🎰 Слоты</div>
-<div class="item" data="coin">🪙 Орёл / Решка</div>
-<div class="item" data="stats">📊 Статистика</div>
-</div>
-</div>
+        <div class="logo">
+            ROYALE X
+        </div>
 
-<div class="main">
+        <div class="balance-card">
 
-<div class="screen active" id="home">
+            <div class="balance-label">
+                Текущий баланс
+            </div>
 
-<h1>Premium Glass Casino</h1>
+            <div class="balance-value" id="balanceValue">
+                $10,000
+            </div>
 
-<div class="hero">
-<div>
-<h2 style="font-size:2.8rem">Casino Royale X</h2>
-<div style="opacity:.75;margin-top:8px">
-VisionOS × Stake × Linear
-</div>
-</div>
+            <div class="balance-profit" id="profitValue">
+                +$0 сегодня
+            </div>
 
-<div class="orb-ai"></div>
-</div>
+        </div>
 
-<div class="cards">
-<div class="card">
-VIP Уровень
-<h2>Gold</h2>
-</div>
+        <nav class="nav">
 
-<div class="card">
-Побед
-<h2 id="winsHome">0</h2>
-</div>
+            <div class="nav-item active" data-screen="dashboard">
 
-<div class="card">
-Игр
-<h2 id="gamesHome">0</h2>
-</div>
-</div>
+                <div class="nav-icon">🏠</div>
+                <div class="nav-label">Главная</div>
 
-</div>
+            </div>
 
-<div class="screen" id="slots">
+            <div class="nav-item" data-screen="slots">
 
-<div class="center">
+                <div class="nav-icon">🎰</div>
+                <div class="nav-label">Слоты</div>
 
-<h1>🎰 Neon Slots</h1>
+            </div>
 
-<div class="reels">
-<div class="reel" id="r1">🍒</div>
-<div class="reel" id="r2">💎</div>
-<div class="reel" id="r3">⭐</div>
-</div>
+            <div class="nav-item" data-screen="blackjack">
 
-<div class="controls">
-<input id="bet" type="number" value="50">
-<button onclick="spin()">SPIN</button>
-</div>
+                <div class="nav-icon">🃏</div>
+                <div class="nav-label">Blackjack</div>
 
-<div class="result" id="slotResult"></div>
+            </div>
 
-</div>
+            <div class="nav-item" data-screen="coinflip">
 
-</div>
+                <div class="nav-icon">🪙</div>
+                <div class="nav-label">Coin Flip</div>
 
-<div class="screen" id="coin">
+            </div>
 
-<div class="center">
+            <div class="nav-item" data-screen="dice">
 
-<h1>🪙 Coin Flip</h1>
+                <div class="nav-icon">🎲</div>
+                <div class="nav-label">Dice</div>
 
-<div class="coin" id="coinEl">?</div>
+            </div>
 
-<div class="controls">
-<button onclick="flip('Орёл')">Орёл</button>
-<button onclick="flip('Решка')">Решка</button>
-</div>
+            <div class="nav-item" data-screen="crash">
 
-<div class="result" id="coinResult"></div>
+                <div class="nav-icon">📈</div>
+                <div class="nav-label">Crash</div>
 
-</div>
+            </div>
 
-</div>
+            <div class="nav-item" data-screen="achievements">
 
-<div class="screen" id="stats">
+                <div class="nav-icon">🏆</div>
+                <div class="nav-label">Достижения</div>
 
-<h1>Статистика</h1>
+            </div>
 
-<div class="stats">
+            <div class="nav-item" data-screen="leaderboard">
 
-<div class="stat">
-<h3 id="wins">0</h3>
-Побед
-</div>
+                <div class="nav-icon">👑</div>
+                <div class="nav-label">Лидеры</div>
 
-<div class="stat">
-<h3 id="losses">0</h3>
-Поражений
-</div>
+            </div>
 
-<div class="stat">
-<h3 id="games">0</h3>
-Игр
-</div>
+            <div class="nav-item" data-screen="profile">
 
-</div>
+                <div class="nav-icon">👤</div>
+                <div class="nav-label">Профиль</div>
 
-</div>
+            </div>
 
-</div>
+            <div class="nav-item" data-screen="rewards">
+
+                <div class="nav-icon">🎁</div>
+                <div class="nav-label">Награды</div>
+
+            </div>
+
+            <div class="nav-item" data-screen="settings">
+
+                <div class="nav-icon">⚙️</div>
+                <div class="nav-label">Настройки</div>
+
+            </div>
+
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="profile-card">
+
+            <div class="avatar">
+                RX
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-name">
+                    Premium Player
+                </div>
+
+                <div class="profile-level">
+                    VIP Gold Member
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <!-- =====================================
+         MAIN
+    ====================================== -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="page-title" id="pageTitle">
+                Dashboard
+            </div>
+
+            <div class="top-actions">
+
+                <button class="glass-button">
+                    🔔
+                </button>
+
+                <button class="glass-button">
+                    💎 VIP
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="content">
+
+            <!-- =====================================
+                 DASHBOARD
+            ====================================== -->
+
+            <section class="screen active" id="dashboard">
+
+                <div class="hero">
+
+                    <div class="hero-left">
+
+                        <div class="hero-title">
+                            Casino Royale X
+                        </div>
+
+                        <div class="hero-subtitle">
+
+                            Премиальное виртуальное казино
+                            в стиле Apple Vision Pro,
+                            Arc Browser, Linear и
+                            современных интерфейсов 2026 года.
+
+                        </div>
+
+                    </div>
+
+                    <div class="hero-orb"></div>
+
+                </div>
+
+                <div class="stats-grid">
+
+                    <div class="stat-card">
+
+                        <div class="stat-label">
+                            Баланс
+                        </div>
+
+                        <div class="stat-value" id="dashboardBalance">
+                            $10,000
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-label">
+                            Победы
+                        </div>
+
+                        <div class="stat-value" id="winsStat">
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-label">
+                            Поражения
+                        </div>
+
+                        <div class="stat-value" id="lossStat">
+                            0
+                        </div>
+
+                    </div>
+
+                    <div class="stat-card">
+
+                        <div class="stat-label">
+                            Игр сыграно
+                        </div>
+
+                        <div class="stat-value" id="gamesStat">
+                            0
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 SLOTS
+            ====================================== -->
+
+            <section class="screen" id="slots">
+
+                <div class="game-layout">
+
+                    <div class="game-title">
+                        🎰 Neon Slots
+                    </div>
+
+                    <div class="game-sub">
+                        Совпадение 3 символов = x5 ставка
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="slots-machine">
+
+                            <div class="reel" id="slot1">
+                                🍒
+                            </div>
+
+                            <div class="reel" id="slot2">
+                                💎
+                            </div>
+
+                            <div class="reel" id="slot3">
+                                ⭐
+                            </div>
+
+                        </div>
+
+                        <div class="controls">
+
+                            <input
+                                id="slotBet"
+                                class="bet-input"
+                                type="number"
+                                value="100"
+                                min="10"
+                            >
+
+                            <button
+                                class="neon-button"
+                                id="spinButton">
+
+                                SPIN
+
+                            </button>
+
+                        </div>
+
+                        <div class="result" id="slotResult">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 BLACKJACK
+            ====================================== -->
+
+            <section class="screen" id="blackjack">
+
+                <div class="game-layout">
+
+                    <div class="game-title">
+                        🃏 Blackjack
+                    </div>
+
+                    <div class="game-sub">
+                        Наберите 21 или ближе к нему
+                    </div>
+
+                    <div class="blackjack-table">
+
+                        <h3>
+                            Дилер
+                        </h3>
+
+                        <div
+                            class="cards-row"
+                            id="dealerCards">
+
+                        </div>
+
+                        <h3>
+                            Игрок
+                        </h3>
+
+                        <div
+                            class="cards-row"
+                            id="playerCards">
+
+                        </div>
+
+                        <div class="controls">
+
+                            <button
+                                class="neon-button"
+                                id="startBlackjack">
+
+                                Новая игра
+
+                            </button>
+
+                            <button
+                                class="neon-button"
+                                id="hitButton">
+
+                                Hit
+
+                            </button>
+
+                            <button
+                                class="neon-button"
+                                id="standButton">
+
+                                Stand
+
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="result"
+                            id="blackjackResult">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+               PART 3 END
+               CONTINUES IN PART 4
+            ====================================== -->
+          
+            <!-- =====================================
+                 COIN FLIP
+            ====================================== -->
+
+            <section class="screen" id="coinflip">
+
+                <div class="game-layout">
+
+                    <div class="game-title">
+                        🪙 Coin Flip
+                    </div>
+
+                    <div class="game-sub">
+                        Выберите сторону монеты и испытайте удачу
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="coin-area">
+
+                            <div
+                                class="coin"
+                                id="coin">
+
+                                ₿
+
+                            </div>
+
+                            <div class="coin-buttons">
+
+                                <button
+                                    class="neon-button"
+                                    id="headsButton">
+
+                                    Орёл
+
+                                </button>
+
+                                <button
+                                    class="neon-button"
+                                    id="tailsButton">
+
+                                    Решка
+
+                                </button>
+
+                            </div>
+
+                            <div
+                                class="result"
+                                id="coinResult">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 DICE
+            ====================================== -->
+
+            <section class="screen" id="dice">
+
+                <div class="game-layout">
+
+                    <div class="game-title">
+                        🎲 Dice Roll
+                    </div>
+
+                    <div class="game-sub">
+                        Бросайте кубик и выигрывайте награды
+                    </div>
+
+                    <div class="panel">
+
+                        <div class="dice-wrap">
+
+                            <div
+                                class="dice-box"
+                                id="diceBox">
+
+                                ⚀
+
+                            </div>
+
+                            <div
+                                class="dice-value"
+                                id="diceValue">
+
+                                Выпало: 1
+
+                            </div>
+
+                            <button
+                                class="neon-button"
+                                id="rollDice">
+
+                                Бросить кубик
+
+                            </button>
+
+                            <div
+                                class="result"
+                                id="diceResult">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 CRASH
+            ====================================== -->
+
+            <section class="screen" id="crash">
+
+                <div class="game-layout">
+
+                    <div class="crash-layout">
+
+                        <div class="crash-header">
+
+                            <div>
+
+                                <div class="game-title">
+                                    📈 Crash
+                                </div>
+
+                                <div class="game-sub">
+                                    Успей забрать выигрыш
+                                    до обрушения графика
+                                </div>
+
+                            </div>
+
+                            <div
+                                class="crash-multiplier"
+                                id="crashMultiplier">
+
+                                1.00x
+
+                            </div>
+
+                        </div>
+
+                        <div class="crash-canvas">
+
+                            <canvas
+                                id="crashCanvas">
+
+                            </canvas>
+
+                        </div>
+
+                        <div class="crash-controls">
+
+                            <button
+                                class="neon-button"
+                                id="startCrash">
+
+                                START
+
+                            </button>
+
+                            <button
+                                class="neon-button"
+                                id="cashoutCrash">
+
+                                CASHOUT
+
+                            </button>
+
+                        </div>
+
+                        <div
+                            class="result"
+                            id="crashResult">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 ACHIEVEMENTS
+            ====================================== -->
+
+            <section
+                class="screen"
+                id="achievements">
+
+                <div class="achievements-grid">
+
+                    <div class="achievement">
+
+                        <div class="achievement-icon">
+                            🏆
+                        </div>
+
+                        <div class="achievement-title">
+                            Первый выигрыш
+                        </div>
+
+                        <div class="achievement-desc">
+                            Победите в любой игре
+                        </div>
+
+                    </div>
+
+                    <div class="achievement">
+
+                        <div class="achievement-icon">
+                            💰
+                        </div>
+
+                        <div class="achievement-title">
+                            Большой куш
+                        </div>
+
+                        <div class="achievement-desc">
+                            Выиграйте более $5000
+                        </div>
+
+                    </div>
+
+                    <div class="achievement">
+
+                        <div class="achievement-icon">
+                            🎰
+                        </div>
+
+                        <div class="achievement-title">
+                            Slot Master
+                        </div>
+
+                        <div class="achievement-desc">
+                            Сделайте 100 вращений
+                        </div>
+
+                    </div>
+
+                    <div class="achievement">
+
+                        <div class="achievement-icon">
+                            👑
+                        </div>
+
+                        <div class="achievement-title">
+                            VIP
+                        </div>
+
+                        <div class="achievement-desc">
+                            Достигните баланса $50000
+                        </div>
+
+                    </div>
+
+                    <div class="achievement">
+
+                        <div class="achievement-icon">
+                            ⚡
+                        </div>
+
+                        <div class="achievement-title">
+                            Risk Player
+                        </div>
+
+                        <div class="achievement-desc">
+                            Сыграйте в Crash
+                        </div>
+
+                    </div>
+
+                    <div class="achievement">
+
+                        <div class="achievement-icon">
+                            🔥
+                        </div>
+
+                        <div class="achievement-title">
+                            Lucky Streak
+                        </div>
+
+                        <div class="achievement-desc">
+                            Выиграйте 5 раз подряд
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 LEADERBOARD
+            ====================================== -->
+
+            <section
+                class="screen"
+                id="leaderboard">
+
+                <div class="leaderboard">
+
+                    <div class="player-row">
+
+                        <div class="player-left">
+
+                            <div class="rank">
+                                1
+                            </div>
+
+                            <div class="player-avatar"></div>
+
+                            <div>
+
+                                <strong>
+                                    NeonKing
+                                </strong>
+
+                                <div>
+                                    VIP Diamond
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="player-profit">
+                            +$248,900
+                        </div>
+
+                    </div>
+
+                    <div class="player-row">
+
+                        <div class="player-left">
+
+                            <div class="rank">
+                                2
+                            </div>
+
+                            <div class="player-avatar"></div>
+
+                            <div>
+
+                                <strong>
+                                    ShadowAce
+                                </strong>
+
+                                <div>
+                                    High Roller
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="player-profit">
+                            +$182,200
+                        </div>
+
+                    </div>
+
+                    <div class="player-row">
+
+                        <div class="player-left">
+
+                            <div class="rank">
+                                3
+                            </div>
+
+                            <div class="player-avatar"></div>
+
+                            <div>
+
+                                <strong>
+                                    QuantumBet
+                                </strong>
+
+                                <div>
+                                    Elite
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="player-profit">
+                            +$144,500
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 PROFILE
+            ====================================== -->
+
+            <section
+                class="screen"
+                id="profile">
+
+                <div class="profile-layout">
+
+                    <div class="profile-left">
+
+                        <div
+                            class="profile-big-avatar">
+
+                            RX
+
+                        </div>
+
+                        <div class="profile-center">
+
+                            <h2>
+                                Premium Player
+                            </h2>
+
+                            <p>
+                                VIP Gold Member
+                            </p>
+
+                        </div>
+
+                        <div class="profile-stats">
+
+                            <div class="profile-stat">
+
+                                Уровень
+
+                                <div
+                                    class="profile-stat-value">
+
+                                    27
+
+                                </div>
+
+                            </div>
+
+                            <div class="profile-stat">
+
+                                Побед
+
+                                <div
+                                    class="profile-stat-value"
+                                    id="profileWins">
+
+                                    0
+
+                                </div>
+
+                            </div>
+
+                            <div class="profile-stat">
+
+                                Баланс
+
+                                <div
+                                    class="profile-stat-value"
+                                    id="profileBalance">
+
+                                    $10000
+
+                                </div>
+
+                            </div>
+
+                            <div class="profile-stat">
+
+                                Игр
+
+                                <div
+                                    class="profile-stat-value"
+                                    id="profileGames">
+
+                                    0
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="profile-right">
+
+                        <h2>
+                            Последняя активность
+                        </h2>
+
+                        <br>
+
+                        <div class="activity-item">
+                            🎰 Вращение слотов
+                        </div>
+
+                        <div class="activity-item">
+                            🃏 Игра в Blackjack
+                        </div>
+
+                        <div class="activity-item">
+                            📈 Crash режим
+                        </div>
+
+                        <div class="activity-item">
+                            🏆 Получено достижение
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+               PART 4 END
+               CONTINUES IN PART 5
+            ====================================== -->
+          
+            <!-- =====================================
+                 DAILY REWARDS
+            ====================================== -->
+
+            <section
+                class="screen"
+                id="rewards">
+
+                <div class="game-layout">
+
+                    <div class="game-title">
+                        🎁 Daily Rewards
+                    </div>
+
+                    <div class="game-sub">
+                        Заходите каждый день и получайте бонусы
+                    </div>
+
+                    <div class="rewards-grid">
+
+                        <div class="reward-day active">
+                            <span>💵</span>
+                            Day 1
+                            <small>$100</small>
+                        </div>
+
+                        <div class="reward-day">
+                            <span>💎</span>
+                            Day 2
+                            <small>$250</small>
+                        </div>
+
+                        <div class="reward-day">
+                            <span>🎰</span>
+                            Day 3
+                            <small>$500</small>
+                        </div>
+
+                        <div class="reward-day">
+                            <span>🔥</span>
+                            Day 4
+                            <small>$1000</small>
+                        </div>
+
+                        <div class="reward-day">
+                            <span>⚡</span>
+                            Day 5
+                            <small>$2500</small>
+                        </div>
+
+                        <div class="reward-day">
+                            <span>👑</span>
+                            Day 6
+                            <small>$5000</small>
+                        </div>
+
+                        <div class="reward-day">
+                            <span>🚀</span>
+                            Day 7
+                            <small>$10000</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- =====================================
+                 SETTINGS
+            ====================================== -->
+
+            <section
+                class="screen"
+                id="settings">
+
+                <div class="settings-layout">
+
+                    <div class="setting-card">
+
+                        <div class="setting-title">
+                            Анимации интерфейса
+                        </div>
+
+                        <div
+                            class="switch active"
+                            id="animSwitch">
+
+                        </div>
+
+                    </div>
+
+                    <div class="setting-card">
+
+                        <div class="setting-title">
+                            Неоновое свечение
+                        </div>
+
+                        <div
+                            class="switch active"
+                            id="glowSwitch">
+
+                        </div>
+
+                    </div>
+
+                    <div class="setting-card">
+
+                        <div class="setting-title">
+                            Частицы фона
+                        </div>
+
+                        <div
+                            class="switch active"
+                            id="particleSwitch">
+
+                        </div>
+
+                    </div>
+
+                    <div class="setting-card">
+
+                        <div class="setting-title">
+                            Liquid Glass режим
+                        </div>
+
+                        <div
+                            class="switch active"
+                            id="glassSwitch">
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
 
 </div>
 
 <script>
 
-let balance=1000;
-let wins=0;
-let losses=0;
-let games=0;
+/* =====================================
+   CASINO ROYALE X
+   CORE ENGINE
+===================================== */
 
-const symbols=["🍒","💎","⭐","🍋","7️⃣","🍇"];
+const screens =
+document.querySelectorAll(".screen");
+
+const navItems =
+document.querySelectorAll(".nav-item");
+
+const pageTitle =
+document.getElementById("pageTitle");
+
+navItems.forEach(item=>{
+
+    item.addEventListener("click",()=>{
+
+        navItems.forEach(n=>
+            n.classList.remove("active")
+        );
+
+        item.classList.add("active");
+
+        const target =
+        item.dataset.screen;
+
+        screens.forEach(screen=>
+            screen.classList.remove("active")
+        );
+
+        document
+        .getElementById(target)
+        .classList
+        .add("active");
+
+        pageTitle.textContent =
+        item.innerText.trim();
+
+    });
+
+});
+
+/* =====================================
+   PLAYER DATA
+===================================== */
+
+let balance = 10000;
+let wins = 0;
+let losses = 0;
+let games = 0;
+
+const balanceValue =
+document.getElementById(
+"balanceValue"
+);
+
+const dashboardBalance =
+document.getElementById(
+"dashboardBalance"
+);
+
+const profileBalance =
+document.getElementById(
+"profileBalance"
+);
+
+const winsStat =
+document.getElementById(
+"winsStat"
+);
+
+const lossStat =
+document.getElementById(
+"lossStat"
+);
+
+const gamesStat =
+document.getElementById(
+"gamesStat"
+);
+
+const profileWins =
+document.getElementById(
+"profileWins"
+);
+
+const profileGames =
+document.getElementById(
+"profileGames"
+);
 
 function updateUI(){
-balance=Math.max(balance,0);
-document.getElementById("balance").textContent="$"+balance;
-winsHome.textContent=wins;
-gamesHome.textContent=games;
-wins.textContent=wins;
-losses.textContent=losses;
-games.textContent=games;
+
+    balanceValue.textContent =
+    "$" + balance.toLocaleString();
+
+    dashboardBalance.textContent =
+    "$" + balance.toLocaleString();
+
+    profileBalance.textContent =
+    "$" + balance.toLocaleString();
+
+    winsStat.textContent =
+    wins;
+
+    lossStat.textContent =
+    losses;
+
+    gamesStat.textContent =
+    games;
+
+    profileWins.textContent =
+    wins;
+
+    profileGames.textContent =
+    games;
+
 }
 
-function addWin(v){
-balance+=v;
-wins++;
-games++;
 updateUI();
-}
 
-function addLoss(v){
-balance-=v;
-losses++;
-games++;
-updateUI();
-}
+/* =====================================
+   CURSOR GLOW
+===================================== */
 
-document.querySelectorAll(".item").forEach(btn=>{
-btn.onclick=()=>{
-document.querySelectorAll(".item").forEach(x=>x.classList.remove("active"));
-btn.classList.add("active");
+const glow =
+document.getElementById(
+"cursorGlow"
+);
 
-document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+let mouseX = 0;
+let mouseY = 0;
 
-document.getElementById(btn.dataset.data).classList.add("active");
-};
+let glowX = 0;
+let glowY = 0;
+
+window.addEventListener(
+"mousemove",
+e=>{
+
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
 });
 
-function spin(){
+function animateGlow(){
 
-let bet=parseInt(document.getElementById("bet").value)||0;
+    glowX +=
+    (mouseX-glowX)*0.12;
 
-if(bet<=0||bet>balance)return;
+    glowY +=
+    (mouseY-glowY)*0.12;
 
-let c=0;
+    glow.style.transform =
+    `translate(
+    ${glowX-160}px,
+    ${glowY-160}px
+    )`;
 
-const timer=setInterval(()=>{
-
-r1.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-r2.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-r3.textContent=symbols[Math.floor(Math.random()*symbols.length)];
-
-c++;
-
-if(c>20){
-
-clearInterval(timer);
-
-let a=symbols[Math.floor(Math.random()*symbols.length)];
-let b=symbols[Math.floor(Math.random()*symbols.length)];
-let d=symbols[Math.floor(Math.random()*symbols.length)];
-
-r1.textContent=a;
-r2.textContent=b;
-r3.textContent=d;
-
-if(a===b&&b===d){
-
-let reward=bet*5;
-
-slotResult.textContent=
-"🔥 Джекпот +$"+reward;
-
-addWin(reward);
-
-}else{
-
-slotResult.textContent=
-"😢 -$"+bet;
-
-addLoss(bet);
+    requestAnimationFrame(
+        animateGlow
+    );
 
 }
 
+animateGlow();
+
+/* =====================================
+   FLOATING ORBS
+===================================== */
+
+const orbs =
+document.querySelectorAll(
+".orb"
+);
+
+let orbTime = 0;
+
+/* =====================================
+   PART 5 END
+   JS CONTINUES IN PART 6
+===================================== */
+  
+/* =====================================
+   FLOATING ORBS ANIMATION
+===================================== */
+
+function animateOrbs(){
+
+    orbTime += 0.005;
+
+    orbs.forEach((orb,index)=>{
+
+        const x =
+        Math.sin(
+            orbTime + index
+        ) * 40;
+
+        const y =
+        Math.cos(
+            orbTime * 1.3 + index
+        ) * 30;
+
+        orb.style.transform =
+        `translate3d(
+            ${x}px,
+            ${y}px,
+            0
+        )`;
+
+    });
+
+    requestAnimationFrame(
+        animateOrbs
+    );
+
 }
 
-},80);
+animateOrbs();
+
+/* =====================================
+   PARTICLES ENGINE
+===================================== */
+
+const particlesContainer =
+document.getElementById(
+"particles"
+);
+
+const particles = [];
+
+for(let i=0;i<40;i++){
+
+    const p =
+    document.createElement(
+        "div"
+    );
+
+    p.className =
+    "particle";
+
+    const size =
+    Math.random()*6+2;
+
+    p.style.width =
+    size+"px";
+
+    p.style.height =
+    size+"px";
+
+    p.style.left =
+    Math.random()*100+"%";
+
+    p.style.top =
+    Math.random()*100+"%";
+
+    particlesContainer
+    .appendChild(p);
+
+    particles.push({
+
+        el:p,
+
+        x:Math.random()
+        *window.innerWidth,
+
+        y:Math.random()
+        *window.innerHeight,
+
+        speed:
+        Math.random()*0.5+0.2
+
+    });
 
 }
 
-function flip(choice){
+function animateParticles(){
 
-coinEl.classList.add("flip");
+    particles.forEach(p=>{
 
-setTimeout(()=>{
+        p.y -= p.speed;
 
-coinEl.classList.remove("flip");
+        if(p.y < -20){
 
-let res=Math.random()>.5?"Орёл":"Решка";
+            p.y =
+            window.innerHeight+20;
 
-coinEl.textContent=
-res==="Орёл"?"🦅":"👑";
+        }
 
-if(res===choice){
+        p.el.style.transform =
+        `translate3d(
+            ${p.x}px,
+            ${p.y}px,
+            0
+        )`;
 
-coinResult.textContent=
-"🎉 Победа +$100";
+    });
 
-addWin(100);
-
-}else{
-
-coinResult.textContent=
-"❌ Поражение -$50";
-
-addLoss(50);
-
-}
-
-},800);
+    requestAnimationFrame(
+        animateParticles
+    );
 
 }
 
-/* cursor glow */
+animateParticles();
 
-let mx=0,my=0,cx=0,cy=0;
-const cursor=document.querySelector(".cursor");
+/* =====================================
+   SLOT MACHINE
+===================================== */
 
-window.addEventListener("mousemove",e=>{
-mx=e.clientX;
-my=e.clientY;
+const slotSymbols = [
+
+    "🍒",
+    "💎",
+    "⭐",
+    "🔥",
+    "🍀",
+    "7️⃣"
+
+];
+
+const slot1 =
+document.getElementById(
+"slot1"
+);
+
+const slot2 =
+document.getElementById(
+"slot2"
+);
+
+const slot3 =
+document.getElementById(
+"slot3"
+);
+
+const spinButton =
+document.getElementById(
+"spinButton"
+);
+
+const slotResult =
+document.getElementById(
+"slotResult"
+);
+
+spinButton.addEventListener(
+"click",
+()=>{
+
+    let spins = 0;
+
+    spinButton.disabled = true;
+
+    const interval =
+    setInterval(()=>{
+
+        slot1.textContent =
+        slotSymbols[
+        Math.floor(
+        Math.random()
+        *slotSymbols.length
+        )];
+
+        slot2.textContent =
+        slotSymbols[
+        Math.floor(
+        Math.random()
+        *slotSymbols.length
+        )];
+
+        slot3.textContent =
+        slotSymbols[
+        Math.floor(
+        Math.random()
+        *slotSymbols.length
+        )];
+
+        spins++;
+
+        if(spins > 20){
+
+            clearInterval(
+                interval
+            );
+
+            const a =
+            slotSymbols[
+            Math.floor(
+            Math.random()
+            *slotSymbols.length
+            )];
+
+            const b =
+            slotSymbols[
+            Math.floor(
+            Math.random()
+            *slotSymbols.length
+            )];
+
+            const c =
+            slotSymbols[
+            Math.floor(
+            Math.random()
+            *slotSymbols.length
+            )];
+
+            slot1.textContent=a;
+            slot2.textContent=b;
+            slot3.textContent=c;
+
+            games++;
+
+            if(
+                a===b &&
+                b===c
+            ){
+
+                wins++;
+
+                balance += 500;
+
+                slotResult.innerHTML =
+                "🔥 JACKPOT +$500";
+
+            }else{
+
+                losses++;
+
+                balance -= 100;
+
+                slotResult.innerHTML =
+                "❌ -$100";
+
+            }
+
+            updateUI();
+
+            spinButton.disabled =
+            false;
+
+        }
+
+    },90);
+
 });
 
-function animateCursor(){
-cx+=(mx-cx)*0.08;
-cy+=(my-cy)*0.08;
-cursor.style.transform=
-`translate(${cx-140}px,${cy-140}px)`;
-requestAnimationFrame(animateCursor);
+/* =====================================
+   COIN FLIP
+===================================== */
+
+const headsButton =
+document.getElementById(
+"headsButton"
+);
+
+const tailsButton =
+document.getElementById(
+"tailsButton"
+);
+
+const coin =
+document.getElementById(
+"coin"
+);
+
+const coinResult =
+document.getElementById(
+"coinResult"
+);
+
+function playCoin(choice){
+
+    coin.style.transition =
+    "1s";
+
+    coin.style.transform =
+    "rotateY(1800deg)";
+
+    setTimeout(()=>{
+
+        const result =
+        Math.random() > .5
+        ? "Орёл"
+        : "Решка";
+
+        coin.textContent =
+        result === "Орёл"
+        ? "🦅"
+        : "👑";
+
+        games++;
+
+        if(result===choice){
+
+            wins++;
+
+            balance += 200;
+
+            coinResult.innerHTML =
+            "🎉 Победа +$200";
+
+        }else{
+
+            losses++;
+
+            balance -= 100;
+
+            coinResult.innerHTML =
+            "💀 Поражение -$100";
+
+        }
+
+        updateUI();
+
+    },1000);
+
 }
-animateCursor();
 
-/* background */
+headsButton.addEventListener(
+"click",
+()=>playCoin("Орёл")
+);
 
-const o1=document.querySelector(".o1");
-const o2=document.querySelector(".o2");
-const o3=document.querySelector(".o3");
+tailsButton.addEventListener(
+"click",
+()=>playCoin("Решка")
+);
 
-function bg(t){
+/* =====================================
+   DICE GAME
+===================================== */
 
-o1.style.transform=
-`translate(${Math.sin(t/3000)*50}px,${Math.cos(t/2600)*40}px)`;
+const diceFaces = [
+"⚀","⚁","⚂",
+"⚃","⚄","⚅"
+];
 
-o2.style.transform=
-`translate(${Math.cos(t/3300)*40}px,${Math.sin(t/2800)*60}px)`;
+const diceBox =
+document.getElementById(
+"diceBox"
+);
 
-o3.style.transform=
-`translate(${Math.sin(t/2500)*70}px,${Math.cos(t/3500)*40}px)`;
+const diceValue =
+document.getElementById(
+"diceValue"
+);
 
-requestAnimationFrame(bg);
+const diceResult =
+document.getElementById(
+"diceResult"
+);
+
+const rollDice =
+document.getElementById(
+"rollDice"
+);
+
+rollDice.addEventListener(
+"click",
+()=>{
+
+    let count = 0;
+
+    const timer =
+    setInterval(()=>{
+
+        const r =
+        Math.floor(
+        Math.random()*6
+        );
+
+        diceBox.textContent =
+        diceFaces[r];
+
+        count++;
+
+        if(count>18){
+
+            clearInterval(
+                timer
+            );
+
+            const value =
+            Math.floor(
+            Math.random()*6
+            )+1;
+
+            diceBox.textContent =
+            diceFaces[value-1];
+
+            diceValue.textContent =
+            "Выпало: " + value;
+
+            games++;
+
+            if(value >= 5){
+
+                wins++;
+
+                balance += 300;
+
+                diceResult.innerHTML =
+                "🎲 Победа +$300";
+
+            }else{
+
+                losses++;
+
+                balance -= 100;
+
+                diceResult.innerHTML =
+                "❌ Проигрыш -$100";
+
+            }
+
+            updateUI();
+
+        }
+
+    },70);
+
+});
+
+/* =====================================
+   BLACKJACK START
+===================================== */
+
+const dealerCards =
+document.getElementById(
+"dealerCards"
+);
+
+const playerCards =
+document.getElementById(
+"playerCards"
+);
+
+const blackjackResult =
+document.getElementById(
+"blackjackResult"
+);
+
+const startBlackjack =
+document.getElementById(
+"startBlackjack"
+);
+
+const hitButton =
+document.getElementById(
+"hitButton"
+);
+
+const standButton =
+document.getElementById(
+"standButton"
+);
+
+let playerHand = [];
+let dealerHand = [];
+
+function randomCard(){
+
+    return Math.floor(
+        Math.random()*11
+    ) + 1;
+
 }
 
-requestAnimationFrame(bg);
+/* =====================================
+   PART 6 END
+   BLACKJACK + CRASH + FILE END
+   IN PART 7
+===================================== */
+  
+/* =====================================
+   BLACKJACK ENGINE
+===================================== */
+
+function renderCard(value){
+
+    const card =
+    document.createElement(
+        "div"
+    );
+
+    card.className =
+    "playing-card";
+
+    card.textContent =
+    value;
+
+    return card;
+
+}
+
+function renderHands(){
+
+    dealerCards.innerHTML = "";
+    playerCards.innerHTML = "";
+
+    dealerHand.forEach(card=>{
+
+        dealerCards.appendChild(
+            renderCard(card)
+        );
+
+    });
+
+    playerHand.forEach(card=>{
+
+        playerCards.appendChild(
+            renderCard(card)
+        );
+
+    });
+
+}
+
+function handValue(hand){
+
+    return hand.reduce(
+        (a,b)=>a+b,
+        0
+    );
+
+}
+
+function startBJ(){
+
+    blackjackResult.innerHTML =
+    "";
+
+    playerHand = [
+        randomCard(),
+        randomCard()
+    ];
+
+    dealerHand = [
+        randomCard(),
+        randomCard()
+    ];
+
+    renderHands();
+
+}
+
+startBlackjack
+.addEventListener(
+"click",
+startBJ
+);
+
+hitButton
+.addEventListener(
+"click",
+()=>{
+
+    playerHand.push(
+        randomCard()
+    );
+
+    renderHands();
+
+    const playerScore =
+    handValue(
+        playerHand
+    );
+
+    if(playerScore > 21){
+
+        blackjackResult.innerHTML =
+        "💀 Перебор";
+
+        games++;
+        losses++;
+
+        balance -= 250;
+
+        updateUI();
+
+    }
+
+});
+
+standButton
+.addEventListener(
+"click",
+()=>{
+
+    while(
+        handValue(
+            dealerHand
+        ) < 17
+    ){
+
+        dealerHand.push(
+            randomCard()
+        );
+
+    }
+
+    renderHands();
+
+    const playerScore =
+    handValue(
+        playerHand
+    );
+
+    const dealerScore =
+    handValue(
+        dealerHand
+    );
+
+    games++;
+
+    if(
+        dealerScore > 21 ||
+        playerScore > dealerScore
+    ){
+
+        wins++;
+
+        balance += 500;
+
+        blackjackResult.innerHTML =
+        "🎉 Победа +$500";
+
+    }
+
+    else if(
+        playerScore === dealerScore
+    ){
+
+        blackjackResult.innerHTML =
+        "🤝 Ничья";
+
+    }
+
+    else{
+
+        losses++;
+
+        balance -= 250;
+
+        blackjackResult.innerHTML =
+        "❌ Поражение";
+
+    }
+
+    updateUI();
+
+});
+
+/* =====================================
+   CRASH GAME
+===================================== */
+
+const crashCanvas =
+document.getElementById(
+"crashCanvas"
+);
+
+const ctx =
+crashCanvas.getContext(
+"2d"
+);
+
+function resizeCrash(){
+
+    crashCanvas.width =
+    crashCanvas.offsetWidth;
+
+    crashCanvas.height =
+    crashCanvas.offsetHeight;
+
+}
+
+resizeCrash();
+
+window.addEventListener(
+"resize",
+resizeCrash
+);
+
+const crashMultiplier =
+document.getElementById(
+"crashMultiplier"
+);
+
+const crashResult =
+document.getElementById(
+"crashResult"
+);
+
+const startCrash =
+document.getElementById(
+"startCrash"
+);
+
+const cashoutCrash =
+document.getElementById(
+"cashoutCrash"
+);
+
+let crashRunning =
+false;
+
+let currentMultiplier =
+1;
+
+let crashedAt =
+0;
+
+let cashedOut =
+false;
+
+function drawCrash(mult){
+
+    ctx.clearRect(
+        0,
+        0,
+        crashCanvas.width,
+        crashCanvas.height
+    );
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        0,
+        crashCanvas.height
+    );
+
+    const maxX =
+    crashCanvas.width;
+
+    for(
+        let x=0;
+        x<maxX;
+        x+=4
+    ){
+
+        const progress =
+        x/maxX;
+
+        const y =
+        crashCanvas.height -
+        (
+            Math.pow(
+                progress,
+                1.7
+            )
+            *
+            mult
+            *
+            45
+        );
+
+        ctx.lineTo(x,y);
+
+    }
+
+    ctx.lineWidth = 4;
+
+    ctx.strokeStyle =
+    "#ff0055";
+
+    ctx.shadowBlur = 25;
+
+    ctx.shadowColor =
+    "#ff0055";
+
+    ctx.stroke();
+
+}
+
+function startCrashGame(){
+
+    if(crashRunning)
+    return;
+
+    crashRunning =
+    true;
+
+    cashedOut =
+    false;
+
+    currentMultiplier =
+    1;
+
+    crashedAt =
+    (
+        Math.random()*4
+    ) + 1.5;
+
+    crashResult.innerHTML =
+    "";
+
+    function frame(){
+
+        if(
+            !crashRunning
+        ) return;
+
+        currentMultiplier +=
+        0.01;
+
+        crashMultiplier
+        .textContent =
+        currentMultiplier
+        .toFixed(2)
+        +"x";
+
+        drawCrash(
+            currentMultiplier
+        );
+
+        if(
+            currentMultiplier
+            >= crashedAt
+        ){
+
+            crashRunning =
+            false;
+
+            if(!cashedOut){
+
+                games++;
+                losses++;
+
+                balance -= 300;
+
+                crashResult.innerHTML =
+                "💥 CRASH";
+
+                updateUI();
+
+            }
+
+            return;
+
+        }
+
+        requestAnimationFrame(
+            frame
+        );
+
+    }
+
+    frame();
+
+}
+
+startCrash
+.addEventListener(
+"click",
+startCrashGame
+);
+
+cashoutCrash
+.addEventListener(
+"click",
+()=>{
+
+    if(
+        !crashRunning ||
+        cashedOut
+    ) return;
+
+    cashedOut = true;
+
+    crashRunning =
+    false;
+
+    const reward =
+    Math.floor(
+        currentMultiplier
+        *250
+    );
+
+    balance += reward;
+
+    wins++;
+    games++;
+
+    crashResult.innerHTML =
+    "🚀 CASHOUT +$"
+    +reward;
+
+    updateUI();
+
+});
+
+/* =====================================
+   SETTINGS SWITCHES
+===================================== */
+
+document
+.querySelectorAll(
+".switch"
+)
+.forEach(sw=>{
+
+    sw.addEventListener(
+        "click",
+        ()=>{
+
+            sw.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+});
+
+/* =====================================
+   PROFIT COUNTER
+===================================== */
+
+function updateProfit(){
+
+    const profit =
+    document.getElementById(
+        "profitValue"
+    );
+
+    const diff =
+    balance - 10000;
+
+    if(diff >= 0){
+
+        profit.textContent =
+        "+$"+
+        diff.toLocaleString()
+        +" сегодня";
+
+        profit.style.color =
+        "#67ff9d";
+
+    }else{
+
+        profit.textContent =
+        "-$"+
+        Math.abs(diff)
+        .toLocaleString()
+        +" сегодня";
+
+        profit.style.color =
+        "#ff7070";
+
+    }
+
+}
+
+setInterval(
+    updateProfit,
+    100
+);
+
+/* =====================================
+   INTRO ANIMATION
+===================================== */
+
+window.addEventListener(
+"load",
+()=>{
+
+    document.body.animate(
+
+        [
+            {
+                opacity:0
+            },
+            {
+                opacity:1
+            }
+        ],
+
+        {
+            duration:1200,
+            fill:"forwards"
+        }
+
+    );
+
+});
+
+/* =====================================
+   AMBIENT FLOATING EFFECT
+===================================== */
+
+const heroOrb =
+document.querySelector(
+".hero-orb"
+);
+
+let floatTime = 0;
+
+function animateHeroOrb(){
+
+    floatTime += 0.01;
+
+    if(heroOrb){
+
+        heroOrb.style.transform =
+        `
+        translateY(
+        ${
+            Math.sin(
+                floatTime
+            )*12
+        }px
+        )
+        scale(
+        ${
+            1+
+            Math.sin(
+                floatTime*2
+            )*0.03
+        }
+        )
+        `;
+
+    }
+
+    requestAnimationFrame(
+        animateHeroOrb
+    );
+
+}
+
+animateHeroOrb();
+
+/* =====================================
+   INITIALIZE
+===================================== */
 
 updateUI();
+updateProfit();
+
+startBJ();
+
+drawCrash(1);
+
+/* =====================================
+   END OF FILE
+===================================== */
 
 </script>
 
