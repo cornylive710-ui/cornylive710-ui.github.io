@@ -2,861 +2,394 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casino Royale X — Premium Glass Edition</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Casino Royale X</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-
 :root{
-
---red:#ff2d2d;
---pink:#ff0055;
---rose:#ff3366;
---magenta:#d81b60;
---purple:#9c27b0;
---violet:#7b1fa2;
---deep:#5e35b1;
-
+--g1:#ff2d2d;
+--g2:#ff0055;
+--g3:#9c27b0;
 --glass:rgba(255,255,255,.08);
---glass2:rgba(255,255,255,.05);
---border:rgba(255,255,255,.12);
-
+--border:rgba(255,255,255,.14);
 }
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Inter,sans-serif;
-}
-
-html,body{
-height:100%;
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,sans-serif}
+body{
+background:#06060d;
+color:#fff;
 overflow:hidden;
-background:#05050b;
-color:white;
+height:100vh;
 }
-
-/* ==========================
-BACKGROUND
-========================== */
-
 .bg{
-position:fixed;
-inset:0;
-overflow:hidden;
-z-index:-10;
-}
-
-.mesh{
-position:absolute;
-inset:0;
+position:fixed;inset:0;overflow:hidden;z-index:-5;
 background:
-radial-gradient(circle at 15% 20%, rgba(255,0,85,.18), transparent 35%),
-radial-gradient(circle at 80% 20%, rgba(156,39,176,.18), transparent 35%),
-radial-gradient(circle at 50% 90%, rgba(255,45,45,.15), transparent 40%),
-#05050b;
+radial-gradient(circle at 15% 20%,rgba(255,0,85,.18),transparent 35%),
+radial-gradient(circle at 80% 20%,rgba(156,39,176,.18),transparent 35%),
+radial-gradient(circle at 50% 90%,rgba(255,45,45,.15),transparent 40%),
+#06060d;
 }
-
 .orb{
 position:absolute;
 border-radius:50%;
-filter:blur(90px);
+filter:blur(100px);
 opacity:.5;
-mix-blend-mode:screen;
-will-change:transform;
 }
-
-.o1{
-width:550px;
-height:550px;
-background:#ff0055;
-left:-150px;
-top:-150px;
-}
-
-.o2{
-width:450px;
-height:450px;
-background:#9c27b0;
-right:-100px;
-top:15%;
-}
-
-.o3{
-width:400px;
-height:400px;
-background:#ff3366;
-bottom:-120px;
-left:30%;
-}
-
-.shape{
-position:absolute;
-background:rgba(255,255,255,.03);
-backdrop-filter:blur(30px);
-border:1px solid rgba(255,255,255,.05);
-}
-
-.s1{
-width:220px;
-height:220px;
-border-radius:50px;
-top:20%;
-left:70%;
-transform:rotate(30deg);
-}
-
-.s2{
-width:180px;
-height:180px;
-border-radius:50%;
-bottom:10%;
-left:8%;
-}
-
-/* ==========================
-CURSOR GLOW
-========================== */
-
+.o1{width:500px;height:500px;background:#ff0055;left:-120px;top:-120px}
+.o2{width:400px;height:400px;background:#9c27b0;right:-100px;top:20%}
+.o3{width:350px;height:350px;background:#ff3366;bottom:-100px;left:30%}
 .cursor{
 position:fixed;
-width:320px;
-height:320px;
+width:280px;height:280px;
 border-radius:50%;
 pointer-events:none;
-z-index:100;
-background:
-radial-gradient(circle,
-rgba(255,0,120,.22),
-rgba(156,39,176,.12),
-transparent 70%);
-filter:blur(45px);
+background:radial-gradient(circle,rgba(255,0,120,.25),transparent 70%);
+filter:blur(40px);
+z-index:99;
 }
-
-/* ==========================
-APP
-========================== */
-
 .app{
-height:100vh;
-padding:30px;
 display:flex;
-gap:24px;
+height:100vh;
+padding:20px;
+gap:20px;
 }
-
-/* ==========================
-SIDEBAR
-========================== */
-
 .sidebar{
-
-width:280px;
-
+width:250px;
 background:var(--glass);
-
 backdrop-filter:blur(35px);
-
 border:1px solid var(--border);
-
-border-radius:34px;
-
-padding:24px;
-
+border-radius:28px;
+padding:20px;
 display:flex;
 flex-direction:column;
-
-box-shadow:
-0 10px 50px rgba(0,0,0,.35);
-
+box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
-
 .logo{
-
-font-size:2rem;
+font-size:1.8rem;
 font-weight:900;
-
-background:
-linear-gradient(
-135deg,
-#ff2d2d,
-#ff0055,
-#9c27b0
-);
-
+margin-bottom:25px;
+background:linear-gradient(135deg,var(--g1),var(--g2),var(--g3));
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-
-margin-bottom:30px;
-
 }
-
 .balance{
-
-padding:18px;
-
-border-radius:22px;
-
-background:
-rgba(255,255,255,.06);
-
-border:1px solid rgba(255,255,255,.08);
-
-margin-bottom:24px;
-
+padding:16px;
+border-radius:18px;
+background:rgba(255,255,255,.05);
+margin-bottom:20px;
 }
-
-.balance-title{
-opacity:.6;
-font-size:.8rem;
-}
-
-.balance-value{
-font-size:2rem;
+.balance span{
+font-size:1.8rem;
 font-weight:800;
-margin-top:4px;
+display:block;
+margin-top:6px;
 }
-
 .menu{
 display:flex;
 flex-direction:column;
 gap:10px;
 }
-
-.menu-item{
-
-height:60px;
-
-border-radius:18px;
-
-display:flex;
-align-items:center;
-
-padding:0 18px;
-
-cursor:pointer;
-
-transition:.35s;
-
-background:transparent;
-
-}
-
-.menu-item:hover{
-
-background:
-rgba(255,255,255,.08);
-
-transform:translateX(8px);
-
-}
-
-.menu-item.active{
-
-background:
-linear-gradient(
-135deg,
-rgba(255,0,85,.25),
-rgba(156,39,176,.25)
-);
-
-border:1px solid rgba(255,255,255,.08);
-
-}
-
-.icon{
-margin-right:12px;
-font-size:1.1rem;
-}
-
-.spacer{
-flex:1;
-}
-
-.user{
-
-padding:16px;
-
-border-radius:20px;
-
-background:
-rgba(255,255,255,.05);
-
-}
-
-/* ==========================
-CONTENT
-========================== */
-
-.content{
-
-flex:1;
-
-background:var(--glass);
-
-border:1px solid var(--border);
-
-backdrop-filter:blur(35px);
-
-border-radius:34px;
-
-padding:28px;
-
-overflow:hidden;
-
-position:relative;
-
-box-shadow:
-0 10px 50px rgba(0,0,0,.35);
-
-}
-
-.topbar{
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-margin-bottom:24px;
-
-}
-
-.page-title{
-
-font-size:2rem;
-font-weight:800;
-
-}
-
-.badge{
-
-padding:12px 18px;
-
+.item{
+padding:14px 16px;
 border-radius:16px;
-
-background:
-rgba(255,255,255,.08);
-
-border:
-1px solid rgba(255,255,255,.08);
-
+cursor:pointer;
+transition:.3s;
 }
-
-.screen{
-
-position:absolute;
-
-left:28px;
-right:28px;
-top:100px;
-bottom:28px;
-
-opacity:0;
-pointer-events:none;
-
-transform:
-translateY(30px)
-scale(.98);
-
-transition:.5s;
-
+.item:hover,.item.active{
+background:rgba(255,255,255,.08);
+transform:translateX(6px);
 }
-
-.screen.active{
-
-opacity:1;
-pointer-events:auto;
-
-transform:none;
-
-}
-
-/* ==========================
-HOME
-========================== */
-
-.hero{
-
-height:240px;
-
-border-radius:30px;
-
-background:
-linear-gradient(
-135deg,
-rgba(255,0,85,.18),
-rgba(156,39,176,.18)
-);
-
-border:
-1px solid rgba(255,255,255,.08);
-
-padding:30px;
-
-display:flex;
-justify-content:space-between;
-align-items:center;
-
-overflow:hidden;
-
+.main{
+flex:1;
+background:var(--glass);
+backdrop-filter:blur(35px);
+border:1px solid var(--border);
+border-radius:28px;
+padding:25px;
 position:relative;
-
+overflow:hidden;
 }
-
-.hero::before{
-
-content:"";
-
-position:absolute;
-
-width:400px;
-height:400px;
-
-right:-120px;
-top:-120px;
-
-border-radius:50%;
-
+.screen{
+display:none;
+height:100%;
+}
+.screen.active{
+display:block;
+animation:fade .4s ease;
+}
+@keyframes fade{
+from{opacity:0;transform:translateY(15px)}
+to{opacity:1;transform:none}
+}
+h1{
+font-size:2rem;
+margin-bottom:20px;
+}
+.hero{
+height:220px;
+border-radius:24px;
 background:
-radial-gradient(circle,
-rgba(255,255,255,.18),
-transparent);
-
-filter:blur(50px);
-
+linear-gradient(135deg,
+rgba(255,0,85,.2),
+rgba(156,39,176,.2));
+border:1px solid rgba(255,255,255,.1);
+padding:25px;
+display:flex;
+align-items:center;
+justify-content:space-between;
 }
-
-.hero h1{
-
-font-size:3rem;
-font-weight:900;
-
-max-width:500px;
-
-}
-
-.hero p{
-
-opacity:.75;
-margin-top:10px;
-
-}
-
-.hero-orb{
-
-width:180px;
-height:180px;
-
+.orb-ai{
+width:140px;
+height:140px;
 border-radius:50%;
-
-background:
-radial-gradient(circle at 30% 30%,
-#ff2d2d,
-#ff0055,
-#9c27b0,
-#5e35b1);
-
+background:radial-gradient(circle at 30% 30%,#ff2d2d,#ff0055,#9c27b0);
 box-shadow:
 0 0 30px #ff0055,
-0 0 60px rgba(255,0,85,.6);
-
+0 0 60px rgba(255,0,85,.5);
 animation:float 5s ease-in-out infinite;
-
 }
-
-.grid{
-
-margin-top:24px;
-
+@keyframes float{
+50%{transform:translateY(-15px)}
+}
+.cards{
 display:grid;
-
-grid-template-columns:
-repeat(3,1fr);
-
-gap:20px;
-
+grid-template-columns:repeat(3,1fr);
+gap:16px;
+margin-top:20px;
 }
-
 .card{
-
-height:170px;
-
-border-radius:26px;
-
-background:
-rgba(255,255,255,.05);
-
-border:
-1px solid rgba(255,255,255,.08);
-
 padding:20px;
-
-transition:.35s;
-
+border-radius:20px;
+background:rgba(255,255,255,.05);
+border:1px solid rgba(255,255,255,.08);
 }
-
-.card:hover{
-
-transform:
-translateY(-10px);
-
-box-shadow:
-0 0 30px rgba(255,0,120,.15);
-
-}
-
-.card-title{
-
-font-weight:700;
-
-margin-bottom:10px;
-
-}
-
-.card-value{
-
+.card h2{
 font-size:2rem;
-font-weight:900;
-
+margin-top:10px;
 }
-
-/* ==========================
-SLOTS SCREEN
-========================== */
-
-.slots-wrap{
-
+.center{
 height:100%;
-
 display:flex;
 flex-direction:column;
-
 align-items:center;
 justify-content:center;
-
 }
-
-.slots-title{
-
-font-size:3rem;
-font-weight:900;
-
-margin-bottom:30px;
-
-}
-
 .reels{
-
 display:flex;
-gap:18px;
-
+gap:15px;
+margin:25px 0;
 }
-
 .reel{
-
-width:130px;
-height:130px;
-
-border-radius:28px;
-
+width:120px;
+height:120px;
 display:flex;
 align-items:center;
 justify-content:center;
-
 font-size:4rem;
-
-background:
-rgba(255,255,255,.08);
-
-border:
-1px solid rgba(255,255,255,.12);
-
-backdrop-filter:blur(30px);
-
+border-radius:24px;
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.12);
 }
-
-.bet-panel{
-
-margin-top:30px;
-
+.controls{
 display:flex;
-gap:12px;
-
+gap:10px;
 }
-
 input{
-
-padding:16px;
-
-width:180px;
-
+padding:15px;
+width:160px;
 border:none;
 outline:none;
-
-border-radius:18px;
-
-background:
-rgba(255,255,255,.08);
-
-color:white;
-
+border-radius:16px;
+background:rgba(255,255,255,.08);
+color:#fff;
 }
-
 button{
-
-padding:16px 24px;
-
+padding:15px 20px;
 border:none;
-
-border-radius:18px;
-
+border-radius:16px;
 cursor:pointer;
-
 font-weight:700;
-
-color:white;
-
-background:
-linear-gradient(
-135deg,
-#ff0055,
-#9c27b0
-);
-
+color:#fff;
+background:linear-gradient(135deg,var(--g2),var(--g3));
 transition:.3s;
-
 }
-
 button:hover{
-
 transform:scale(1.05);
-
 box-shadow:
 0 0 10px currentColor,
 0 0 20px currentColor,
 0 0 40px currentColor;
-
 }
-
-.slot-result{
-
+.result{
+margin-top:18px;
+min-height:24px;
+}
+.coin{
+width:140px;
+height:140px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:3rem;
+font-weight:900;
+background:linear-gradient(135deg,#ffd700,#ffb300);
+color:#222;
+margin-bottom:20px;
+transition:.8s;
+}
+.flip{
+transform:rotateY(1080deg);
+}
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
 margin-top:20px;
-font-size:1.1rem;
-
 }
-
-/* ==========================
-ANIMATIONS
-========================== */
-
-@keyframes float{
-
-0%,100%{
-transform:translateY(0);
+.stat{
+padding:18px;
+border-radius:20px;
+background:rgba(255,255,255,.05);
+text-align:center;
 }
-
-50%{
-transform:translateY(-20px);
+.stat h3{
+font-size:2rem;
+margin-bottom:6px;
 }
-
+@media(max-width:900px){
+body{overflow:auto}
+.app{flex-direction:column;height:auto}
+.sidebar{width:100%}
+.cards,.stats{grid-template-columns:1fr}
+.reel{width:90px;height:90px;font-size:3rem}
 }
-
-@media(max-width:1100px){
-
-.app{
-flex-direction:column;
-overflow:auto;
-height:auto;
-}
-
-.sidebar{
-width:100%;
-}
-
-.content{
-min-height:900px;
-}
-
-.grid{
-grid-template-columns:1fr;
-}
-
-}
-
 </style>
 </head>
 <body>
 
-<div class="cursor"></div>
-
 <div class="bg">
-
-<div class="mesh"></div>
-
 <div class="orb o1"></div>
 <div class="orb o2"></div>
 <div class="orb o3"></div>
-
-<div class="shape s1"></div>
-<div class="shape s2"></div>
-
 </div>
+
+<div class="cursor"></div>
 
 <div class="app">
 
-<!-- SIDEBAR -->
-
 <div class="sidebar">
-
-<div class="logo">
-ROYALE X
-</div>
+<div class="logo">ROYALE X</div>
 
 <div class="balance">
-<div class="balance-title">
-BALANCE
-</div>
-<div class="balance-value">
-$1000
-</div>
+Баланс
+<span id="balance">$1000</span>
 </div>
 
 <div class="menu">
-
-<div class="menu-item active" data-screen="home">
-<span class="icon">🏠</span>
-Home
+<div class="item active" data="home">🏠 Главная</div>
+<div class="item" data="slots">🎰 Слоты</div>
+<div class="item" data="coin">🪙 Орёл / Решка</div>
+<div class="item" data="stats">📊 Статистика</div>
+</div>
 </div>
 
-<div class="menu-item" data-screen="slots">
-<span class="icon">🎰</span>
-Slots
-</div>
-
-<div class="menu-item">
-<span class="icon">🃏</span>
-Blackjack
-</div>
-
-<div class="menu-item">
-<span class="icon">🪙</span>
-Coin Flip
-</div>
-
-<div class="menu-item">
-<span class="icon">🎲</span>
-Dice
-</div>
-
-<div class="menu-item">
-<span class="icon">💎</span>
-Crash
-</div>
-
-</div>
-
-<div class="spacer"></div>
-
-<div class="user">
-👑 Premium Player
-</div>
-
-</div>
-
-<!-- CONTENT -->
-
-<div class="content">
-
-<div class="topbar">
-
-<div class="page-title">
-Premium Casino
-</div>
-
-<div class="badge">
-Glass Edition
-</div>
-
-</div>
-
-<!-- HOME -->
+<div class="main">
 
 <div class="screen active" id="home">
 
+<h1>Premium Glass Casino</h1>
+
 <div class="hero">
-
 <div>
-
-<h1>
-Next Generation Casino Experience
-</h1>
-
-<p>
-Apple Vision Pro × Stake × Arc Browser
-</p>
-
+<h2 style="font-size:2.8rem">Casino Royale X</h2>
+<div style="opacity:.75;margin-top:8px">
+VisionOS × Stake × Linear
+</div>
 </div>
 
-<div class="hero-orb"></div>
-
+<div class="orb-ai"></div>
 </div>
 
-<div class="grid">
-
+<div class="cards">
 <div class="card">
-<div class="card-title">Total Wins</div>
-<div class="card-value">$12.4K</div>
+VIP Уровень
+<h2>Gold</h2>
 </div>
 
 <div class="card">
-<div class="card-title">Level</div>
-<div class="card-value">VIP</div>
+Побед
+<h2 id="winsHome">0</h2>
 </div>
 
 <div class="card">
-<div class="card-title">Win Rate</div>
-<div class="card-value">68%</div>
+Игр
+<h2 id="gamesHome">0</h2>
+</div>
 </div>
 
 </div>
-
-</div>
-
-<!-- SLOTS -->
 
 <div class="screen" id="slots">
 
-<div class="slots-wrap">
+<div class="center">
 
-<div class="slots-title">
-🎰 Neon Slots
-</div>
+<h1>🎰 Neon Slots</h1>
 
 <div class="reels">
-
 <div class="reel" id="r1">🍒</div>
 <div class="reel" id="r2">💎</div>
 <div class="reel" id="r3">⭐</div>
+</div>
+
+<div class="controls">
+<input id="bet" type="number" value="50">
+<button onclick="spin()">SPIN</button>
+</div>
+
+<div class="result" id="slotResult"></div>
 
 </div>
 
-<div class="bet-panel">
+</div>
 
-<input
-type="number"
-value="50"
-placeholder="Bet">
+<div class="screen" id="coin">
 
-<button>
-Spin
-</button>
+<div class="center">
+
+<h1>🪙 Coin Flip</h1>
+
+<div class="coin" id="coinEl">?</div>
+
+<div class="controls">
+<button onclick="flip('Орёл')">Орёл</button>
+<button onclick="flip('Решка')">Решка</button>
+</div>
+
+<div class="result" id="coinResult"></div>
 
 </div>
 
-<div class="slot-result">
-Ready to play
+</div>
+
+<div class="screen" id="stats">
+
+<h1>Статистика</h1>
+
+<div class="stats">
+
+<div class="stat">
+<h3 id="wins">0</h3>
+Побед
+</div>
+
+<div class="stat">
+<h3 id="losses">0</h3>
+Поражений
+</div>
+
+<div class="stat">
+<h3 id="games">0</h3>
+Игр
 </div>
 
 </div>
@@ -869,14 +402,137 @@ Ready to play
 
 <script>
 
-/* ======================
-CURSOR
-====================== */
+let balance=1000;
+let wins=0;
+let losses=0;
+let games=0;
 
-const cursor =
-document.querySelector(".cursor");
+const symbols=["🍒","💎","⭐","🍋","7️⃣","🍇"];
+
+function updateUI(){
+balance=Math.max(balance,0);
+document.getElementById("balance").textContent="$"+balance;
+winsHome.textContent=wins;
+gamesHome.textContent=games;
+wins.textContent=wins;
+losses.textContent=losses;
+games.textContent=games;
+}
+
+function addWin(v){
+balance+=v;
+wins++;
+games++;
+updateUI();
+}
+
+function addLoss(v){
+balance-=v;
+losses++;
+games++;
+updateUI();
+}
+
+document.querySelectorAll(".item").forEach(btn=>{
+btn.onclick=()=>{
+document.querySelectorAll(".item").forEach(x=>x.classList.remove("active"));
+btn.classList.add("active");
+
+document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+
+document.getElementById(btn.dataset.data).classList.add("active");
+};
+});
+
+function spin(){
+
+let bet=parseInt(document.getElementById("bet").value)||0;
+
+if(bet<=0||bet>balance)return;
+
+let c=0;
+
+const timer=setInterval(()=>{
+
+r1.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+r2.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+r3.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+
+c++;
+
+if(c>20){
+
+clearInterval(timer);
+
+let a=symbols[Math.floor(Math.random()*symbols.length)];
+let b=symbols[Math.floor(Math.random()*symbols.length)];
+let d=symbols[Math.floor(Math.random()*symbols.length)];
+
+r1.textContent=a;
+r2.textContent=b;
+r3.textContent=d;
+
+if(a===b&&b===d){
+
+let reward=bet*5;
+
+slotResult.textContent=
+"🔥 Джекпот +$"+reward;
+
+addWin(reward);
+
+}else{
+
+slotResult.textContent=
+"😢 -$"+bet;
+
+addLoss(bet);
+
+}
+
+}
+
+},80);
+
+}
+
+function flip(choice){
+
+coinEl.classList.add("flip");
+
+setTimeout(()=>{
+
+coinEl.classList.remove("flip");
+
+let res=Math.random()>.5?"Орёл":"Решка";
+
+coinEl.textContent=
+res==="Орёл"?"🦅":"👑";
+
+if(res===choice){
+
+coinResult.textContent=
+"🎉 Победа +$100";
+
+addWin(100);
+
+}else{
+
+coinResult.textContent=
+"❌ Поражение -$50";
+
+addLoss(50);
+
+}
+
+},800);
+
+}
+
+/* cursor glow */
 
 let mx=0,my=0,cx=0,cy=0;
+const cursor=document.querySelector(".cursor");
 
 window.addEventListener("mousemove",e=>{
 mx=e.clientX;
@@ -884,24 +540,15 @@ my=e.clientY;
 });
 
 function animateCursor(){
-
 cx+=(mx-cx)*0.08;
 cy+=(my-cy)*0.08;
-
 cursor.style.transform=
-`translate(${cx-160}px,${cy-160}px)`;
-
-requestAnimationFrame(
-animateCursor
-);
-
+`translate(${cx-140}px,${cy-140}px)`;
+requestAnimationFrame(animateCursor);
 }
-
 animateCursor();
 
-/* ======================
-BACKGROUND
-====================== */
+/* background */
 
 const o1=document.querySelector(".o1");
 const o2=document.querySelector(".o2");
@@ -910,76 +557,20 @@ const o3=document.querySelector(".o3");
 function bg(t){
 
 o1.style.transform=
-`translate(
-${Math.sin(t/3000)*60}px,
-${Math.cos(t/2500)*50}px
-)`;
+`translate(${Math.sin(t/3000)*50}px,${Math.cos(t/2600)*40}px)`;
 
 o2.style.transform=
-`translate(
-${Math.cos(t/3500)*50}px,
-${Math.sin(t/2800)*70}px
-)`;
+`translate(${Math.cos(t/3300)*40}px,${Math.sin(t/2800)*60}px)`;
 
 o3.style.transform=
-`translate(
-${Math.sin(t/2400)*70}px,
-${Math.cos(t/3200)*40}px
-)`;
+`translate(${Math.sin(t/2500)*70}px,${Math.cos(t/3500)*40}px)`;
 
 requestAnimationFrame(bg);
-
 }
 
 requestAnimationFrame(bg);
 
-/* ======================
-SCREENS
-====================== */
-
-const items=
-document.querySelectorAll(
-".menu-item[data-screen]"
-);
-
-const screens=
-document.querySelectorAll(
-".screen"
-);
-
-items.forEach(item=>{
-
-item.addEventListener(
-"click",
-()=>{
-
-items.forEach(i=>
-i.classList.remove(
-"active"
-));
-
-item.classList.add(
-"active"
-);
-
-screens.forEach(s=>
-s.classList.remove(
-"active"
-));
-
-const target=
-item.dataset.screen;
-
-document
-.getElementById(target)
-.classList.add(
-"active"
-);
-
-}
-);
-
-});
+updateUI();
 
 </script>
 
