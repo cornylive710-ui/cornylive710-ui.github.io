@@ -3,21 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casino Royale Neon</title>
+<title>Casino Royale X — Premium Glass Edition</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
+
 --red:#ff2d2d;
 --pink:#ff0055;
 --rose:#ff3366;
+--magenta:#d81b60;
 --purple:#9c27b0;
 --violet:#7b1fa2;
 --deep:#5e35b1;
+
 --glass:rgba(255,255,255,.08);
---border:rgba(255,255,255,.15);
+--glass2:rgba(255,255,255,.05);
+--border:rgba(255,255,255,.12);
+
 }
 
 *{
@@ -27,229 +32,657 @@ box-sizing:border-box;
 font-family:Inter,sans-serif;
 }
 
-body{
+html,body{
+height:100%;
+overflow:hidden;
 background:#05050b;
 color:white;
-overflow-x:hidden;
-min-height:100vh;
 }
 
-body::before{
-content:"";
+/* ==========================
+BACKGROUND
+========================== */
+
+.bg{
 position:fixed;
 inset:0;
-background:
-radial-gradient(circle at 10% 20%, rgba(255,0,85,.2), transparent 35%),
-radial-gradient(circle at 90% 20%, rgba(156,39,176,.2), transparent 35%),
-radial-gradient(circle at 50% 90%, rgba(255,45,45,.15), transparent 40%),
-#05050b;
+overflow:hidden;
 z-index:-10;
 }
 
-.cursor{
-position:fixed;
-width:280px;
-height:280px;
-border-radius:50%;
-pointer-events:none;
+.mesh{
+position:absolute;
+inset:0;
 background:
-radial-gradient(circle,
-rgba(255,0,120,.25),
-transparent 70%);
-filter:blur(40px);
-z-index:2;
+radial-gradient(circle at 15% 20%, rgba(255,0,85,.18), transparent 35%),
+radial-gradient(circle at 80% 20%, rgba(156,39,176,.18), transparent 35%),
+radial-gradient(circle at 50% 90%, rgba(255,45,45,.15), transparent 40%),
+#05050b;
 }
 
 .orb{
-position:fixed;
+position:absolute;
 border-radius:50%;
 filter:blur(90px);
-opacity:.4;
-z-index:-5;
+opacity:.5;
+mix-blend-mode:screen;
+will-change:transform;
 }
 
 .o1{
-width:500px;
-height:500px;
+width:550px;
+height:550px;
 background:#ff0055;
 left:-150px;
 top:-150px;
 }
 
 .o2{
+width:450px;
+height:450px;
+background:#9c27b0;
+right:-100px;
+top:15%;
+}
+
+.o3{
 width:400px;
 height:400px;
-background:#9c27b0;
-right:-120px;
-top:30%;
+background:#ff3366;
+bottom:-120px;
+left:30%;
 }
 
-.wrapper{
-max-width:1300px;
-margin:auto;
-padding:40px 20px;
-}
-
-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:30px;
-}
-
-.logo{
-font-size:2rem;
-font-weight:900;
-background:linear-gradient(135deg,#ff2d2d,#9c27b0);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-}
-
-.balance{
-padding:14px 24px;
-border-radius:20px;
-background:var(--glass);
-border:1px solid var(--border);
+.shape{
+position:absolute;
+background:rgba(255,255,255,.03);
 backdrop-filter:blur(30px);
-font-weight:700;
+border:1px solid rgba(255,255,255,.05);
 }
 
-.games{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+.s1{
+width:220px;
+height:220px;
+border-radius:50px;
+top:20%;
+left:70%;
+transform:rotate(30deg);
+}
+
+.s2{
+width:180px;
+height:180px;
+border-radius:50%;
+bottom:10%;
+left:8%;
+}
+
+/* ==========================
+CURSOR GLOW
+========================== */
+
+.cursor{
+position:fixed;
+width:320px;
+height:320px;
+border-radius:50%;
+pointer-events:none;
+z-index:100;
+background:
+radial-gradient(circle,
+rgba(255,0,120,.22),
+rgba(156,39,176,.12),
+transparent 70%);
+filter:blur(45px);
+}
+
+/* ==========================
+APP
+========================== */
+
+.app{
+height:100vh;
+padding:30px;
+display:flex;
 gap:24px;
 }
 
-.card{
+/* ==========================
+SIDEBAR
+========================== */
+
+.sidebar{
+
+width:280px;
+
 background:var(--glass);
-backdrop-filter:blur(30px);
+
+backdrop-filter:blur(35px);
+
 border:1px solid var(--border);
-border-radius:30px;
+
+border-radius:34px;
+
 padding:24px;
-box-shadow:0 10px 40px rgba(0,0,0,.3);
+
+display:flex;
+flex-direction:column;
+
+box-shadow:
+0 10px 50px rgba(0,0,0,.35);
+
+}
+
+.logo{
+
+font-size:2rem;
+font-weight:900;
+
+background:
+linear-gradient(
+135deg,
+#ff2d2d,
+#ff0055,
+#9c27b0
+);
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+margin-bottom:30px;
+
+}
+
+.balance{
+
+padding:18px;
+
+border-radius:22px;
+
+background:
+rgba(255,255,255,.06);
+
+border:1px solid rgba(255,255,255,.08);
+
+margin-bottom:24px;
+
+}
+
+.balance-title{
+opacity:.6;
+font-size:.8rem;
+}
+
+.balance-value{
+font-size:2rem;
+font-weight:800;
+margin-top:4px;
+}
+
+.menu{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.menu-item{
+
+height:60px;
+
+border-radius:18px;
+
+display:flex;
+align-items:center;
+
+padding:0 18px;
+
+cursor:pointer;
+
 transition:.35s;
+
+background:transparent;
+
+}
+
+.menu-item:hover{
+
+background:
+rgba(255,255,255,.08);
+
+transform:translateX(8px);
+
+}
+
+.menu-item.active{
+
+background:
+linear-gradient(
+135deg,
+rgba(255,0,85,.25),
+rgba(156,39,176,.25)
+);
+
+border:1px solid rgba(255,255,255,.08);
+
+}
+
+.icon{
+margin-right:12px;
+font-size:1.1rem;
+}
+
+.spacer{
+flex:1;
+}
+
+.user{
+
+padding:16px;
+
+border-radius:20px;
+
+background:
+rgba(255,255,255,.05);
+
+}
+
+/* ==========================
+CONTENT
+========================== */
+
+.content{
+
+flex:1;
+
+background:var(--glass);
+
+border:1px solid var(--border);
+
+backdrop-filter:blur(35px);
+
+border-radius:34px;
+
+padding:28px;
+
+overflow:hidden;
+
+position:relative;
+
+box-shadow:
+0 10px 50px rgba(0,0,0,.35);
+
+}
+
+.topbar{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:24px;
+
+}
+
+.page-title{
+
+font-size:2rem;
+font-weight:800;
+
+}
+
+.badge{
+
+padding:12px 18px;
+
+border-radius:16px;
+
+background:
+rgba(255,255,255,.08);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+}
+
+.screen{
+
+position:absolute;
+
+left:28px;
+right:28px;
+top:100px;
+bottom:28px;
+
+opacity:0;
+pointer-events:none;
+
+transform:
+translateY(30px)
+scale(.98);
+
+transition:.5s;
+
+}
+
+.screen.active{
+
+opacity:1;
+pointer-events:auto;
+
+transform:none;
+
+}
+
+/* ==========================
+HOME
+========================== */
+
+.hero{
+
+height:240px;
+
+border-radius:30px;
+
+background:
+linear-gradient(
+135deg,
+rgba(255,0,85,.18),
+rgba(156,39,176,.18)
+);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+padding:30px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+overflow:hidden;
+
+position:relative;
+
+}
+
+.hero::before{
+
+content:"";
+
+position:absolute;
+
+width:400px;
+height:400px;
+
+right:-120px;
+top:-120px;
+
+border-radius:50%;
+
+background:
+radial-gradient(circle,
+rgba(255,255,255,.18),
+transparent);
+
+filter:blur(50px);
+
+}
+
+.hero h1{
+
+font-size:3rem;
+font-weight:900;
+
+max-width:500px;
+
+}
+
+.hero p{
+
+opacity:.75;
+margin-top:10px;
+
+}
+
+.hero-orb{
+
+width:180px;
+height:180px;
+
+border-radius:50%;
+
+background:
+radial-gradient(circle at 30% 30%,
+#ff2d2d,
+#ff0055,
+#9c27b0,
+#5e35b1);
+
+box-shadow:
+0 0 30px #ff0055,
+0 0 60px rgba(255,0,85,.6);
+
+animation:float 5s ease-in-out infinite;
+
+}
+
+.grid{
+
+margin-top:24px;
+
+display:grid;
+
+grid-template-columns:
+repeat(3,1fr);
+
+gap:20px;
+
+}
+
+.card{
+
+height:170px;
+
+border-radius:26px;
+
+background:
+rgba(255,255,255,.05);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+padding:20px;
+
+transition:.35s;
+
 }
 
 .card:hover{
-transform:translateY(-8px);
+
+transform:
+translateY(-10px);
+
+box-shadow:
+0 0 30px rgba(255,0,120,.15);
+
 }
 
-.title{
-font-size:1.5rem;
-font-weight:800;
-margin-bottom:20px;
+.card-title{
+
+font-weight:700;
+
+margin-bottom:10px;
+
 }
 
-.slot-machine{
+.card-value{
+
+font-size:2rem;
+font-weight:900;
+
+}
+
+/* ==========================
+SLOTS SCREEN
+========================== */
+
+.slots-wrap{
+
+height:100%;
+
 display:flex;
+flex-direction:column;
+
+align-items:center;
 justify-content:center;
-gap:10px;
-margin:25px 0;
+
+}
+
+.slots-title{
+
+font-size:3rem;
+font-weight:900;
+
+margin-bottom:30px;
+
+}
+
+.reels{
+
+display:flex;
+gap:18px;
+
 }
 
 .reel{
-width:90px;
-height:90px;
+
+width:130px;
+height:130px;
+
+border-radius:28px;
+
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:3rem;
-border-radius:20px;
-background:rgba(255,255,255,.08);
-border:1px solid rgba(255,255,255,.1);
+
+font-size:4rem;
+
+background:
+rgba(255,255,255,.08);
+
+border:
+1px solid rgba(255,255,255,.12);
+
+backdrop-filter:blur(30px);
+
 }
 
-.controls{
+.bet-panel{
+
+margin-top:30px;
+
 display:flex;
-gap:10px;
-margin-top:15px;
+gap:12px;
+
 }
 
 input{
-flex:1;
-padding:14px;
+
+padding:16px;
+
+width:180px;
+
 border:none;
 outline:none;
-border-radius:16px;
-background:rgba(255,255,255,.08);
+
+border-radius:18px;
+
+background:
+rgba(255,255,255,.08);
+
 color:white;
+
 }
 
 button{
-padding:14px 18px;
+
+padding:16px 24px;
+
 border:none;
-border-radius:16px;
+
+border-radius:18px;
+
 cursor:pointer;
+
 font-weight:700;
+
 color:white;
-background:linear-gradient(135deg,#ff0055,#9c27b0);
+
+background:
+linear-gradient(
+135deg,
+#ff0055,
+#9c27b0
+);
+
 transition:.3s;
+
 }
 
 button:hover{
+
 transform:scale(1.05);
+
 box-shadow:
 0 0 10px currentColor,
 0 0 20px currentColor,
 0 0 40px currentColor;
+
 }
 
-.result{
-margin-top:15px;
-opacity:.85;
-min-height:24px;
+.slot-result{
+
+margin-top:20px;
+font-size:1.1rem;
+
 }
 
-.coin{
-width:130px;
-height:130px;
-margin:20px auto;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:2rem;
-font-weight:900;
-background:
-linear-gradient(135deg,#ffd700,#ffb300);
-color:#222;
-transition:.8s;
-transform-style:preserve-3d;
+/* ==========================
+ANIMATIONS
+========================== */
+
+@keyframes float{
+
+0%,100%{
+transform:translateY(0);
 }
 
-.coin.flip{
-transform:rotateY(1080deg);
+50%{
+transform:translateY(-20px);
 }
 
-.dice{
-font-size:5rem;
-text-align:center;
-margin:15px 0;
 }
 
-.stats{
-margin-top:30px;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:16px;
+@media(max-width:1100px){
+
+.app{
+flex-direction:column;
+overflow:auto;
+height:auto;
 }
 
-.stat{
-padding:18px;
-text-align:center;
-border-radius:20px;
-background:rgba(255,255,255,.06);
+.sidebar{
+width:100%;
 }
 
-.stat h3{
-font-size:1.8rem;
-margin-bottom:8px;
+.content{
+min-height:900px;
 }
 
-footer{
-margin-top:40px;
-text-align:center;
-opacity:.6;
+.grid{
+grid-template-columns:1fr;
+}
+
 }
 
 </style>
@@ -258,323 +691,241 @@ opacity:.6;
 
 <div class="cursor"></div>
 
+<div class="bg">
+
+<div class="mesh"></div>
+
 <div class="orb o1"></div>
 <div class="orb o2"></div>
+<div class="orb o3"></div>
 
-<div class="wrapper">
+<div class="shape s1"></div>
+<div class="shape s2"></div>
 
-<header>
-<div class="logo">CASINO ROYALE</div>
-<div class="balance">💰 Баланс: $<span id="balance">1000</span></div>
-</header>
+</div>
 
-<div class="games">
+<div class="app">
 
-<!-- SLOT -->
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+ROYALE X
+</div>
+
+<div class="balance">
+<div class="balance-title">
+BALANCE
+</div>
+<div class="balance-value">
+$1000
+</div>
+</div>
+
+<div class="menu">
+
+<div class="menu-item active" data-screen="home">
+<span class="icon">🏠</span>
+Home
+</div>
+
+<div class="menu-item" data-screen="slots">
+<span class="icon">🎰</span>
+Slots
+</div>
+
+<div class="menu-item">
+<span class="icon">🃏</span>
+Blackjack
+</div>
+
+<div class="menu-item">
+<span class="icon">🪙</span>
+Coin Flip
+</div>
+
+<div class="menu-item">
+<span class="icon">🎲</span>
+Dice
+</div>
+
+<div class="menu-item">
+<span class="icon">💎</span>
+Crash
+</div>
+
+</div>
+
+<div class="spacer"></div>
+
+<div class="user">
+👑 Premium Player
+</div>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="content">
+
+<div class="topbar">
+
+<div class="page-title">
+Premium Casino
+</div>
+
+<div class="badge">
+Glass Edition
+</div>
+
+</div>
+
+<!-- HOME -->
+
+<div class="screen active" id="home">
+
+<div class="hero">
+
+<div>
+
+<h1>
+Next Generation Casino Experience
+</h1>
+
+<p>
+Apple Vision Pro × Stake × Arc Browser
+</p>
+
+</div>
+
+<div class="hero-orb"></div>
+
+</div>
+
+<div class="grid">
 
 <div class="card">
+<div class="card-title">Total Wins</div>
+<div class="card-value">$12.4K</div>
+</div>
 
-<div class="title">🎰 Слоты</div>
+<div class="card">
+<div class="card-title">Level</div>
+<div class="card-value">VIP</div>
+</div>
 
-<div class="slot-machine">
+<div class="card">
+<div class="card-title">Win Rate</div>
+<div class="card-value">68%</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- SLOTS -->
+
+<div class="screen" id="slots">
+
+<div class="slots-wrap">
+
+<div class="slots-title">
+🎰 Neon Slots
+</div>
+
+<div class="reels">
+
 <div class="reel" id="r1">🍒</div>
 <div class="reel" id="r2">💎</div>
-<div class="reel" id="r3">🍋</div>
-</div>
-
-<div class="controls">
-<input type="number" id="slotBet" value="50">
-<button onclick="spin()">Крутить</button>
-</div>
-
-<div class="result" id="slotResult"></div>
+<div class="reel" id="r3">⭐</div>
 
 </div>
 
-<!-- COIN -->
+<div class="bet-panel">
 
-<div class="card">
+<input
+type="number"
+value="50"
+placeholder="Bet">
 
-<div class="title">🪙 Орёл / Решка</div>
-
-<div class="coin" id="coin">?</div>
-
-<div class="controls">
-<button onclick="flipCoin('Орёл')">Орёл</button>
-<button onclick="flipCoin('Решка')">Решка</button>
-</div>
-
-<div class="result" id="coinResult"></div>
+<button>
+Spin
+</button>
 
 </div>
 
-<!-- DICE -->
-
-<div class="card">
-
-<div class="title">🎲 Dice</div>
-
-<div class="dice" id="dice">🎲</div>
-
-<div class="controls">
-<input type="number" id="diceBet" value="25">
-<button onclick="rollDice()">Бросить</button>
+<div class="slot-result">
+Ready to play
 </div>
-
-<div class="result" id="diceResult"></div>
 
 </div>
 
 </div>
 
-<div class="stats">
-
-<div class="stat">
-<h3 id="wins">0</h3>
-Побед
 </div>
-
-<div class="stat">
-<h3 id="losses">0</h3>
-Поражений
-</div>
-
-<div class="stat">
-<h3 id="gamesCount">0</h3>
-Игр
-</div>
-
-</div>
-
-<footer>
-Casino Royale Neon Demo • HTML/CSS/JS Only
-</footer>
 
 </div>
 
 <script>
 
-let balance=1000;
-let wins=0;
-let losses=0;
-let games=0;
-
-const symbols=[
-"🍒",
-"🍋",
-"💎",
-"⭐",
-"7️⃣",
-"🍇"
-];
-
-function update(){
-
-balance=Math.max(0,balance);
-
-document.getElementById("balance").textContent=balance;
-document.getElementById("wins").textContent=wins;
-document.getElementById("losses").textContent=losses;
-document.getElementById("gamesCount").textContent=games;
-
-}
-
-function win(amount){
-balance+=amount;
-wins++;
-games++;
-update();
-}
-
-function lose(amount){
-balance-=amount;
-losses++;
-games++;
-update();
-}
-
-function randomSymbol(){
-return symbols[Math.floor(Math.random()*symbols.length)];
-}
-
-/* SLOT */
-
-function spin(){
-
-const bet=parseInt(
-document.getElementById("slotBet").value
-)||0;
-
-if(bet<=0||bet>balance)return;
-
-let count=0;
-
-const interval=setInterval(()=>{
-
-document.getElementById("r1").textContent=randomSymbol();
-document.getElementById("r2").textContent=randomSymbol();
-document.getElementById("r3").textContent=randomSymbol();
-
-count++;
-
-if(count>18){
-
-clearInterval(interval);
-
-const a=randomSymbol();
-const b=randomSymbol();
-const c=randomSymbol();
-
-r1.textContent=a;
-r2.textContent=b;
-r3.textContent=c;
-
-if(a===b && b===c){
-
-const reward=bet*5;
-
-win(reward);
-
-slotResult.innerHTML=
-`🔥 Джекпот +$${reward}`;
-
-}else{
-
-lose(bet);
-
-slotResult.innerHTML=
-`😢 Потеряно $${bet}`;
-
-}
-
-}
-
-},80);
-
-}
-
-/* COIN */
-
-function flipCoin(choice){
-
-const coin=
-document.getElementById("coin");
-
-coin.classList.add("flip");
-
-setTimeout(()=>{
-
-coin.classList.remove("flip");
-
-const result=
-Math.random()>0.5
-?"Орёл"
-:"Решка";
-
-coin.innerHTML=
-result==="Орёл"
-?"🦅"
-:"👑";
-
-if(result===choice){
-
-win(100);
-
-coinResult.innerHTML=
-"🎉 Вы угадали +$100";
-
-}else{
-
-lose(50);
-
-coinResult.innerHTML=
-"❌ Не угадали -$50";
-
-}
-
-},800);
-
-}
-
-/* DICE */
-
-function rollDice(){
-
-const bet=parseInt(
-document.getElementById("diceBet").value
-)||0;
-
-if(bet<=0||bet>balance)return;
-
-const value=
-Math.floor(Math.random()*6)+1;
-
-dice.innerHTML=value;
-
-if(value>=5){
-
-win(bet*2);
-
-diceResult.innerHTML=
-`🔥 Выпало ${value}. Выигрыш $${bet*2}`;
-
-}else{
-
-lose(bet);
-
-diceResult.innerHTML=
-`😢 Выпало ${value}. Потеря $${bet}`;
-
-}
-
-}
-
-/* CURSOR */
-
-const cursor=
+/* ======================
+CURSOR
+====================== */
+
+const cursor =
 document.querySelector(".cursor");
 
-let mx=0;
-let my=0;
-
-let cx=0;
-let cy=0;
+let mx=0,my=0,cx=0,cy=0;
 
 window.addEventListener("mousemove",e=>{
-
 mx=e.clientX;
 my=e.clientY;
-
 });
 
-function animate(){
+function animateCursor(){
 
 cx+=(mx-cx)*0.08;
 cy+=(my-cy)*0.08;
 
 cursor.style.transform=
-`translate(${cx-140}px,${cy-140}px)`;
+`translate(${cx-160}px,${cy-160}px)`;
 
-requestAnimationFrame(animate);
+requestAnimationFrame(
+animateCursor
+);
 
 }
 
-animate();
+animateCursor();
 
-/* FLOATING ORBS */
+/* ======================
+BACKGROUND
+====================== */
 
 const o1=document.querySelector(".o1");
 const o2=document.querySelector(".o2");
+const o3=document.querySelector(".o3");
 
 function bg(t){
 
 o1.style.transform=
-`translate(${Math.sin(t/2500)*60}px,
-${Math.cos(t/2000)*40}px)`;
+`translate(
+${Math.sin(t/3000)*60}px,
+${Math.cos(t/2500)*50}px
+)`;
 
 o2.style.transform=
-`translate(${Math.cos(t/3000)*50}px,
-${Math.sin(t/2500)*70}px)`;
+`translate(
+${Math.cos(t/3500)*50}px,
+${Math.sin(t/2800)*70}px
+)`;
+
+o3.style.transform=
+`translate(
+${Math.sin(t/2400)*70}px,
+${Math.cos(t/3200)*40}px
+)`;
 
 requestAnimationFrame(bg);
 
@@ -582,7 +933,53 @@ requestAnimationFrame(bg);
 
 requestAnimationFrame(bg);
 
-update();
+/* ======================
+SCREENS
+====================== */
+
+const items=
+document.querySelectorAll(
+".menu-item[data-screen]"
+);
+
+const screens=
+document.querySelectorAll(
+".screen"
+);
+
+items.forEach(item=>{
+
+item.addEventListener(
+"click",
+()=>{
+
+items.forEach(i=>
+i.classList.remove(
+"active"
+));
+
+item.classList.add(
+"active"
+);
+
+screens.forEach(s=>
+s.classList.remove(
+"active"
+));
+
+const target=
+item.dataset.screen;
+
+document
+.getElementById(target)
+.classList.add(
+"active"
+);
+
+}
+);
+
+});
 
 </script>
 
