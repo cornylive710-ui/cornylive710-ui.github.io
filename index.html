@@ -3,962 +3,586 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>OneUI 9 Concept Preview</title>
+<title>Casino Royale Neon</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <style>
 
 :root{
-
 --red:#ff2d2d;
 --pink:#ff0055;
 --rose:#ff3366;
---magenta:#d81b60;
 --purple:#9c27b0;
 --violet:#7b1fa2;
 --deep:#5e35b1;
-
 --glass:rgba(255,255,255,.08);
---glass-border:rgba(255,255,255,.15);
-
+--border:rgba(255,255,255,.15);
 }
 
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
-}
-
-html,body{
-width:100%;
-height:100%;
-overflow:hidden;
 font-family:Inter,sans-serif;
-background:#05050c;
-color:white;
 }
 
 body{
-
-background:
-radial-gradient(circle at 10% 20%, rgba(255,0,85,.18), transparent 35%),
-radial-gradient(circle at 80% 15%, rgba(156,39,176,.20), transparent 35%),
-radial-gradient(circle at 50% 90%, rgba(255,45,45,.16), transparent 40%),
-#05050c;
-
+background:#05050b;
+color:white;
+overflow-x:hidden;
+min-height:100vh;
 }
 
-/* ===========================
-CURSOR GLOW
-=========================== */
+body::before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 10% 20%, rgba(255,0,85,.2), transparent 35%),
+radial-gradient(circle at 90% 20%, rgba(156,39,176,.2), transparent 35%),
+radial-gradient(circle at 50% 90%, rgba(255,45,45,.15), transparent 40%),
+#05050b;
+z-index:-10;
+}
 
 .cursor{
 position:fixed;
-width:320px;
-height:320px;
+width:280px;
+height:280px;
 border-radius:50%;
 pointer-events:none;
-z-index:2;
-
 background:
 radial-gradient(circle,
-rgba(255,0,100,.18),
-rgba(255,0,255,.08),
+rgba(255,0,120,.25),
 transparent 70%);
-
-filter:blur(50px);
-}
-
-/* ===========================
-BACKGROUND
-=========================== */
-
-.bg{
-position:fixed;
-inset:0;
-overflow:hidden;
-z-index:-2;
+filter:blur(40px);
+z-index:2;
 }
 
 .orb{
-position:absolute;
+position:fixed;
 border-radius:50%;
-filter:blur(80px);
-mix-blend-mode:screen;
-opacity:.5;
-will-change:transform;
+filter:blur(90px);
+opacity:.4;
+z-index:-5;
 }
 
-.orb1{
-width:650px;
-height:650px;
+.o1{
+width:500px;
+height:500px;
 background:#ff0055;
-left:-180px;
+left:-150px;
 top:-150px;
 }
 
-.orb2{
-width:500px;
-height:500px;
+.o2{
+width:400px;
+height:400px;
 background:#9c27b0;
-right:-100px;
-top:20%;
+right:-120px;
+top:30%;
 }
-
-.orb3{
-width:450px;
-height:450px;
-background:#ff3366;
-bottom:-150px;
-left:25%;
-}
-
-.glass-shape{
-position:absolute;
-border-radius:40px;
-
-background:rgba(255,255,255,.05);
-
-border:1px solid rgba(255,255,255,.08);
-
-backdrop-filter:blur(20px);
-}
-
-.shape1{
-width:220px;
-height:220px;
-
-top:18%;
-left:70%;
-
-transform:rotate(30deg);
-}
-
-.shape2{
-width:180px;
-height:180px;
-
-bottom:15%;
-left:12%;
-
-border-radius:50%;
-}
-
-.particles{
-position:absolute;
-inset:0;
-}
-
-.particle{
-
-position:absolute;
-width:3px;
-height:3px;
-border-radius:50%;
-
-background:white;
-
-opacity:.25;
-}
-
-/* ===========================
-LAYOUT
-=========================== */
 
 .wrapper{
-
-height:100vh;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-perspective:2200px;
-
+max-width:1300px;
+margin:auto;
+padding:40px 20px;
 }
 
-.phone{
-
-width:390px;
-height:820px;
-
-border-radius:48px;
-
-position:relative;
-
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.12),
-rgba(255,255,255,.05)
-);
-
-border:1px solid rgba(255,255,255,.14);
-
-backdrop-filter:blur(40px);
-
-box-shadow:
-0 50px 120px rgba(0,0,0,.55),
-0 0 80px rgba(156,39,176,.18);
-
-overflow:hidden;
-
-transform-style:preserve-3d;
-
-}
-
-/* ===========================
-REFLECTION
-=========================== */
-
-.phone::before{
-
-content:"";
-
-position:absolute;
-
-top:-40%;
-left:-40%;
-
-width:80%;
-height:160%;
-
-background:
-linear-gradient(
-90deg,
-transparent,
-rgba(255,255,255,.12),
-transparent
-);
-
-transform:rotate(25deg);
-
-pointer-events:none;
-
-}
-
-/* ===========================
-SCREEN
-=========================== */
-
-.screen{
-
-position:absolute;
-inset:0;
-
-overflow:hidden;
-
-background:
-linear-gradient(
-180deg,
-rgba(255,255,255,.02),
-rgba(255,255,255,.01)
-);
-
-}
-
-/* ===========================
-DYNAMIC ISLAND
-=========================== */
-
-.island{
-
-position:absolute;
-
-top:12px;
-left:50%;
-
-transform:translateX(-50%);
-
-width:128px;
-height:34px;
-
-background:black;
-
-border-radius:30px;
-
-z-index:50;
-
-display:flex;
-align-items:center;
-justify-content:center;
-
-transition:.4s;
-}
-
-.island-dot{
-
-width:10px;
-height:10px;
-border-radius:50%;
-
-background:#00ff95;
-
-box-shadow:
-0 0 8px #00ff95,
-0 0 20px #00ff95;
-
-animation:pulse 2s infinite;
-}
-
-/* ===========================
-LOCK SCREEN
-=========================== */
-
-.lock-screen{
-
-position:absolute;
-inset:0;
-
-display:flex;
-flex-direction:column;
-
-align-items:center;
-justify-content:flex-start;
-
-padding-top:90px;
-
-transition:.9s cubic-bezier(.2,.9,.2,1);
-
-}
-
-.time{
-
-font-size:5rem;
-font-weight:200;
-letter-spacing:-4px;
-
-}
-
-.date{
-
-opacity:.7;
-margin-top:-10px;
-}
-
-.weather{
-
-margin-top:40px;
-
-padding:16px 22px;
-
-background:var(--glass);
-
-border:1px solid var(--glass-border);
-
-backdrop-filter:blur(30px);
-
-border-radius:24px;
-}
-
-.weather-row{
-display:flex;
-gap:12px;
-align-items:center;
-}
-
-.weather-icon{
-font-size:2rem;
-}
-
-.weather-temp{
-font-size:1.5rem;
-font-weight:700;
-}
-
-.ai-orb{
-
-margin-top:80px;
-
-width:180px;
-height:180px;
-
-border-radius:50%;
-
-background:
-radial-gradient(circle at 30% 30%,
-#ff2d2d,
-#ff0055,
-#9c27b0,
-#5e35b1);
-
-filter:blur(.2px);
-
-position:relative;
-
-box-shadow:
-0 0 30px #ff0055,
-0 0 60px #ff0055,
-0 0 100px rgba(255,0,85,.4);
-
-animation:orbFloat 5s ease-in-out infinite;
-}
-
-.ai-orb::before{
-
-content:"";
-
-position:absolute;
-inset:-15px;
-
-border-radius:50%;
-
-border:1px solid rgba(255,255,255,.2);
-
-animation:spin 18s linear infinite;
-
-}
-
-.ai-orb::after{
-
-content:"";
-
-position:absolute;
-inset:-35px;
-
-border-radius:50%;
-
-border:1px solid rgba(255,255,255,.08);
-
-animation:spin 25s linear infinite reverse;
-
-}
-
-.unlock-text{
-
-position:absolute;
-
-bottom:80px;
-
-font-size:.9rem;
-
-opacity:.65;
-
-animation:blink 2s infinite;
-}
-
-.home-indicator{
-
-position:absolute;
-
-bottom:14px;
-left:50%;
-
-transform:translateX(-50%);
-
-width:120px;
-height:5px;
-
-border-radius:10px;
-
-background:rgba(255,255,255,.8);
-
-}
-
-/* ===========================
-HOME SCREEN
-=========================== */
-
-.home-screen{
-
-position:absolute;
-inset:0;
-
-padding-top:70px;
-
-opacity:0;
-
-pointer-events:none;
-
-transform:translateY(50px);
-
-transition:.8s cubic-bezier(.2,.9,.2,1);
-
-}
-
-.home-screen.active{
-
-opacity:1;
-transform:none;
-pointer-events:auto;
-
-}
-
-.status{
-
+header{
 display:flex;
 justify-content:space-between;
-
-padding:0 24px;
-font-size:.85rem;
+align-items:center;
+margin-bottom:30px;
 }
 
-.widgets{
-
-padding:20px;
-display:grid;
-gap:16px;
+.logo{
+font-size:2rem;
+font-weight:900;
+background:linear-gradient(135deg,#ff2d2d,#9c27b0);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-.widget{
-
+.balance{
+padding:14px 24px;
+border-radius:20px;
 background:var(--glass);
-
-border:1px solid var(--glass-border);
-
+border:1px solid var(--border);
 backdrop-filter:blur(30px);
-
-border-radius:28px;
-
-padding:18px;
-
-box-shadow:
-0 10px 40px rgba(0,0,0,.25);
-
-}
-
-.ai-widget{
-
-height:140px;
-
-display:flex;
-flex-direction:column;
-justify-content:center;
-
-background:
-linear-gradient(
-135deg,
-rgba(255,0,85,.18),
-rgba(156,39,176,.18)
-);
-
-}
-
-.ai-title{
-
-font-size:1.2rem;
 font-weight:700;
 }
 
-.ai-sub{
-
-opacity:.7;
-margin-top:6px;
-font-size:.9rem;
-}
-
-.apps{
-
-padding:10px 20px 0;
-
+.games{
 display:grid;
-
-grid-template-columns:
-repeat(4,1fr);
-
-gap:18px;
+grid-template-columns:repeat(auto-fit,minmax(340px,1fr));
+gap:24px;
 }
 
-.app{
-
-display:flex;
-flex-direction:column;
-align-items:center;
-gap:8px;
-
-cursor:pointer;
-
+.card{
+background:var(--glass);
+backdrop-filter:blur(30px);
+border:1px solid var(--border);
+border-radius:30px;
+padding:24px;
+box-shadow:0 10px 40px rgba(0,0,0,.3);
 transition:.35s;
 }
 
-.app:hover{
-transform:translateY(-6px);
+.card:hover{
+transform:translateY(-8px);
 }
 
-.icon{
+.title{
+font-size:1.5rem;
+font-weight:800;
+margin-bottom:20px;
+}
 
-width:62px;
-height:62px;
+.slot-machine{
+display:flex;
+justify-content:center;
+gap:10px;
+margin:25px 0;
+}
 
-border-radius:22px;
-
-background:rgba(255,255,255,.08);
-
-border:1px solid rgba(255,255,255,.15);
-
-backdrop-filter:blur(25px);
-
+.reel{
+width:90px;
+height:90px;
 display:flex;
 align-items:center;
 justify-content:center;
-
-font-size:1.4rem;
-
-box-shadow:
-0 0 20px rgba(255,255,255,.08);
-
+font-size:3rem;
+border-radius:20px;
+background:rgba(255,255,255,.08);
+border:1px solid rgba(255,255,255,.1);
 }
 
-.label{
-font-size:.72rem;
-opacity:.85;
+.controls{
+display:flex;
+gap:10px;
+margin-top:15px;
 }
 
-/* ===========================
-NOTIFICATION
-=========================== */
+input{
+flex:1;
+padding:14px;
+border:none;
+outline:none;
+border-radius:16px;
+background:rgba(255,255,255,.08);
+color:white;
+}
 
-.notification{
-
-position:absolute;
-
-left:16px;
-right:16px;
-
-top:70px;
-
+button{
 padding:14px 18px;
-
-border-radius:22px;
-
-background:rgba(255,255,255,.1);
-
-backdrop-filter:blur(30px);
-
-border:1px solid rgba(255,255,255,.15);
-
-transform:translateY(-120px);
-
-transition:.7s;
+border:none;
+border-radius:16px;
+cursor:pointer;
+font-weight:700;
+color:white;
+background:linear-gradient(135deg,#ff0055,#9c27b0);
+transition:.3s;
 }
 
-.notification.show{
-transform:none;
+button:hover{
+transform:scale(1.05);
+box-shadow:
+0 0 10px currentColor,
+0 0 20px currentColor,
+0 0 40px currentColor;
 }
 
-/* ===========================
-ANIMATION
-=========================== */
-
-@keyframes pulse{
-
-50%{
-transform:scale(1.3);
+.result{
+margin-top:15px;
+opacity:.85;
+min-height:24px;
 }
 
+.coin{
+width:130px;
+height:130px;
+margin:20px auto;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:2rem;
+font-weight:900;
+background:
+linear-gradient(135deg,#ffd700,#ffb300);
+color:#222;
+transition:.8s;
+transform-style:preserve-3d;
 }
 
-@keyframes spin{
-
-from{
-transform:rotate(0deg);
+.coin.flip{
+transform:rotateY(1080deg);
 }
 
-to{
-transform:rotate(360deg);
+.dice{
+font-size:5rem;
+text-align:center;
+margin:15px 0;
 }
 
+.stats{
+margin-top:30px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:16px;
 }
 
-@keyframes orbFloat{
-
-0%,100%{
-transform:translateY(0);
+.stat{
+padding:18px;
+text-align:center;
+border-radius:20px;
+background:rgba(255,255,255,.06);
 }
 
-50%{
-transform:translateY(-18px);
+.stat h3{
+font-size:1.8rem;
+margin-bottom:8px;
 }
 
-}
-
-@keyframes blink{
-
-50%{
-opacity:1;
-}
-
+footer{
+margin-top:40px;
+text-align:center;
+opacity:.6;
 }
 
 </style>
 </head>
-
 <body>
 
 <div class="cursor"></div>
 
-<div class="bg">
-
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
-
-<div class="glass-shape shape1"></div>
-<div class="glass-shape shape2"></div>
-
-<div class="particles" id="particles"></div>
-
-</div>
+<div class="orb o1"></div>
+<div class="orb o2"></div>
 
 <div class="wrapper">
 
-<div class="phone" id="phone">
+<header>
+<div class="logo">CASINO ROYALE</div>
+<div class="balance">💰 Баланс: $<span id="balance">1000</span></div>
+</header>
 
-<div class="screen">
+<div class="games">
 
-<div class="island">
-<div class="island-dot"></div>
+<!-- SLOT -->
+
+<div class="card">
+
+<div class="title">🎰 Слоты</div>
+
+<div class="slot-machine">
+<div class="reel" id="r1">🍒</div>
+<div class="reel" id="r2">💎</div>
+<div class="reel" id="r3">🍋</div>
 </div>
 
-<div class="notification" id="notification">
-✨ Galaxy AI готов к работе
+<div class="controls">
+<input type="number" id="slotBet" value="50">
+<button onclick="spin()">Крутить</button>
 </div>
 
-<!-- LOCK SCREEN -->
-
-<div class="lock-screen" id="lock">
-
-<div class="time" id="time">
-12:45
-</div>
-
-<div class="date" id="date">
-Monday, June 9
-</div>
-
-<div class="weather">
-
-<div class="weather-row">
-<div class="weather-icon">☀️</div>
-<div>
-<div class="weather-temp">24°C</div>
-<div style="opacity:.6;font-size:.8rem;">
-Tallinn
-</div>
-</div>
-</div>
+<div class="result" id="slotResult"></div>
 
 </div>
 
-<div class="ai-orb"></div>
+<!-- COIN -->
 
-<div class="unlock-text">
-Swipe Up To Unlock
+<div class="card">
+
+<div class="title">🪙 Орёл / Решка</div>
+
+<div class="coin" id="coin">?</div>
+
+<div class="controls">
+<button onclick="flipCoin('Орёл')">Орёл</button>
+<button onclick="flipCoin('Решка')">Решка</button>
 </div>
 
-<div class="home-indicator"></div>
+<div class="result" id="coinResult"></div>
 
 </div>
 
-<!-- HOME -->
+<!-- DICE -->
 
-<div class="home-screen" id="home">
+<div class="card">
 
-<div class="status">
-<div>09:41</div>
-<div>5G • 100%</div>
+<div class="title">🎲 Dice</div>
+
+<div class="dice" id="dice">🎲</div>
+
+<div class="controls">
+<input type="number" id="diceBet" value="25">
+<button onclick="rollDice()">Бросить</button>
 </div>
 
-<div class="widgets">
-
-<div class="widget ai-widget">
-
-<div class="ai-title">
-Galaxy AI
-</div>
-
-<div class="ai-sub">
-Ask anything. Create anything.
-</div>
+<div class="result" id="diceResult"></div>
 
 </div>
 
 </div>
 
-<div class="apps">
+<div class="stats">
 
-<div class="app">
-<div class="icon">🤖</div>
-<div class="label">AI</div>
+<div class="stat">
+<h3 id="wins">0</h3>
+Побед
 </div>
 
-<div class="app">
-<div class="icon">📷</div>
-<div class="label">Camera</div>
+<div class="stat">
+<h3 id="losses">0</h3>
+Поражений
 </div>
 
-<div class="app">
-<div class="icon">💬</div>
-<div class="label">Messages</div>
-</div>
-
-<div class="app">
-<div class="icon">🌐</div>
-<div class="label">Browser</div>
-</div>
-
-<div class="app">
-<div class="icon">⚙️</div>
-<div class="label">Settings</div>
-</div>
-
-<div class="app">
-<div class="icon">🎵</div>
-<div class="label">Music</div>
-</div>
-
-<div class="app">
-<div class="icon">❤️</div>
-<div class="label">Health</div>
-</div>
-
-<div class="app">
-<div class="icon">☁️</div>
-<div class="label">Cloud</div>
+<div class="stat">
+<h3 id="gamesCount">0</h3>
+Игр
 </div>
 
 </div>
 
-</div>
-
-</div>
-
-</div>
+<footer>
+Casino Royale Neon Demo • HTML/CSS/JS Only
+</footer>
 
 </div>
 
 <script>
 
+let balance=1000;
+let wins=0;
+let losses=0;
+let games=0;
+
+const symbols=[
+"🍒",
+"🍋",
+"💎",
+"⭐",
+"7️⃣",
+"🍇"
+];
+
+function update(){
+
+balance=Math.max(0,balance);
+
+document.getElementById("balance").textContent=balance;
+document.getElementById("wins").textContent=wins;
+document.getElementById("losses").textContent=losses;
+document.getElementById("gamesCount").textContent=games;
+
+}
+
+function win(amount){
+balance+=amount;
+wins++;
+games++;
+update();
+}
+
+function lose(amount){
+balance-=amount;
+losses++;
+games++;
+update();
+}
+
+function randomSymbol(){
+return symbols[Math.floor(Math.random()*symbols.length)];
+}
+
+/* SLOT */
+
+function spin(){
+
+const bet=parseInt(
+document.getElementById("slotBet").value
+)||0;
+
+if(bet<=0||bet>balance)return;
+
+let count=0;
+
+const interval=setInterval(()=>{
+
+document.getElementById("r1").textContent=randomSymbol();
+document.getElementById("r2").textContent=randomSymbol();
+document.getElementById("r3").textContent=randomSymbol();
+
+count++;
+
+if(count>18){
+
+clearInterval(interval);
+
+const a=randomSymbol();
+const b=randomSymbol();
+const c=randomSymbol();
+
+r1.textContent=a;
+r2.textContent=b;
+r3.textContent=c;
+
+if(a===b && b===c){
+
+const reward=bet*5;
+
+win(reward);
+
+slotResult.innerHTML=
+`🔥 Джекпот +$${reward}`;
+
+}else{
+
+lose(bet);
+
+slotResult.innerHTML=
+`😢 Потеряно $${bet}`;
+
+}
+
+}
+
+},80);
+
+}
+
+/* COIN */
+
+function flipCoin(choice){
+
+const coin=
+document.getElementById("coin");
+
+coin.classList.add("flip");
+
+setTimeout(()=>{
+
+coin.classList.remove("flip");
+
+const result=
+Math.random()>0.5
+?"Орёл"
+:"Решка";
+
+coin.innerHTML=
+result==="Орёл"
+?"🦅"
+:"👑";
+
+if(result===choice){
+
+win(100);
+
+coinResult.innerHTML=
+"🎉 Вы угадали +$100";
+
+}else{
+
+lose(50);
+
+coinResult.innerHTML=
+"❌ Не угадали -$50";
+
+}
+
+},800);
+
+}
+
+/* DICE */
+
+function rollDice(){
+
+const bet=parseInt(
+document.getElementById("diceBet").value
+)||0;
+
+if(bet<=0||bet>balance)return;
+
+const value=
+Math.floor(Math.random()*6)+1;
+
+dice.innerHTML=value;
+
+if(value>=5){
+
+win(bet*2);
+
+diceResult.innerHTML=
+`🔥 Выпало ${value}. Выигрыш $${bet*2}`;
+
+}else{
+
+lose(bet);
+
+diceResult.innerHTML=
+`😢 Выпало ${value}. Потеря $${bet}`;
+
+}
+
+}
+
 /* CURSOR */
 
-const cursor=document.querySelector(".cursor");
+const cursor=
+document.querySelector(".cursor");
 
-let mx=0,my=0;
-let cx=0,cy=0;
+let mx=0;
+let my=0;
+
+let cx=0;
+let cy=0;
 
 window.addEventListener("mousemove",e=>{
+
 mx=e.clientX;
 my=e.clientY;
+
 });
 
-function animateCursor(){
+function animate(){
 
 cx+=(mx-cx)*0.08;
 cy+=(my-cy)*0.08;
 
 cursor.style.transform=
-`translate(${cx-160}px,${cy-160}px)`;
+`translate(${cx-140}px,${cy-140}px)`;
 
-requestAnimationFrame(animateCursor);
-}
-
-animateCursor();
-
-/* TIME */
-
-function updateTime(){
-
-const now=new Date();
-
-document.getElementById("time").innerHTML=
-now.toLocaleTimeString("ru-RU",{
-hour:"2-digit",
-minute:"2-digit"
-});
-
-document.getElementById("date").innerHTML=
-now.toLocaleDateString("ru-RU",{
-weekday:"long",
-month:"long",
-day:"numeric"
-});
+requestAnimationFrame(animate);
 
 }
 
-updateTime();
-setInterval(updateTime,1000);
+animate();
 
-/* PARTICLES */
+/* FLOATING ORBS */
 
-const particles=document.getElementById("particles");
+const o1=document.querySelector(".o1");
+const o2=document.querySelector(".o2");
 
-for(let i=0;i<60;i++){
+function bg(t){
 
-const p=document.createElement("div");
+o1.style.transform=
+`translate(${Math.sin(t/2500)*60}px,
+${Math.cos(t/2000)*40}px)`;
 
-p.className="particle";
+o2.style.transform=
+`translate(${Math.cos(t/3000)*50}px,
+${Math.sin(t/2500)*70}px)`;
 
-p.style.left=Math.random()*100+"%";
-p.style.top=Math.random()*100+"%";
-
-p.style.opacity=Math.random()*.5;
-
-particles.appendChild(p);
-
-}
-
-/* PHONE TILT */
-
-const phone=document.getElementById("phone");
-
-window.addEventListener("mousemove",e=>{
-
-const x=(e.clientX/window.innerWidth-.5)*16;
-const y=(e.clientY/window.innerHeight-.5)*16;
-
-phone.style.transform=
-`rotateY(${x}deg)
- rotateX(${-y}deg)`;
-
-});
-
-/* UNLOCK */
-
-const lock=document.getElementById("lock");
-const home=document.getElementById("home");
-
-let startY=0;
-
-lock.addEventListener("touchstart",e=>{
-startY=e.touches[0].clientY;
-});
-
-lock.addEventListener("touchend",e=>{
-
-const end=e.changedTouches[0].clientY;
-
-if(startY-end>80){
-
-lock.style.transform=
-"translateY(-100%)";
-
-home.classList.add("active");
-
-document
-.getElementById("notification")
-.classList.add("show");
+requestAnimationFrame(bg);
 
 }
 
-});
+requestAnimationFrame(bg);
 
-document.addEventListener("keydown",e=>{
-
-if(e.code==="Space"){
-
-lock.style.transform=
-"translateY(-100%)";
-
-home.classList.add("active");
-
-document
-.getElementById("notification")
-.classList.add("show");
-
-}
-
-});
+update();
 
 </script>
 
