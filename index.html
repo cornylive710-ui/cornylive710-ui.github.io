@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Qwest Music — абсолютно рабочий плеер</title>
+    <title>Qwest Music — фикс кликов</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -451,8 +451,6 @@
                         stopProgressTimer();
                     } else if (event.data === YT.PlayerState.ENDED) {
                         playNextTrack();
-                    } else if (event.data === YT.PlayerState.BUFFERING) {
-                        // ничего не делаем
                     }
                 },
                 onError: (error) => {
@@ -491,6 +489,7 @@
     function stopProgressTimer() { if (progressInterval) clearInterval(progressInterval); progressInterval = null; }
 
     function updateWidgetAndMiniCover(track) {
+        console.log('Обновляем виджет для:', track);
         if (track && track.coverUrl) {
             widgetCover.style.backgroundImage = `url('${track.coverUrl}')`;
             widgetCover.style.backgroundSize = 'cover';
@@ -510,10 +509,18 @@
         artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
     }
 
-    // Основная функция воспроизведения с тройным обходом блокировки
-    async function playTrack(track, index) {
-        if (!track || !track.videoId) { playNextTrack(); return; }
-        if (!player || !isPlayerReady) { setTimeout(() => playTrack(track, index), 300); return; }
+    window.playTrack = function(track, index) {
+        console.log('playTrack вызвана с треком:', track);
+        if (!track || !track.videoId) { 
+            console.warn('Нет videoId у трека');
+            playNextTrack(); 
+            return; 
+        }
+        if (!player || !isPlayerReady) { 
+            console.log('Плеер не готов, повтор через 300ms');
+            setTimeout(() => window.playTrack(track, index), 300); 
+            return; 
+        }
         
         currentPlaylist = window.lastSearchResults || [];
         updateWidgetAndMiniCover(track);
@@ -531,27 +538,21 @@
             if (found !== -1) currentIndex = found;
         }
 
-        // Загружаем видео
         player.loadVideoById(track.videoId);
-        
-        // 1. Сначала пробуем заглушить и воспроизвести
         player.mute();
         player.playVideo();
         
-        // 2. Через 800 мс – возвращаем звук (если браузер разрешил)
         setTimeout(() => {
             if (player && player.unMute) {
                 player.unMute();
                 player.setVolume(volumeSlider.value);
                 showToast('🎵 Звук активирован', 1000);
             } else {
-                // Если не получилось – показываем кнопку ручного включения
                 unmuteBtn.style.display = 'block';
                 showToast('⚠️ Нажмите "Включить звук" на виджете', 3000);
             }
         }, 800);
         
-        // 3. Повторный вызов play через 1 секунду (на случай, если видео ещё не готово)
         setTimeout(() => {
             if (player && player.getPlayerState && player.getPlayerState() !== YT.PlayerState.PLAYING) {
                 player.playVideo();
@@ -562,9 +563,8 @@
         widgetPlayPause.textContent = '⏸';
         widget.classList.add('playing');
         showToast(`🎵 ${track.title} — ${track.artist}`, 2000);
-    }
+    };
 
-    // Ручное включение звука
     unmuteBtn.addEventListener('click', () => {
         if (player && player.unMute) {
             player.unMute();
@@ -583,13 +583,13 @@
         if (!currentPlaylist.length) return;
         let nextIndex = currentIndex + 1;
         if (nextIndex >= currentPlaylist.length) nextIndex = 0;
-        playTrack(currentPlaylist[nextIndex], nextIndex);
+        window.playTrack(currentPlaylist[nextIndex], nextIndex);
     }
     function playPrevTrack() {
         if (!currentPlaylist.length) return;
         let prevIndex = currentIndex - 1;
         if (prevIndex < 0) prevIndex = currentPlaylist.length - 1;
-        playTrack(currentPlaylist[prevIndex], prevIndex);
+        window.playTrack(currentPlaylist[prevIndex], prevIndex);
     }
 
     playBtn.addEventListener('click', playPause);
@@ -616,7 +616,7 @@
         if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
     });
 
-    // Поиск (без изменений, работает отлично)
+    // Поиск
     let searchTimeout;
     let lastSearchTime = 0;
     window.lastSearchResults = [];
@@ -677,6 +677,7 @@
                 <button class="fav-btn ${userFavorites.has(track.videoId) ? 'active' : ''}" data-id="${track.videoId}" onclick="event.stopPropagation(); window.toggleFavorite('${track.videoId}', ${JSON.stringify({id: track.videoId, title: track.title, artist: track.artist}).replace(/"/g, '&quot;')})">❤️</button>
             </div>
         `).join('');
+        // Привязываем клик к карточке напрямую
         document.querySelectorAll('.track-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (e.target.classList.contains('fav-btn')) return;
@@ -684,8 +685,11 @@
                 const index = parseInt(card.getAttribute('data-index'));
                 const track = tracksList.find(t => t.videoId === videoId);
                 if (track) {
+                    console.log('Клик по карточке, трек:', track);
                     currentPlaylist = tracksList;
-                    playTrack(track, index);
+                    window.playTrack(track, index);
+                } else {
+                    console.warn('Трек не найден для videoId', videoId);
                 }
             });
         });
