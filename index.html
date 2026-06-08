@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Qwest Music — идеальный плеер</title>
+    <title>Qwest Music — без 429</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -515,18 +515,15 @@
         durationSpan.innerText = '0:00';
         widgetDuration.innerText = '0:00';
 
-        // Устанавливаем индекс
         if (index !== undefined) currentIndex = index;
         else {
             const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
             if (found !== -1) currentIndex = found;
         }
 
-        // Обход autoplay: сначала mute, play, потом unMute
         player.loadVideoById(track.videoId);
         player.mute();
         player.playVideo();
-        // Даём время на запуск и возвращаем звук
         setTimeout(() => {
             if (player && player.unMute) {
                 player.unMute();
@@ -582,17 +579,38 @@
         if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
     });
 
-    // Поиск
+    // Поиск с защитой от 429
+    let lastSearchTime = 0;
     let searchTimeout;
-    window.lastSearchResults = [];
 
-    async function searchTracks(query) {
+    async function searchTracks(query, retryCount = 0) {
         if (!query.trim()) return;
+        
+        const now = Date.now();
+        if (now - lastSearchTime < 1500 && retryCount === 0) {
+            showToast('⏳ Подождите перед новым поиском...', 1000);
+            return;
+        }
+        lastSearchTime = now;
+        
         resultsTitleSpan.innerText = `Результаты: "${query}"`;
         tracksGrid.innerHTML = '<div class="loading">🔎 Поиск на YouTube...</div>';
+        
         try {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`;
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`;
             const resp = await fetch(url);
+            
+            if (resp.status === 429) {
+                if (retryCount < 2) {
+                    const wait = (retryCount + 1) * 2000;
+                    showToast(`⚠️ Лимит запросов, повтор через ${wait/1000} сек...`, wait);
+                    setTimeout(() => searchTracks(query, retryCount + 1), wait);
+                    return;
+                } else {
+                    throw new Error('Лимит запросов YouTube API. Попробуйте позже.');
+                }
+            }
+            
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const data = await resp.json();
             if (!data.items || data.items.length === 0) throw new Error('Ничего не найдено');
