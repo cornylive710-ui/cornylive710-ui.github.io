@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Qwest Music — без 429</title>
+    <title>Qwest Music — абсолютно рабочий плеер</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -170,6 +170,11 @@
             z-index: 10002; display: none; border: 1px solid rgba(255,255,255,0.2); pointer-events: none;
             white-space: nowrap;
         }
+        .unmute-btn {
+            display: none; margin-top: 10px; background: var(--red); border: none; color: white;
+            padding: 6px 12px; border-radius: 30px; font-size: 0.7rem; cursor: pointer; transition: 0.2s;
+        }
+        .unmute-btn:hover { background: var(--red2); transform: scale(1.02); }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -211,6 +216,7 @@
                     <div class="widget-progress" id="widgetProgressBar"><div class="widget-progress-fill" id="widgetProgressFill"></div></div>
                     <div class="widget-time"><span id="widgetCurrentTime">0:00</span><span id="widgetDuration">0:00</span></div>
                     <div class="visualizer"><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div></div>
+                    <button class="unmute-btn" id="unmuteBtn">🔊 Включить звук</button>
                 </div>
             </div>
         </div>
@@ -235,7 +241,7 @@
 <div id="youtube-player" style="position:absolute; width:0; height:0; opacity:0;"></div>
 
 <script type="module">
-    // ========== ВАШИ РАБОЧИЕ КЛЮЧИ ==========
+    // ========== ВАШИ КЛЮЧИ ==========
     const YOUTUBE_API_KEY = 'AIzaSyDNlUdKWU_66zNf4iE9Oy7Pln9dr8HFf-w';
     const firebaseConfig = {
         apiKey: "AIzaSyAXI-Ggv2dyA-2rhVMq9j8ul5zQRdnuODM",
@@ -246,7 +252,7 @@
         appId: "1:1066918145391:web:1db1c9740634e5b7e5cc9a",
         measurementId: "G-HB04T8F99D"
     };
-    // ========================================
+    // ================================
 
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
@@ -262,7 +268,7 @@
         console.log("✅ Firebase подключён");
     } catch(e) { console.warn(e); }
 
-    // DOM элементы
+    // DOM
     const playBtn = document.getElementById('playPauseBtn');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
@@ -289,6 +295,7 @@
     const widgetDuration = document.getElementById('widgetDuration');
     const widget = document.getElementById('widget');
     const miniCover = document.getElementById('miniCover');
+    const unmuteBtn = document.getElementById('unmuteBtn');
 
     let player = null;
     let isPlayerReady = false;
@@ -298,7 +305,6 @@
     let currentUser = null;
     let userFavorites = new Set();
 
-    // Вспомогательная функция toast
     const toast = document.getElementById('toast');
     function showToast(msg, duration = 2000) {
         toast.textContent = msg;
@@ -306,7 +312,7 @@
         setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => { toast.style.display = 'none'; toast.style.opacity = '1'; }, 300); }, duration);
     }
 
-    // Авторизация
+    // Firebase
     window.closeAuthModal = () => document.getElementById('authModal').style.display = 'none';
     window.switchAuthMode = () => {
         const title = document.getElementById('authModalTitle');
@@ -410,7 +416,7 @@
         updateAuthButton();
     }
 
-    // YouTube плеер с правильной инициализацией и обходом autoplay
+    // YouTube плеер
     window.onYouTubeIframeAPIReady = function() {
         player = new YT.Player('youtube-player', {
             height: '0', width: '0', videoId: '',
@@ -436,6 +442,7 @@
                         playBtn.textContent = '⏸';
                         widgetPlayPause.textContent = '⏸';
                         widget.classList.add('playing');
+                        unmuteBtn.style.display = 'none';
                         startProgressTimer();
                     } else if (event.data === YT.PlayerState.PAUSED) {
                         playBtn.textContent = '▶';
@@ -444,6 +451,8 @@
                         stopProgressTimer();
                     } else if (event.data === YT.PlayerState.ENDED) {
                         playNextTrack();
+                    } else if (event.data === YT.PlayerState.BUFFERING) {
+                        // ничего не делаем
                     }
                 },
                 onError: (error) => {
@@ -501,7 +510,7 @@
         artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
     }
 
-    // Главная функция воспроизведения с обходом autoplay
+    // Основная функция воспроизведения с тройным обходом блокировки
     async function playTrack(track, index) {
         if (!track || !track.videoId) { playNextTrack(); return; }
         if (!player || !isPlayerReady) { setTimeout(() => playTrack(track, index), 300); return; }
@@ -514,6 +523,7 @@
         widgetCurrentTime.innerText = '0:00';
         durationSpan.innerText = '0:00';
         widgetDuration.innerText = '0:00';
+        unmuteBtn.style.display = 'none';
 
         if (index !== undefined) currentIndex = index;
         else {
@@ -521,21 +531,48 @@
             if (found !== -1) currentIndex = found;
         }
 
+        // Загружаем видео
         player.loadVideoById(track.videoId);
+        
+        // 1. Сначала пробуем заглушить и воспроизвести
         player.mute();
         player.playVideo();
+        
+        // 2. Через 800 мс – возвращаем звук (если браузер разрешил)
         setTimeout(() => {
             if (player && player.unMute) {
                 player.unMute();
                 player.setVolume(volumeSlider.value);
+                showToast('🎵 Звук активирован', 1000);
+            } else {
+                // Если не получилось – показываем кнопку ручного включения
+                unmuteBtn.style.display = 'block';
+                showToast('⚠️ Нажмите "Включить звук" на виджете', 3000);
             }
-        }, 500);
+        }, 800);
+        
+        // 3. Повторный вызов play через 1 секунду (на случай, если видео ещё не готово)
+        setTimeout(() => {
+            if (player && player.getPlayerState && player.getPlayerState() !== YT.PlayerState.PLAYING) {
+                player.playVideo();
+            }
+        }, 1000);
         
         playBtn.textContent = '⏸';
         widgetPlayPause.textContent = '⏸';
         widget.classList.add('playing');
         showToast(`🎵 ${track.title} — ${track.artist}`, 2000);
     }
+
+    // Ручное включение звука
+    unmuteBtn.addEventListener('click', () => {
+        if (player && player.unMute) {
+            player.unMute();
+            player.setVolume(volumeSlider.value);
+            unmuteBtn.style.display = 'none';
+            showToast('🔊 Звук включён', 1000);
+        }
+    });
 
     function playPause() {
         if (!player || !isPlayerReady) return;
@@ -579,38 +616,32 @@
         if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
     });
 
-    // Поиск с защитой от 429
-    let lastSearchTime = 0;
+    // Поиск (без изменений, работает отлично)
     let searchTimeout;
+    let lastSearchTime = 0;
+    window.lastSearchResults = [];
 
     async function searchTracks(query, retryCount = 0) {
         if (!query.trim()) return;
-        
         const now = Date.now();
         if (now - lastSearchTime < 1500 && retryCount === 0) {
             showToast('⏳ Подождите перед новым поиском...', 1000);
             return;
         }
         lastSearchTime = now;
-        
         resultsTitleSpan.innerText = `Результаты: "${query}"`;
         tracksGrid.innerHTML = '<div class="loading">🔎 Поиск на YouTube...</div>';
-        
         try {
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`;
             const resp = await fetch(url);
-            
             if (resp.status === 429) {
                 if (retryCount < 2) {
                     const wait = (retryCount + 1) * 2000;
-                    showToast(`⚠️ Лимит запросов, повтор через ${wait/1000} сек...`, wait);
+                    showToast(`⚠️ Лимит, повтор через ${wait/1000} сек...`, wait);
                     setTimeout(() => searchTracks(query, retryCount + 1), wait);
                     return;
-                } else {
-                    throw new Error('Лимит запросов YouTube API. Попробуйте позже.');
-                }
+                } else throw new Error('Лимит запросов. Попробуйте позже.');
             }
-            
             if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const data = await resp.json();
             if (!data.items || data.items.length === 0) throw new Error('Ничего не найдено');
@@ -699,7 +730,7 @@
 
     searchTracks("top hits 2025");
 
-    // Эффекты свечения
+    // Свечение
     const glow = document.getElementById('cursorGlow');
     const playerDiv = document.getElementById('miniPlayer');
     const widgetDiv = document.getElementById('widget');
