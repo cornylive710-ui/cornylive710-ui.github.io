@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Qwest Music — починенный плеер</title>
+    <title>Qwest Music — финальная версия</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -164,12 +164,20 @@
         .close-modal { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; }
         .loading, .error-message { text-align: center; grid-column: 1/-1; }
         .error-message { color: #ff2d55; }
+        .toast {
+            position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(16px); color: white; padding: 10px 20px; border-radius: 60px; font-size: 0.85rem;
+            z-index: 10002; display: none; border: 1px solid rgba(255,255,255,0.2); pointer-events: none;
+            white-space: nowrap;
+        }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
 <div id="cursorGlow"></div>
+<div id="toast" class="toast"></div>
+
 <header>
     <div class="container">
         <div class="nav">
@@ -227,20 +235,21 @@
 <div id="youtube-player" style="position:absolute; width:0; height:0; opacity:0;"></div>
 
 <script type="module">
-    // ========== ВСТАВЬ СВОЙ YOUTUBE API КЛЮЧ ==========
+    // ========== YOUTUBE API КЛЮЧ (ВАШ) ==========
     const YOUTUBE_API_KEY = 'AIzaSyDNlUdKWU_66zNf4iE9Oy7Pln9dr8HFf-w';
-    // ========== ВСТАВЬ КЛЮЧИ FIREBASE ==========
+    // ========== FIREBASE КОНФИГ (ВАШ) ==========
     const firebaseConfig = {
-  apiKey: "AIzaSyAXI-Ggv2dyA-2rhVMq9j8ul5zQRdnuODM",
-  authDomain: "qwestmusic-e07e3.firebaseapp.com",
-  projectId: "qwestmusic-e07e3",
-  storageBucket: "qwestmusic-e07e3.firebasestorage.app",
-  messagingSenderId: "1066918145391",
-  appId: "1:1066918145391:web:1db1c9740634e5b7e5cc9a",
-  measurementId: "G-HB04T8F99D"
-};
-    // =================================================
+        apiKey: "AIzaSyAXI-Ggv2dyA-2rhVMq9j8ul5zQRdnuODM",
+        authDomain: "qwestmusic-e07e3.firebaseapp.com",
+        projectId: "qwestmusic-e07e3",
+        storageBucket: "qwestmusic-e07e3.firebasestorage.app",
+        messagingSenderId: "1066918145391",
+        appId: "1:1066918145391:web:1db1c9740634e5b7e5cc9a",
+        measurementId: "G-HB04T8F99D"
+    };
+    // ============================================
 
+    // Импорты Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
@@ -248,15 +257,11 @@
     let app, auth, db;
     let firebaseAvailable = false;
     try {
-        if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "вставь_свой_apiKey") {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            firebaseAvailable = true;
-            console.log("✅ Firebase подключён");
-        } else {
-            console.warn("⚠️ Firebase не настроен, вход и избранное недоступны");
-        }
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        firebaseAvailable = true;
+        console.log("✅ Firebase подключён");
     } catch(e) { console.warn("Firebase init error", e); }
 
     // DOM элементы
@@ -295,7 +300,18 @@
     let currentUser = null;
     let userFavorites = new Set();
 
-    // --- Авторизация (без изменений) ---
+    // --- Утилита для тост-сообщений ---
+    const toastEl = document.getElementById('toast');
+    function showToast(msg, duration = 2000) {
+        toastEl.textContent = msg;
+        toastEl.style.display = 'block';
+        setTimeout(() => {
+            toastEl.style.opacity = '0';
+            setTimeout(() => { toastEl.style.display = 'none'; toastEl.style.opacity = '1'; }, 300);
+        }, duration);
+    }
+
+    // --- Авторизация (рабочая) ---
     window.closeAuthModal = () => document.getElementById('authModal').style.display = 'none';
     window.switchAuthMode = () => {
         const title = document.getElementById('authModalTitle');
@@ -312,7 +328,7 @@
         }
     };
     window.handleAuth = async () => {
-        if (!firebaseAvailable || !auth) { alert("Firebase не настроен. Добавьте ключи."); return; }
+        if (!firebaseAvailable) { alert("Firebase не инициализирован"); return; }
         const email = document.getElementById('authEmail').value;
         const password = document.getElementById('authPassword').value;
         const title = document.getElementById('authModalTitle').innerText;
@@ -325,12 +341,13 @@
             window.closeAuthModal();
             document.getElementById('authEmail').value = '';
             document.getElementById('authPassword').value = '';
+            showToast('✅ Вход выполнен', 1500);
         } catch (error) {
             alert(`Ошибка: ${error.message}`);
         }
     };
     async function loadUserFavorites() {
-        if (!firebaseAvailable || !currentUser || !db) return;
+        if (!firebaseAvailable || !currentUser) return;
         const userRef = doc(db, "users", currentUser.uid);
         const docSnap = await getDoc(userRef);
         userFavorites.clear();
@@ -341,7 +358,7 @@
     }
     window.toggleFavorite = async (trackId, trackData) => {
         if (!firebaseAvailable || !currentUser) {
-            alert("Войдите в аккаунт, чтобы добавлять в избранное");
+            showToast('🔒 Войдите в аккаунт, чтобы добавить в избранное', 2000);
             window.showAuthModal();
             return false;
         }
@@ -353,10 +370,12 @@
             if (isFav) {
                 await updateDoc(userRef, { favorites: arrayRemove(trackId) });
                 userFavorites.delete(trackId);
+                showToast('❤️ Удалено из избранного', 1000);
             } else {
                 await updateDoc(userRef, { favorites: arrayUnion(trackId) });
                 userFavorites.add(trackId);
                 await setDoc(doc(db, "favorite_tracks", trackId), trackData, { merge: true });
+                showToast('💾 Добавлено в избранное', 1000);
             }
             updateFavButtonsUI();
             return !isFav;
@@ -371,14 +390,14 @@
     }
     function updateAuthButton() {
         if (!firebaseAvailable) {
-            authButton.innerHTML = '⚠️ Нет API';
-            authButton.onclick = () => alert("Добавьте ключи Firebase в код");
+            authButton.innerHTML = '⚠️ Ошибка';
+            authButton.onclick = () => alert("Firebase не загрузился");
             return;
         }
         if (currentUser) {
             authButton.innerHTML = '👤 Профиль';
             authButton.classList.remove('outline');
-            authButton.onclick = () => alert(`Вы вошли как: ${currentUser.email}\nЧтобы выйти, перезагрузите страницу`);
+            authButton.onclick = () => alert(`Вы вошли как: ${currentUser.email}\nВыйти можно через консоль или перезагрузкой`);
         } else {
             authButton.innerHTML = '🔑 Войти';
             authButton.classList.add('outline');
@@ -396,39 +415,43 @@
         updateAuthButton();
     }
 
-    // --- YouTube плеер с усиленной инициализацией ---
+    // --- YouTube плеер с улучшенной инициализацией ---
     window.onYouTubeIframeAPIReady = function() {
-        player = new YT.Player('youtube-player', {
-            height: '0', width: '0', videoId: '',
-            playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
-            events: {
-                onReady: () => {
-                    isPlayerReady = true;
-                    console.log('YouTube плеер готов');
-                    if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
-                },
-                onStateChange: (event) => {
-                    if (!player) return;
-                    if (event.data === YT.PlayerState.PLAYING) {
-                        playBtn.textContent = '⏸';
-                        widgetPlayPause.textContent = '⏸';
-                        widget.classList.add('playing');
-                        startProgressTimer();
-                    } else if (event.data === YT.PlayerState.PAUSED) {
-                        playBtn.textContent = '▶';
-                        widgetPlayPause.textContent = '▶';
-                        widget.classList.remove('playing');
-                        stopProgressTimer();
-                    } else if (event.data === YT.PlayerState.ENDED) {
+        try {
+            player = new YT.Player('youtube-player', {
+                height: '0', width: '0', videoId: '',
+                playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+                events: {
+                    onReady: () => {
+                        isPlayerReady = true;
+                        console.log('YouTube плеер готов');
+                        if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
+                        showToast('🎵 Плеер готов', 1000);
+                    },
+                    onStateChange: (event) => {
+                        if (!player) return;
+                        if (event.data === YT.PlayerState.PLAYING) {
+                            playBtn.textContent = '⏸';
+                            widgetPlayPause.textContent = '⏸';
+                            widget.classList.add('playing');
+                            startProgressTimer();
+                        } else if (event.data === YT.PlayerState.PAUSED) {
+                            playBtn.textContent = '▶';
+                            widgetPlayPause.textContent = '▶';
+                            widget.classList.remove('playing');
+                            stopProgressTimer();
+                        } else if (event.data === YT.PlayerState.ENDED) {
+                            playNextTrack();
+                        }
+                    },
+                    onError: (error) => {
+                        console.error('YouTube ошибка:', error.data);
+                        showToast('⚠️ Ошибка воспроизведения, переключаем', 1500);
                         playNextTrack();
                     }
-                },
-                onError: (error) => {
-                    console.error('YouTube ошибка:', error.data);
-                    playNextTrack();
                 }
-            }
-        });
+            });
+        } catch(e) { console.error(e); }
     };
 
     function startProgressTimer() {
@@ -481,18 +504,13 @@
         artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
     }
 
-    // --- УЛУЧШЕННАЯ ФУНКЦИЯ ВОСПРОИЗВЕДЕНИЯ С ОБХОДОМ БЛОКИРОВКИ ---
+    // Основная функция воспроизведения
     async function playTrack(track, index) {
         if (!track || !track.videoId) {
-            console.warn('Некорректный трек, переключаем');
             playNextTrack();
             return;
         }
-
-        // Сохраняем текущий плейлист
         currentPlaylist = window.lastSearchResults || [];
-        
-        // Обновляем интерфейс виджета и мини-плеера
         updateWidgetAndMiniCover(track);
         progressFill.style.width = '0%';
         widgetProgressFill.style.width = '0%';
@@ -501,43 +519,31 @@
         durationSpan.innerText = '0:00';
         widgetDuration.innerText = '0:00';
 
-        // Устанавливаем индекс
         if (index !== undefined) currentIndex = index;
         else {
             const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
             if (found !== -1) currentIndex = found;
         }
 
-        // Ждём готовности плеера
         if (!player || !isPlayerReady) {
-            console.log('Плеер ещё не готов, повтор через 300мс');
-            setTimeout(() => playTrack(track, index), 300);
+            // Ждём готовности плеера
+            const waitInterval = setInterval(() => {
+                if (isPlayerReady && player) {
+                    clearInterval(waitInterval);
+                    player.loadVideoById(track.videoId);
+                    player.playVideo();
+                    playBtn.textContent = '⏸';
+                    widgetPlayPause.textContent = '⏸';
+                    widget.classList.add('playing');
+                }
+            }, 200);
             return;
         }
 
-        // Загружаем видео
         player.loadVideoById(track.videoId);
-        
-        // Пытаемся воспроизвести с обходом автозапуска
         try {
-            // Сохраняем текущую громкость
-            const currentVolume = player.getVolume();
-            // Если браузер блокирует autoplay, включаем mute, играем, потом возвращаем громкость
-            player.mute();
             await player.playVideo();
-            // Если получилось, возвращаем громкость через небольшую задержку
-            setTimeout(() => {
-                if (player && player.unMute) {
-                    player.unMute();
-                    player.setVolume(currentVolume);
-                }
-            }, 100);
-        } catch (e) {
-            console.warn('Автозапуск заблокирован, но плеер должен загрузиться', e);
-            // Всё равно пробуем
-            player.playVideo();
-        }
-        
+        } catch(e) { console.warn(e); }
         playBtn.textContent = '⏸';
         widgetPlayPause.textContent = '⏸';
         widget.classList.add('playing');
@@ -566,14 +572,14 @@
         playTrack(currentPlaylist[prevIndex], prevIndex);
     }
 
-    // --- Обработчики ---
+    // Назначение обработчиков
     playBtn.addEventListener('click', playPause);
     nextBtn.addEventListener('click', playNextTrack);
     prevBtn.addEventListener('click', playPrevTrack);
     widgetPlayPause.addEventListener('click', playPause);
     widgetNext.addEventListener('click', playNextTrack);
     widgetPrev.addEventListener('click', playPrevTrack);
-    
+
     progressBar.addEventListener('click', (e) => {
         if (!player || !isPlayerReady) return;
         const rect = progressBar.getBoundingClientRect();
@@ -592,14 +598,14 @@
         if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
     });
 
-    // --- Поиск (без изменений) ---
+    // --- Поиск с повторными попытками при сетевых ошибках ---
     let searchTimeout;
     window.lastSearchResults = [];
 
-    async function searchTracks(query) {
+    async function searchTracks(query, retryCount = 0) {
         if (!query.trim()) return;
-        if (!YOUTUBE_API_KEY || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY') {
-            tracksGrid.innerHTML = '<div class="error-message">⚠️ Вставьте свой YouTube API ключ в код (строка YOUTUBE_API_KEY).</div>';
+        if (!YOUTUBE_API_KEY) {
+            tracksGrid.innerHTML = '<div class="error-message">⚠️ Ключ YouTube API не задан.</div>';
             return;
         }
         resultsTitleSpan.innerText = `Результаты: "${query}"`;
@@ -607,6 +613,7 @@
         try {
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`;
             const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const data = await resp.json();
             if (!data.items || data.items.length === 0) throw new Error('Ничего не найдено');
             const tracks = data.items.map(item => ({
@@ -619,9 +626,15 @@
             currentPlaylist = tracks;
             currentIndex = 0;
             renderTracks(tracks);
+            showToast(`🔍 Найдено ${tracks.length} треков`, 1500);
         } catch(e) {
             console.error(e);
-            tracksGrid.innerHTML = `<div class="error-message">⚠️ Ошибка: ${e.message}</div>`;
+            if (retryCount < 2) {
+                showToast(`⚠️ Ошибка сети, повторная попытка... (${retryCount+1}/2)`, 1500);
+                setTimeout(() => searchTracks(query, retryCount+1), 1000);
+            } else {
+                tracksGrid.innerHTML = `<div class="error-message">⚠️ Ошибка: ${e.message}. Проверьте интернет и VPN.</div>`;
+            }
         }
     }
 
@@ -652,6 +665,7 @@
                 }
             });
         });
+        updateFavButtonsUI();
     }
 
     function escapeHtml(str) {
@@ -665,7 +679,7 @@
 
     document.getElementById('showFavBtn').addEventListener('click', async () => {
         if (!firebaseAvailable || !currentUser) {
-            alert("Войдите в аккаунт, чтобы увидеть избранное");
+            showToast('🔒 Войдите в аккаунт, чтобы увидеть избранное', 2000);
             window.showAuthModal();
             return;
         }
@@ -693,9 +707,10 @@
         }
     });
 
-    searchTracks("top hits 2024");
+    // Стартовый поиск
+    searchTracks("top hits 2025");
 
-    // --- Эффекты свечения ---
+    // Эффекты свечения
     const glow = document.getElementById('cursorGlow');
     const playerDiv = document.getElementById('miniPlayer');
     const widgetDiv = document.getElementById('widget');
