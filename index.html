@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Qwest Music — финальная версия</title>
+    <title>Qwest Music — исправленное воспроизведение</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
+        /* ===== ВЕСЬ ТВОЙ СТИЛЬ (БЕЗ ИЗМЕНЕНИЙ) ===== */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #08090d; --bg2: #10131a; --glass: rgba(255,255,255,0.06);
@@ -249,9 +250,8 @@
     };
     // ============================================
 
-    // Импорты Firebase
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
 
     let app, auth, db;
@@ -300,7 +300,6 @@
     let currentUser = null;
     let userFavorites = new Set();
 
-    // --- Утилита для тост-сообщений ---
     const toastEl = document.getElementById('toast');
     function showToast(msg, duration = 2000) {
         toastEl.textContent = msg;
@@ -311,7 +310,7 @@
         }, duration);
     }
 
-    // --- Авторизация (рабочая) ---
+    // --- Авторизация ---
     window.closeAuthModal = () => document.getElementById('authModal').style.display = 'none';
     window.switchAuthMode = () => {
         const title = document.getElementById('authModalTitle');
@@ -397,7 +396,7 @@
         if (currentUser) {
             authButton.innerHTML = '👤 Профиль';
             authButton.classList.remove('outline');
-            authButton.onclick = () => alert(`Вы вошли как: ${currentUser.email}\nВыйти можно через консоль или перезагрузкой`);
+            authButton.onclick = () => alert(`Вы вошли как: ${currentUser.email}`);
         } else {
             authButton.innerHTML = '🔑 Войти';
             authButton.classList.add('outline');
@@ -415,43 +414,41 @@
         updateAuthButton();
     }
 
-    // --- YouTube плеер с улучшенной инициализацией ---
+    // --- YouTube плеер (упрощённая надёжная инициализация) ---
     window.onYouTubeIframeAPIReady = function() {
-        try {
-            player = new YT.Player('youtube-player', {
-                height: '0', width: '0', videoId: '',
-                playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
-                events: {
-                    onReady: () => {
-                        isPlayerReady = true;
-                        console.log('YouTube плеер готов');
-                        if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
-                        showToast('🎵 Плеер готов', 1000);
-                    },
-                    onStateChange: (event) => {
-                        if (!player) return;
-                        if (event.data === YT.PlayerState.PLAYING) {
-                            playBtn.textContent = '⏸';
-                            widgetPlayPause.textContent = '⏸';
-                            widget.classList.add('playing');
-                            startProgressTimer();
-                        } else if (event.data === YT.PlayerState.PAUSED) {
-                            playBtn.textContent = '▶';
-                            widgetPlayPause.textContent = '▶';
-                            widget.classList.remove('playing');
-                            stopProgressTimer();
-                        } else if (event.data === YT.PlayerState.ENDED) {
-                            playNextTrack();
-                        }
-                    },
-                    onError: (error) => {
-                        console.error('YouTube ошибка:', error.data);
-                        showToast('⚠️ Ошибка воспроизведения, переключаем', 1500);
+        player = new YT.Player('youtube-player', {
+            height: '0', width: '0', videoId: '',
+            playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+            events: {
+                onReady: () => {
+                    isPlayerReady = true;
+                    console.log('✅ YouTube плеер готов');
+                    if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
+                    showToast('🎵 Плеер готов', 1000);
+                },
+                onStateChange: (event) => {
+                    if (!player) return;
+                    if (event.data === YT.PlayerState.PLAYING) {
+                        playBtn.textContent = '⏸';
+                        widgetPlayPause.textContent = '⏸';
+                        widget.classList.add('playing');
+                        if (!progressInterval) startProgressTimer();
+                    } else if (event.data === YT.PlayerState.PAUSED) {
+                        playBtn.textContent = '▶';
+                        widgetPlayPause.textContent = '▶';
+                        widget.classList.remove('playing');
+                        stopProgressTimer();
+                    } else if (event.data === YT.PlayerState.ENDED) {
                         playNextTrack();
                     }
+                },
+                onError: (err) => {
+                    console.error('YouTube ошибка:', err.data);
+                    showToast('⚠️ Ошибка воспроизведения, переключаем', 1500);
+                    playNextTrack();
                 }
-            });
-        } catch(e) { console.error(e); }
+            }
+        });
     };
 
     function startProgressTimer() {
@@ -504,13 +501,20 @@
         artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
     }
 
-    // Основная функция воспроизведения
-    async function playTrack(track, index) {
+    // ==== ГЛАВНАЯ ФУНКЦИЯ ВОСПРОИЗВЕДЕНИЯ ====
+    function playTrack(track, index) {
         if (!track || !track.videoId) {
             playNextTrack();
             return;
         }
+        // Сохраняем текущий плейлист и индекс
         currentPlaylist = window.lastSearchResults || [];
+        if (index !== undefined) currentIndex = index;
+        else {
+            const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
+            if (found !== -1) currentIndex = found;
+        }
+        // Обновляем UI
         updateWidgetAndMiniCover(track);
         progressFill.style.width = '0%';
         widgetProgressFill.style.width = '0%';
@@ -519,17 +523,11 @@
         durationSpan.innerText = '0:00';
         widgetDuration.innerText = '0:00';
 
-        if (index !== undefined) currentIndex = index;
-        else {
-            const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
-            if (found !== -1) currentIndex = found;
-        }
-
+        // Если плеер ещё не готов, ждём
         if (!player || !isPlayerReady) {
-            // Ждём готовности плеера
-            const waitInterval = setInterval(() => {
+            const wait = setInterval(() => {
                 if (isPlayerReady && player) {
-                    clearInterval(waitInterval);
+                    clearInterval(wait);
                     player.loadVideoById(track.videoId);
                     player.playVideo();
                     playBtn.textContent = '⏸';
@@ -539,11 +537,9 @@
             }, 200);
             return;
         }
-
+        // Плеер готов — загружаем и играем
         player.loadVideoById(track.videoId);
-        try {
-            await player.playVideo();
-        } catch(e) { console.warn(e); }
+        player.playVideo();
         playBtn.textContent = '⏸';
         widgetPlayPause.textContent = '⏸';
         widget.classList.add('playing');
@@ -572,7 +568,7 @@
         playTrack(currentPlaylist[prevIndex], prevIndex);
     }
 
-    // Назначение обработчиков
+    // Назначение обработчиков событий
     playBtn.addEventListener('click', playPause);
     nextBtn.addEventListener('click', playNextTrack);
     prevBtn.addEventListener('click', playPrevTrack);
@@ -598,7 +594,7 @@
         if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
     });
 
-    // --- Поиск с повторными попытками при сетевых ошибках ---
+    // --- Поиск (с повторными попытками) ---
     let searchTimeout;
     window.lastSearchResults = [];
 
@@ -707,7 +703,6 @@
         }
     });
 
-    // Стартовый поиск
     searchTracks("top hits 2025");
 
     // Эффекты свечения
