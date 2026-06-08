@@ -6,13 +6,13 @@
     <title>Qwest Music — стеклянный виджет</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg: #08090d; --bg2: #10131a; --glass: rgba(255, 255, 255, 0.06);
-            --glassBorder: rgba(255, 255, 255, 0.08); --text: #ffffff; --muted: rgba(255, 255, 255, 0.65);
-            --red: #ff003c; --red2: #ff2d55; --purple: #8b5cf6; --transition: 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+            --bg: #08090d; --bg2: #10131a; --glass: rgba(255,255,255,0.06);
+            --glassBorder: rgba(255,255,255,0.08); --text: #fff; --muted: rgba(255,255,255,0.65);
+            --red: #ff003c; --red2: #ff2d55; --purple: #8b5cf6; --transition: 0.35s cubic-bezier(0.2,0.8,0.2,1);
         }
         body {
             font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text);
@@ -20,26 +20,26 @@
         }
         body::before {
             content: ""; position: fixed; inset: 0; z-index: -3; animation: bgMove 20s ease infinite;
-            background: radial-gradient(circle at 20% 20%, rgba(255, 0, 60, 0.22), transparent 30%),
-                        radial-gradient(circle at 80% 10%, rgba(138, 92, 246, 0.18), transparent 35%),
-                        radial-gradient(circle at 50% 90%, rgba(255, 0, 60, 0.12), transparent 35%);
+            background: radial-gradient(circle at 20% 20%, rgba(255,0,60,0.22), transparent 30%),
+                        radial-gradient(circle at 80% 10%, rgba(138,92,246,0.18), transparent 35%),
+                        radial-gradient(circle at 50% 90%, rgba(255,0,60,0.12), transparent 35%);
         }
-        @keyframes bgMove { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
+        @keyframes bgMove { 0%{transform:scale(1);} 50%{transform:scale(1.15);} 100%{transform:scale(1);} }
         #cursorGlow {
             position: fixed; width: 450px; height: 450px; border-radius: 50%; pointer-events: none;
-            background: radial-gradient(circle, rgba(255, 0, 60, 0.18), transparent); filter: blur(80px);
-            transform: translate(-50%, -50%); z-index: -1; transition: background 0.2s;
+            background: radial-gradient(circle, rgba(255,0,60,0.18), transparent); filter: blur(80px);
+            transform: translate(-50%,-50%); z-index: -1; transition: background 0.2s;
         }
-        body.player-hover #cursorGlow { background: radial-gradient(circle, rgba(0, 180, 255, 0.25), transparent); }
-        body.widget-hover #cursorGlow { background: radial-gradient(circle, rgba(138, 92, 246, 0.35), transparent); }
-        .container { width: min(1400px, 92%); margin: auto; }
+        body.player-hover #cursorGlow { background: radial-gradient(circle, rgba(0,180,255,0.25), transparent); }
+        body.widget-hover #cursorGlow { background: radial-gradient(circle, rgba(138,92,246,0.35), transparent); }
+        .container { width: min(1400px,92%); margin: auto; }
         .glass {
             background: var(--glass); border: 1px solid var(--glassBorder); backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            -webkit-backdrop-filter: blur(35px); box-shadow: 0 10px 40px rgba(0,0,0,0.25);
         }
         header {
             position: sticky; top: 0; z-index: 1000; padding: 18px 0; backdrop-filter: blur(25px);
-            background: rgba(8, 9, 13, 0.5); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(8,9,13,0.5); border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .nav { display: flex; justify-content: space-between; align-items: center; }
         .logo {
@@ -50,145 +50,57 @@
             background: linear-gradient(135deg, #ff003c, #ff2d55); border: none; color: white;
             font-weight: 600; padding: 12px 24px; border-radius: 30px; cursor: pointer; transition: var(--transition);
         }
-        .auth-btn.outline { background: transparent; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .auth-btn.outline { background: transparent; border: 1px solid rgba(255,255,255,0.3); }
         .auth-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
         .hero { padding: 110px 0 80px; }
         .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
         .hero-title { font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 900; line-height: 0.92; letter-spacing: -4px; }
-        .gradient { background: linear-gradient(135deg, #ffffff, #ff2d55, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .gradient { background: linear-gradient(135deg, #fff, #ff2d55, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .hero-text { margin-top: 24px; font-size: 1.1rem; line-height: 1.8; max-width: 700px; color: var(--muted); }
         .search-wrap { margin-top: 40px; position: relative; transition: 0.3s; }
         .search {
             width: 100%; height: 82px; border: none; outline: none; padding: 0 30px 0 75px; font-size: 1rem;
-            border-radius: 28px; color: white; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px; color: white; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
             transition: 0.25s;
         }
-        .search:focus { transform: scale(1.02); border: 1px solid rgba(255, 255, 255, 0.18); box-shadow: 0 0 40px rgba(255, 0, 60, 0.18); }
-        .search::placeholder { color: rgba(255, 255, 255, 0.45); }
+        .search:focus { transform: scale(1.02); border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 0 40px rgba(255,0,60,0.18); }
+        .search::placeholder { color: rgba(255,255,255,0.45); }
         .search-icon { position: absolute; left: 28px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; opacity: 0.7; }
 
-        /* ========== НОВЫЙ СТЕКЛЯННЫЙ ВИДЖЕТ ========== */
         .hero-art {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 550px;
-            position: relative;
+            display: flex; align-items: center; justify-content: center; height: 550px; position: relative;
         }
         .widget {
-            position: relative;
-            width: 390px;
-            padding: 24px;
-            border-radius: 42px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(30px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            text-align: center;
+            position: relative; width: 390px; padding: 24px; border-radius: 42px;
+            background: rgba(255,255,255,0.08); backdrop-filter: blur(30px);
+            border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+            transition: all 0.3s ease; text-align: center;
         }
-        .widget.playing {
-            box-shadow: 0 0 25px rgba(138, 92, 246, 0.4);
-        }
-        .widget:hover {
-            border-color: rgba(138, 92, 246, 0.6);
-            box-shadow: 0 0 35px rgba(138, 92, 246, 0.5);
-            transform: translateY(-5px);
-        }
+        .widget.playing { box-shadow: 0 0 25px rgba(138,92,246,0.4); }
+        .widget:hover { border-color: rgba(138,92,246,0.6); box-shadow: 0 0 35px rgba(138,92,246,0.5); transform: translateY(-5px); }
         .widget-cover {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            border-radius: 28px;
-            background: linear-gradient(135deg, #ff2d55, #8b5cf6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            margin-bottom: 20px;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 100%; aspect-ratio: 1/1; border-radius: 28px; background: linear-gradient(135deg, #ff2d55, #8b5cf6);
+            display: flex; align-items: center; justify-content: center; font-size: 4rem; margin-bottom: 20px;
+            background-size: cover; background-position: center; box-shadow: 0 15px 30px rgba(0,0,0,0.3);
         }
-        .widget-title {
-            font-weight: 800;
-            font-size: 1.2rem;
-            margin-top: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .widget-artist {
-            color: var(--muted);
-            font-size: 0.9rem;
-            margin-top: 4px;
-            margin-bottom: 20px;
-        }
-        .widget-controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
+        .widget-title { font-weight: 800; font-size: 1.2rem; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .widget-artist { color: var(--muted); font-size: 0.9rem; margin-top: 4px; margin-bottom: 20px; }
+        .widget-controls { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
         .widget-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: 0.2s;
+            width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none;
+            color: white; font-size: 1.2rem; cursor: pointer; transition: 0.2s;
         }
-        .widget-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.05);
-        }
-        .widget-play {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #ff003c, #ff2d55);
-            box-shadow: 0 5px 15px rgba(255, 0, 60, 0.4);
-        }
+        .widget-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+        .widget-play { background: linear-gradient(135deg, #ff003c, #ff2d55); box-shadow: 0 5px 15px rgba(255,0,60,0.4); }
         .widget-progress {
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-            margin: 10px 0;
-            cursor: pointer;
-            position: relative;
+            width: 100%; height: 4px; background: rgba(255,255,255,0.2); border-radius: 4px;
+            margin: 10px 0; cursor: pointer; position: relative;
         }
-        .widget-progress-fill {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #ff003c, #8b5cf6);
-            border-radius: 4px;
-        }
-        .widget-time {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.7rem;
-            color: var(--muted);
-            margin-bottom: 15px;
-        }
-        .visualizer {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 4px;
-            height: 30px;
-        }
-        .visualizer-bar {
-            width: 4px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 2px;
-            transition: height 0.1s ease;
-        }
-        .widget.playing .visualizer-bar {
-            animation: pulse 0.8s infinite alternate;
-        }
+        .widget-progress-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #ff003c, #8b5cf6); border-radius: 4px; }
+        .widget-time { display: flex; justify-content: space-between; font-size: 0.7rem; color: var(--muted); margin-bottom: 15px; }
+        .visualizer { display: flex; justify-content: center; align-items: center; gap: 4px; height: 30px; }
+        .visualizer-bar { width: 4px; height: 12px; background: rgba(255,255,255,0.5); border-radius: 2px; transition: height 0.1s ease; }
+        .widget.playing .visualizer-bar { animation: pulse 0.8s infinite alternate; }
         .widget.playing .visualizer-bar:nth-child(1) { animation-delay: 0s; height: 20px; }
         .widget.playing .visualizer-bar:nth-child(2) { animation-delay: 0.1s; height: 28px; }
         .widget.playing .visualizer-bar:nth-child(3) { animation-delay: 0.2s; height: 16px; }
@@ -196,7 +108,7 @@
         .widget.playing .visualizer-bar:nth-child(5) { animation-delay: 0.4s; height: 32px; }
         @keyframes pulse {
             0% { height: 8px; background: rgba(255,255,255,0.3); }
-            100% { height: 28px; background: rgba(138, 92, 246, 0.9); }
+            100% { height: 28px; background: rgba(138,92,246,0.9); }
         }
 
         .section { padding: 70px 0; }
@@ -206,14 +118,13 @@
             padding: 18px; border-radius: 28px; cursor: pointer; transition: var(--transition);
             position: relative;
         }
-        .track-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(255, 0, 60, 0.12); }
+        .track-card:hover { transform: translateY(-10px); box-shadow: 0 25px 60px rgba(255,0,60,0.12); }
         .track-cover {
-            height: 260px; border-radius: 22px; margin-bottom: 16px; display: flex;
-            align-items: center; justify-content: center; font-size: 3rem;
-            background-size: cover; background-position: center;
+            height: 260px; border-radius: 22px; margin-bottom: 16px; background-size: cover; background-position: center;
+            display: flex; align-items: center; justify-content: center; font-size: 3rem;
         }
         .track-title { font-weight: 700; font-size: 1.05rem; padding-right: 30px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .track-artist { margin-top: 6px; color: var(--muted); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .track-artist { margin-top: 6px; color: var(--muted); font-size: 0.9rem; }
         .fav-btn {
             position: absolute; bottom: 20px; right: 20px; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
             border: none; font-size: 1.5rem; cursor: pointer; border-radius: 50%; width: 36px; height: 36px;
@@ -221,43 +132,53 @@
         }
         .fav-btn.active { color: #ff2d55; text-shadow: 0 0 5px #ff2d55; }
         .mini-player-v2 {
-            position: fixed; left: 20px; right: 20px; bottom: 24px; height: 80px; background: rgba(20, 20, 30, 0.7);
-            backdrop-filter: blur(32px); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 48px;
+            position: fixed; left: 20px; right: 20px; bottom: 24px; height: 80px; background: rgba(20,20,30,0.7);
+            backdrop-filter: blur(32px); border: 1px solid rgba(255,255,255,0.12); border-radius: 48px;
             display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
-            z-index: 9999; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); transition: all 0.2s ease;
+            z-index: 9999; box-shadow: 0 8px 32px rgba(0,0,0,0.3); transition: all 0.2s ease;
         }
-        .mini-player-v2.blue-glow { box-shadow: 0 0 30px rgba(0, 180, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.3); border-color: rgba(0, 180, 255, 0.4); }
+        .mini-player-v2.blue-glow { box-shadow: 0 0 30px rgba(0,180,255,0.3), 0 8px 32px rgba(0,0,0,0.3); border-color: rgba(0,180,255,0.4); }
         .player-left-v2 { display: flex; align-items: center; gap: 14px; flex: 1.2; min-width: 0; }
-        .player-cover-v2 { width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(135deg, #ff2d55, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); flex-shrink: 0; background-size: cover; background-position: center; }
+        .player-cover-v2 {
+            width: 56px; height: 56px; border-radius: 18px; background: linear-gradient(135deg, #ff2d55, #8b5cf6);
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0;
+            background-size: cover; background-position: center;
+        }
         .player-info-v2 { display: flex; flex-direction: column; overflow: hidden; }
-        .player-track-v2 { font-weight: 700; font-size: 0.95rem; letter-spacing: -0.3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .player-artist-v2 { font-size: 0.8rem; color: var(--muted); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-track-v2 { font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .player-artist-v2 { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
         .player-center-v2 { display: flex; align-items: center; gap: 16px; flex: 1; justify-content: center; }
-        .player-btn-v2 { width: 38px; height: 38px; border-radius: 50%; background: rgba(255, 255, 255, 0.06); border: none; color: white; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
-        .player-btn-v2:hover { background: rgba(255, 255, 255, 0.15); transform: scale(1.05); }
-        .player-play-v2 { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff003c, #ff2d55); border: none; color: white; font-size: 1.2rem; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 12px rgba(255, 0, 60, 0.4); }
-        .player-play-v2:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(255, 0, 60, 0.6); }
+        .player-btn-v2 {
+            width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.06); border: none;
+            color: white; font-size: 1rem; cursor: pointer; transition: 0.2s;
+        }
+        .player-btn-v2:hover { background: rgba(255,255,255,0.15); transform: scale(1.05); }
+        .player-play-v2 {
+            width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff003c, #ff2d55);
+            border: none; color: white; font-size: 1.2rem; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(255,0,60,0.4);
+        }
+        .player-play-v2:hover { transform: scale(1.05); box-shadow: 0 6px 16px rgba(255,0,60,0.6); }
         .player-progress-container { flex: 2; display: flex; align-items: center; gap: 12px; margin: 0 20px; }
-        .progress-bar-v2 { flex: 1; height: 4px; background: rgba(255, 255, 255, 0.2); border-radius: 4px; cursor: pointer; position: relative; }
+        .progress-bar-v2 { flex: 1; height: 4px; background: rgba(255,255,255,0.2); border-radius: 4px; cursor: pointer; }
         .progress-fill-v2 { width: 0%; height: 100%; background: linear-gradient(90deg, #ff003c, #ff2d55); border-radius: 4px; }
         .time-v2 { font-size: 0.75rem; color: var(--muted); min-width: 40px; text-align: center; }
         .volume-v2 { display: flex; align-items: center; gap: 10px; flex: 0.6; justify-content: flex-end; }
         .volume-icon-v2 { font-size: 1.1rem; opacity: 0.7; }
-        .volume-slider-v2 { width: 100px; height: 4px; -webkit-appearance: none; background: rgba(255, 255, 255, 0.2); border-radius: 4px; outline: none; }
-        .volume-slider-v2::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #ff2d55; cursor: pointer; box-shadow: 0 0 6px #ff2d55; }
+        .volume-slider-v2 { width: 100px; height: 4px; -webkit-appearance: none; background: rgba(255,255,255,0.2); border-radius: 4px; }
+        .volume-slider-v2::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; border-radius: 50%; background: #ff2d55; cursor: pointer; }
         @media (max-width: 700px) { .player-progress-container, .volume-v2 { display: none; } .player-center-v2 { flex: 2; } }
         @media (max-width: 1000px) { .hero-grid { grid-template-columns: 1fr; } .hero-art { height: auto; } .widget { width: 100%; max-width: 350px; margin: 0 auto; } }
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7);
             backdrop-filter: blur(15px); z-index: 10001; justify-content: center; align-items: center;
         }
-        .modal-content { background: #111216; border-radius: 32px; padding: 40px; width: 90%; max-width: 450px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 25px 50px -12px black; }
+        .modal-content { background: #111216; border-radius: 32px; padding: 40px; width: 90%; max-width: 450px; border: 1px solid rgba(255,255,255,0.1); }
         .modal h2 { margin-bottom: 20px; font-size: 28px; }
         .modal input { width: 100%; padding: 15px; margin-bottom: 15px; background: #1a1c23; border: 1px solid #2a2c33; border-radius: 20px; color: white; font-size: 16px; }
         .modal button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 30px; font-weight: bold; cursor: pointer; }
         .close-modal { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; }
-        .loading { text-align: center; grid-column: 1/-1; color: var(--muted); }
-        .error-message { text-align: center; grid-column: 1/-1; color: #ff2d55; }
+        .loading, .error-message { text-align: center; grid-column: 1/-1; }
+        .error-message { color: #ff2d55; }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
@@ -303,11 +224,8 @@
                         <span id="widgetDuration">0:00</span>
                     </div>
                     <div class="visualizer" id="visualizer">
-                        <div class="visualizer-bar"></div>
-                        <div class="visualizer-bar"></div>
-                        <div class="visualizer-bar"></div>
-                        <div class="visualizer-bar"></div>
-                        <div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div><div class="visualizer-bar"></div><div class="visualizer-bar"></div>
+                        <div class="visualizer-bar"></div><div class="visualizer-bar"></div>
                     </div>
                 </div>
             </div>
@@ -358,16 +276,16 @@
         <input type="email" id="authEmail" placeholder="Email">
         <input type="password" id="authPassword" placeholder="Пароль">
         <button id="authSubmitBtn" onclick="handleAuth()">Войти</button>
-        <p style="text-align: center; margin-top: 20px; cursor: pointer; color: #aaa;" onclick="switchAuthMode()">Нет аккаунта? Зарегистрироваться</p>
+        <p style="text-align:center; margin-top:20px; cursor:pointer; color:#aaa;" onclick="switchAuthMode()">Нет аккаунта? Зарегистрироваться</p>
     </div>
 </div>
 
-<div id="youtube-player" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;"></div>
+<div id="youtube-player" style="position: absolute; width:0; height:0; opacity:0; pointer-events:none;"></div>
 
 <script>
-    // ============================================================
-    const YOUTUBE_API_KEY = 'AIzaSyDNlUdKWU_66zNf4iE9Oy7Pln9dr8HFf-w';  // ВСТАВЬ СВОЙ КЛЮЧ
-    const firebaseConfig = {
+// ==================== КЛЮЧИ ====================
+const YOUTUBE_API_KEY = 'AIzaSyDNlUdKWU_66zNf4iE9Oy7Pln9dr8HFf-w'; // ВСТАВЬ СВОЙ КЛЮЧ
+const firebaseConfig = {
   apiKey: "AIzaSyAXI-Ggv2dyA-2rhVMq9j8ul5zQRdnuODM",
   authDomain: "qwestmusic-e07e3.firebaseapp.com",
   projectId: "qwestmusic-e07e3",
@@ -376,506 +294,461 @@
   appId: "1:1066918145391:web:1db1c9740634e5b7e5cc9a",
   measurementId: "G-HB04T8F99D"
 };
-    };
-    // ============================================================
+// ================================================
 
-    // DOM элементы
-    const playBtn = document.getElementById('playPauseBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const progressFill = document.getElementById('progressFill');
-    const progressBar = document.getElementById('progressBar');
-    const currentTimeSpan = document.getElementById('currentTime');
-    const durationSpan = document.getElementById('duration');
-    const volumeSlider = document.getElementById('volumeSlider');
-    const trackNameSpan = document.getElementById('currentTrackName');
-    const artistNameSpan = document.getElementById('currentArtistName');
-    const searchInput = document.getElementById('searchInput');
-    const tracksGrid = document.getElementById('tracksGrid');
-    const resultsTitleSpan = document.getElementById('resultsTitle');
-    const authButton = document.getElementById('authButton');
+// DOM элементы
+const playBtn = document.getElementById('playPauseBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const progressFill = document.getElementById('progressFill');
+const progressBar = document.getElementById('progressBar');
+const currentTimeSpan = document.getElementById('currentTime');
+const durationSpan = document.getElementById('duration');
+const volumeSlider = document.getElementById('volumeSlider');
+const trackNameSpan = document.getElementById('currentTrackName');
+const artistNameSpan = document.getElementById('currentArtistName');
+const searchInput = document.getElementById('searchInput');
+const tracksGrid = document.getElementById('tracksGrid');
+const resultsTitleSpan = document.getElementById('resultsTitle');
+const authButton = document.getElementById('authButton');
 
-    // Виджет элементы
-    const widgetCover = document.getElementById('widgetCover');
-    const widgetTitle = document.getElementById('widgetTitle');
-    const widgetArtist = document.getElementById('widgetArtist');
-    const widgetPlayPause = document.getElementById('widgetPlayPause');
-    const widgetPrev = document.getElementById('widgetPrev');
-    const widgetNext = document.getElementById('widgetNext');
-    const widgetProgressFill = document.getElementById('widgetProgressFill');
-    const widgetProgressBar = document.getElementById('widgetProgressBar');
-    const widgetCurrentTime = document.getElementById('widgetCurrentTime');
-    const widgetDuration = document.getElementById('widgetDuration');
-    const widget = document.getElementById('widget');
-    const miniCover = document.getElementById('miniCover');
+// Виджет элементы
+const widgetCover = document.getElementById('widgetCover');
+const widgetTitle = document.getElementById('widgetTitle');
+const widgetArtist = document.getElementById('widgetArtist');
+const widgetPlayPause = document.getElementById('widgetPlayPause');
+const widgetPrev = document.getElementById('widgetPrev');
+const widgetNext = document.getElementById('widgetNext');
+const widgetProgressFill = document.getElementById('widgetProgressFill');
+const widgetProgressBar = document.getElementById('widgetProgressBar');
+const widgetCurrentTime = document.getElementById('widgetCurrentTime');
+const widgetDuration = document.getElementById('widgetDuration');
+const widget = document.getElementById('widget');
+const miniCover = document.getElementById('miniCover');
 
-    // --- Переменные YouTube плеера ---
-    let player = null;
-    let isPlayerReady = false;
-    let currentPlaylist = [];
-    let currentIndex = 0;
-    let progressInterval = null;
-    let currentTrackData = null;
+// Переменные плеера
+let player = null;
+let isPlayerReady = false;
+let currentPlaylist = [];
+let currentIndex = 0;
+let progressInterval = null;
 
-    // --- Firebase ---
-    let firebaseAvailable = false;
-    let auth = null, db = null;
-    let currentUser = null;
-    let userFavorites = new Set();
+// Firebase
+let firebaseAvailable = false;
+let auth = null, db = null;
+let currentUser = null;
+let userFavorites = new Set();
 
-    // --- Инициализация Firebase ---
-    if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "вставь_свой_apiKey") {
-        import('https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js')
-            .then(module => {
-                const { initializeApp } = module;
-                const app = initializeApp(firebaseConfig);
-                return import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js')
-                    .then(authMod => {
-                        auth = authMod.getAuth(app);
-                        return import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js')
-                            .then(fsMod => {
-                                db = fsMod.getFirestore(app);
-                                firebaseAvailable = true;
-                                console.log("✅ Firebase подключён");
-                                initAuthListener();
-                            });
-                    });
-            })
-            .catch(e => console.warn("⚠️ Firebase ошибка:", e));
+// --- Инициализация Firebase (опционально) ---
+if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "вставь_свой_apiKey") {
+    import('https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js')
+        .then(module => {
+            const { initializeApp } = module;
+            const app = initializeApp(firebaseConfig);
+            return import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js')
+                .then(authMod => {
+                    auth = authMod.getAuth(app);
+                    return import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js')
+                        .then(fsMod => {
+                            db = fsMod.getFirestore(app);
+                            firebaseAvailable = true;
+                            console.log("Firebase подключён");
+                            initAuthListener();
+                        });
+                });
+        })
+        .catch(e => console.warn("Firebase ошибка:", e));
+} else {
+    console.warn("Firebase не настроен");
+    if (authButton) authButton.innerHTML = '⚠️ Нет API';
+}
+
+// --- Авторизация (глобальные функции) ---
+window.showAuthModal = () => {
+    if (!firebaseAvailable) { alert("Firebase не настроен"); return; }
+    document.getElementById('authModal').style.display = 'flex';
+};
+window.closeAuthModal = () => {
+    document.getElementById('authModal').style.display = 'none';
+};
+window.switchAuthMode = () => {
+    const title = document.getElementById('authModalTitle');
+    const submitBtn = document.getElementById('authSubmitBtn');
+    const toggleText = document.querySelector('#authModal p');
+    if (title.innerText === 'Вход') {
+        title.innerText = 'Регистрация';
+        submitBtn.innerText = 'Зарегистрироваться';
+        toggleText.innerText = 'Уже есть аккаунт? Войти';
     } else {
-        console.warn("⚠️ Firebase не настроен");
-        if (authButton) authButton.innerHTML = '⚠️ Нет API';
+        title.innerText = 'Вход';
+        submitBtn.innerText = 'Войти';
+        toggleText.innerText = 'Нет аккаунта? Зарегистрироваться';
     }
-
-    // --- Авторизация ---
-    window.showAuthModal = () => {
-        if (!firebaseAvailable) { alert("Firebase не настроен"); return; }
-        document.getElementById('authModal').style.display = 'flex';
-    };
-    window.closeAuthModal = () => {
-        document.getElementById('authModal').style.display = 'none';
-    };
-    window.switchAuthMode = () => {
-        const title = document.getElementById('authModalTitle');
-        const submitBtn = document.getElementById('authSubmitBtn');
-        const toggleText = document.querySelector('#authModal p');
-        if (title.innerText === 'Вход') {
-            title.innerText = 'Регистрация';
-            submitBtn.innerText = 'Зарегистрироваться';
-            toggleText.innerText = 'Уже есть аккаунт? Войти';
+};
+window.handleAuth = async () => {
+    if (!firebaseAvailable || !auth) return;
+    const email = document.getElementById('authEmail').value;
+    const password = document.getElementById('authPassword').value;
+    const title = document.getElementById('authModalTitle').innerText;
+    const { signInWithEmailAndPassword, createUserWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
+    try {
+        if (title === 'Вход') {
+            await signInWithEmailAndPassword(auth, email, password);
         } else {
-            title.innerText = 'Вход';
-            submitBtn.innerText = 'Войти';
-            toggleText.innerText = 'Нет аккаунта? Зарегистрироваться';
+            await createUserWithEmailAndPassword(auth, email, password);
         }
-    };
-    window.handleAuth = async () => {
-        if (!firebaseAvailable || !auth) return;
-        const email = document.getElementById('authEmail').value;
-        const password = document.getElementById('authPassword').value;
-        const title = document.getElementById('authModalTitle').innerText;
-        const { signInWithEmailAndPassword, createUserWithEmailAndPassword } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
-        try {
-            if (title === 'Вход') {
-                await signInWithEmailAndPassword(auth, email, password);
-            } else {
-                await createUserWithEmailAndPassword(auth, email, password);
-            }
-            closeAuthModal();
-            document.getElementById('authEmail').value = '';
-            document.getElementById('authPassword').value = '';
-        } catch (error) {
-            alert(`Ошибка: ${error.message}`);
-        }
-    };
-    window.logout = async () => {
-        if (!firebaseAvailable || !auth) return;
-        const { signOut } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js');
-        await signOut(auth);
-        alert('Вы вышли');
-    };
-    async function loadUserFavorites() {
-        if (!firebaseAvailable || !currentUser || !db) return;
-        const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
-        const userRef = doc(db, "users", currentUser.uid);
-        const docSnap = await getDoc(userRef);
-        userFavorites.clear();
-        if (docSnap.exists() && docSnap.data().favorites) {
-            docSnap.data().favorites.forEach(id => userFavorites.add(id));
+        window.closeAuthModal();
+        document.getElementById('authEmail').value = '';
+        document.getElementById('authPassword').value = '';
+    } catch (error) {
+        alert(`Ошибка: ${error.message}`);
+    }
+};
+async function loadUserFavorites() {
+    if (!firebaseAvailable || !currentUser || !db) return;
+    const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
+    const userRef = doc(db, "users", currentUser.uid);
+    const docSnap = await getDoc(userRef);
+    userFavorites.clear();
+    if (docSnap.exists() && docSnap.data().favorites) {
+        docSnap.data().favorites.forEach(id => userFavorites.add(id));
+    }
+    updateFavButtonsUI();
+}
+window.toggleFavorite = async (trackId, trackData) => {
+    if (!firebaseAvailable || !currentUser) {
+        alert("Войдите в аккаунт");
+        window.showAuthModal();
+        return false;
+    }
+    const isFav = userFavorites.has(trackId);
+    const { doc, getDoc, updateDoc, arrayUnion, arrayRemove, setDoc } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
+    const userRef = doc(db, "users", currentUser.uid);
+    try {
+        const userSnap = await getDoc(userRef);
+        if (!userSnap.exists()) await setDoc(userRef, { favorites: [] });
+        if (isFav) {
+            await updateDoc(userRef, { favorites: arrayRemove(trackId) });
+            userFavorites.delete(trackId);
+        } else {
+            await updateDoc(userRef, { favorites: arrayUnion(trackId) });
+            userFavorites.add(trackId);
+            await setDoc(doc(db, "favorite_tracks", trackId), trackData, { merge: true });
         }
         updateFavButtonsUI();
-    }
-    window.toggleFavorite = async (trackId, trackData) => {
-        if (!firebaseAvailable || !currentUser) {
-            alert("Войдите в аккаунт, чтобы добавлять в избранное");
-            showAuthModal();
-            return false;
-        }
-        const isFav = userFavorites.has(trackId);
-        const { doc, getDoc, updateDoc, arrayUnion, arrayRemove, setDoc } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
-        const userRef = doc(db, "users", currentUser.uid);
-        try {
-            const userSnap = await getDoc(userRef);
-            if (!userSnap.exists()) await setDoc(userRef, { favorites: [] });
-            if (isFav) {
-                await updateDoc(userRef, { favorites: arrayRemove(trackId) });
-                userFavorites.delete(trackId);
+        return !isFav;
+    } catch(e) { console.error(e); alert("Ошибка"); return false; }
+};
+function updateFavButtonsUI() {
+    document.querySelectorAll('.fav-btn').forEach(btn => {
+        const id = btn.getAttribute('data-id');
+        if (userFavorites.has(id)) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+}
+function initAuthListener() {
+    if (!firebaseAvailable || !auth) return;
+    import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js').then(({ onAuthStateChanged }) => {
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            if (user) {
+                authButton.innerHTML = '👤 Профиль';
+                authButton.classList.remove('outline');
+                authButton.onclick = () => alert(`Вы вошли как: ${user.email}`);
+                await loadUserFavorites();
             } else {
-                await updateDoc(userRef, { favorites: arrayUnion(trackId) });
-                userFavorites.add(trackId);
-                await setDoc(doc(db, "favorite_tracks", trackId), trackData, { merge: true });
-            }
-            updateFavButtonsUI();
-            return !isFav;
-        } catch(e) { console.error(e); alert("Ошибка сохранения"); return false; }
-    };
-    function updateFavButtonsUI() {
-        document.querySelectorAll('.fav-btn').forEach(btn => {
-            const id = btn.getAttribute('data-id');
-            if (userFavorites.has(id)) btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-    }
-    function initAuthListener() {
-        if (!firebaseAvailable || !auth) return;
-        import('https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js').then(({ onAuthStateChanged }) => {
-            onAuthStateChanged(auth, async (user) => {
-                currentUser = user;
-                if (user) {
-                    authButton.innerHTML = '👤 Профиль';
-                    authButton.classList.remove('outline');
-                    authButton.onclick = () => alert(`Вы вошли как: ${user.email}`);
-                    await loadUserFavorites();
-                } else {
-                    authButton.innerHTML = '🔑 Войти';
-                    authButton.classList.add('outline');
-                    authButton.onclick = () => showAuthModal();
-                    userFavorites.clear();
-                    updateFavButtonsUI();
-                }
-            });
-        });
-    }
-
-    // --- YouTube плеер (основной) ---
-    window.onYouTubeIframeAPIReady = function() {
-        player = new YT.Player('youtube-player', {
-            height: '0', width: '0',
-            videoId: '',
-            playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
-            events: {
-                onReady: onPlayerReady,
-                onStateChange: onPlayerStateChange,
-                onError: onPlayerError
+                authButton.innerHTML = '🔑 Войти';
+                authButton.classList.add('outline');
+                authButton.onclick = () => window.showAuthModal();
+                userFavorites.clear();
+                updateFavButtonsUI();
             }
         });
-    };
+    });
+}
 
-    function onPlayerReady(event) {
-        isPlayerReady = true;
-        console.log("YouTube плеер готов");
-        if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
-        if (trackNameSpan.innerText === "Не выбрано") {
-            trackNameSpan.innerText = "Готов";
-            artistNameSpan.innerText = "Ищите музыку";
+// --- YouTube плеер ---
+window.onYouTubeIframeAPIReady = function() {
+    player = new YT.Player('youtube-player', {
+        height: '0', width: '0', videoId: '',
+        playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+        events: {
+            onReady: onPlayerReady,
+            onStateChange: onPlayerStateChange,
+            onError: onPlayerError
         }
-    }
-
-    function onPlayerStateChange(event) {
-        if (!player) return;
-        if (event.data === YT.PlayerState.PLAYING) {
-            playBtn.textContent = '⏸';
-            widgetPlayPause.textContent = '⏸';
-            widget.classList.add('playing');
-            startProgressTimer();
-        } else if (event.data === YT.PlayerState.PAUSED) {
-            playBtn.textContent = '▶';
-            widgetPlayPause.textContent = '▶';
-            widget.classList.remove('playing');
-            stopProgressTimer();
-        } else if (event.data === YT.PlayerState.ENDED) {
-            playNextTrack();
-        }
-    }
-
-    function onPlayerError(event) {
-        console.error("YouTube ошибка:", event.data);
-        const originalTrack = trackNameSpan.innerText;
-        const originalArtist = artistNameSpan.innerText;
-        trackNameSpan.innerText = "⚠️ Ошибка";
-        artistNameSpan.innerText = "Пропускаем...";
-        setTimeout(() => {
-            if (trackNameSpan.innerText === "⚠️ Ошибка") {
-                trackNameSpan.innerText = originalTrack;
-                artistNameSpan.innerText = originalArtist;
-            }
-            playNextTrack();
-        }, 1500);
-    }
-
-    function startProgressTimer() {
-        if (progressInterval) clearInterval(progressInterval);
-        progressInterval = setInterval(() => {
-            if (player && isPlayerReady && player.getCurrentTime && player.getDuration) {
-                const current = player.getCurrentTime();
-                const duration = player.getDuration();
-                if (duration && duration > 0) {
-                    const percent = (current / duration) * 100;
-                    progressFill.style.width = `${percent}%`;
-                    widgetProgressFill.style.width = `${percent}%`;
-                    const curMin = Math.floor(current / 60);
-                    const curSec = Math.floor(current % 60);
-                    const timeStr = `${curMin}:${curSec < 10 ? '0'+curSec : curSec}`;
-                    currentTimeSpan.innerText = timeStr;
-                    widgetCurrentTime.innerText = timeStr;
-                    const durMin = Math.floor(duration / 60);
-                    const durSec = Math.floor(duration % 60);
-                    const durStr = `${durMin}:${durSec < 10 ? '0'+durSec : durSec}`;
-                    durationSpan.innerText = durStr;
-                    widgetDuration.innerText = durStr;
-                }
-            }
-        }, 500);
-    }
-    function stopProgressTimer() {
-        if (progressInterval) clearInterval(progressInterval);
-        progressInterval = null;
-    }
-
-    function updateWidgetAndMiniCover(track) {
-        if (track && track.coverUrl) {
-            widgetCover.style.backgroundImage = `url('${track.coverUrl}')`;
-            widgetCover.style.backgroundSize = 'cover';
-            widgetCover.innerHTML = '';
-            miniCover.style.backgroundImage = `url('${track.coverUrl}')`;
-            miniCover.style.backgroundSize = 'cover';
-            miniCover.innerHTML = '';
-        } else {
-            widgetCover.style.backgroundImage = '';
-            widgetCover.innerHTML = '♫';
-            miniCover.style.backgroundImage = '';
-            miniCover.innerHTML = '♫';
-        }
-        widgetTitle.innerText = track ? track.title : 'Не выбрано';
-        widgetArtist.innerText = track ? track.artist : 'Начните поиск';
-        trackNameSpan.innerText = track ? track.title : 'Не выбрано';
-        artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
-    }
-
-    function playTrack(track, index) {
-        if (!track || !track.videoId) {
-            playNextTrack();
-            return;
-        }
-        if (!player || !isPlayerReady) {
-            setTimeout(() => playTrack(track, index), 300);
-            return;
-        }
-        currentPlaylist = window.lastSearchResults || [];
-        currentTrackData = track;
-        updateWidgetAndMiniCover(track);
-        progressFill.style.width = '0%';
-        widgetProgressFill.style.width = '0%';
-        currentTimeSpan.innerText = '0:00';
-        widgetCurrentTime.innerText = '0:00';
-        durationSpan.innerText = '0:00';
-        widgetDuration.innerText = '0:00';
-        player.loadVideoById(track.videoId);
-        player.playVideo();
-        if (index !== undefined) currentIndex = index;
-        else {
-            const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
-            if (found !== -1) currentIndex = found;
-        }
+    });
+};
+function onPlayerReady(event) {
+    isPlayerReady = true;
+    console.log("YouTube плеер готов");
+    if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
+}
+function onPlayerStateChange(event) {
+    if (!player) return;
+    if (event.data === YT.PlayerState.PLAYING) {
         playBtn.textContent = '⏸';
         widgetPlayPause.textContent = '⏸';
         widget.classList.add('playing');
+        startProgressTimer();
+    } else if (event.data === YT.PlayerState.PAUSED) {
+        playBtn.textContent = '▶';
+        widgetPlayPause.textContent = '▶';
+        widget.classList.remove('playing');
+        stopProgressTimer();
+    } else if (event.data === YT.PlayerState.ENDED) {
+        playNextTrack();
     }
-
-    function playPause() {
-        if (!player || !isPlayerReady) return;
-        if (player.getPlayerState() === YT.PlayerState.PLAYING) {
-            player.pauseVideo();
-        } else {
-            player.playVideo();
+}
+function onPlayerError(event) {
+    console.error("YouTube ошибка:", event.data);
+    const originalTrack = trackNameSpan.innerText;
+    const originalArtist = artistNameSpan.innerText;
+    trackNameSpan.innerText = "⚠️ Ошибка";
+    artistNameSpan.innerText = "Пропускаем...";
+    setTimeout(() => {
+        if (trackNameSpan.innerText === "⚠️ Ошибка") {
+            trackNameSpan.innerText = originalTrack;
+            artistNameSpan.innerText = originalArtist;
         }
-    }
-    function playNextTrack() {
-        if (!currentPlaylist.length) return;
-        let nextIndex = currentIndex + 1;
-        if (nextIndex >= currentPlaylist.length) nextIndex = 0;
-        playTrack(currentPlaylist[nextIndex], nextIndex);
-    }
-    function playPrevTrack() {
-        if (!currentPlaylist.length) return;
-        let prevIndex = currentIndex - 1;
-        if (prevIndex < 0) prevIndex = currentPlaylist.length - 1;
-        playTrack(currentPlaylist[prevIndex], prevIndex);
-    }
-
-    // Назначаем обработчики для основных кнопок
-    playBtn.addEventListener('click', playPause);
-    nextBtn.addEventListener('click', playNextTrack);
-    prevBtn.addEventListener('click', playPrevTrack);
-    widgetPlayPause.addEventListener('click', playPause);
-    widgetNext.addEventListener('click', playNextTrack);
-    widgetPrev.addEventListener('click', playPrevTrack);
-
-    progressBar.addEventListener('click', (e) => {
-        if (!player || !isPlayerReady) return;
-        const rect = progressBar.getBoundingClientRect();
-        const percent = (e.clientX - rect.left) / rect.width;
-        const duration = player.getDuration();
-        if (duration && duration > 0) player.seekTo(percent * duration, true);
-    });
-    widgetProgressBar.addEventListener('click', (e) => {
-        if (!player || !isPlayerReady) return;
-        const rect = widgetProgressBar.getBoundingClientRect();
-        const percent = (e.clientX - rect.left) / rect.width;
-        const duration = player.getDuration();
-        if (duration && duration > 0) player.seekTo(percent * duration, true);
-    });
-    volumeSlider.addEventListener('input', (e) => {
-        if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
-    });
-
-    // --- Поиск через YouTube Data API ---
-    let searchTimeout;
-    window.lastSearchResults = [];
-
-    async function searchTracks(query) {
-        if (!query.trim()) return;
-        if (!YOUTUBE_API_KEY || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY') {
-            tracksGrid.innerHTML = '<div class="error-message">⚠️ Не вставлен ключ YouTube API.</div>';
-            return;
-        }
-        resultsTitleSpan.innerText = `Результаты: "${query}"`;
-        tracksGrid.innerHTML = '<div class="loading">🔎 Поиск на YouTube...</div>';
-        try {
-            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${encodeURIComponent(query + ' song')}&type=video&key=${YOUTUBE_API_KEY}`;
-            const resp = await fetch(url);
-            const data = await resp.json();
-            if (!data.items || data.items.length === 0) throw new Error("Ничего не найдено");
-            const tracks = data.items.map(item => ({
-                videoId: item.id.videoId,
-                title: item.snippet.title,
-                artist: item.snippet.channelTitle,
-                coverUrl: item.snippet.thumbnails.high.url
-            }));
-            window.lastSearchResults = tracks;
-            currentPlaylist = tracks;
-            currentIndex = 0;
-            renderTracks(tracks);
-        } catch(e) {
-            console.error(e);
-            tracksGrid.innerHTML = `<div class="error-message">⚠️ Ошибка: ${e.message}</div>`;
-        }
-    }
-
-    function renderTracks(tracksList) {
-        if (!tracksList.length) {
-            tracksGrid.innerHTML = '<div class="loading">😔 Ничего не найдено</div>';
-            return;
-        }
-        const favSet = userFavorites;
-        tracksGrid.innerHTML = tracksList.map((track, idx) => `
-            <div class="track-card glass" data-video-id="${track.videoId}" data-index="${idx}">
-                <div class="track-cover" style="background-image: url('${track.coverUrl}'); background-size: cover;"></div>
-                <div class="track-info">
-                    <div class="track-title">${escapeHtml(track.title)}</div>
-                    <div class="track-artist">${escapeHtml(track.artist)}</div>
-                </div>
-                <button class="fav-btn ${favSet.has(track.videoId) ? 'active' : ''}" data-id="${track.videoId}" onclick="event.stopPropagation(); window.toggleFavorite('${track.videoId}', ${JSON.stringify({id: track.videoId, title: track.title, artist: track.artist}).replace(/"/g, '&quot;')})">❤️</button>
-            </div>
-        `).join('');
-        document.querySelectorAll('.track-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (e.target.classList.contains('fav-btn')) return;
-                const videoId = card.getAttribute('data-video-id');
-                const index = parseInt(card.getAttribute('data-index'));
-                const track = tracksList.find(t => t.videoId === videoId);
-                if (track) {
-                    currentPlaylist = tracksList;
-                    playTrack(track, index);
-                }
-            });
-        });
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    searchInput.addEventListener('input', (e) => {
-        if (searchTimeout) clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => searchTracks(e.target.value), 600);
-    });
-
-    document.getElementById('showFavBtn').addEventListener('click', async () => {
-        if (!firebaseAvailable || !currentUser) {
-            alert("Войдите в аккаунт, чтобы увидеть избранное");
-            showAuthModal();
-            return;
-        }
-        if (!db) return;
-        resultsTitleSpan.innerText = "❤️ Избранные треки";
-        tracksGrid.innerHTML = '<div class="loading">Загрузка избранного...</div>';
-        try {
-            const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
-            const querySnapshot = await getDocs(collection(db, "favorite_tracks"));
-            const favTracks = [];
-            querySnapshot.forEach(doc => {
-                const data = doc.data();
-                if (data && userFavorites.has(data.id)) {
-                    favTracks.push({ videoId: data.id, title: data.title, artist: data.artist, coverUrl: '' });
-                }
-            });
-            if (!favTracks.length) {
-                tracksGrid.innerHTML = '<div class="loading">У вас пока нет избранных треков. Добавьте их, нажав сердечко ❤️</div>';
-                return;
+        playNextTrack();
+    }, 1500);
+}
+function startProgressTimer() {
+    if (progressInterval) clearInterval(progressInterval);
+    progressInterval = setInterval(() => {
+        if (player && isPlayerReady && player.getCurrentTime && player.getDuration) {
+            const current = player.getCurrentTime();
+            const duration = player.getDuration();
+            if (duration && duration > 0) {
+                const percent = (current / duration) * 100;
+                progressFill.style.width = `${percent}%`;
+                widgetProgressFill.style.width = `${percent}%`;
+                const curMin = Math.floor(current / 60);
+                const curSec = Math.floor(current % 60);
+                const timeStr = `${curMin}:${curSec < 10 ? '0'+curSec : curSec}`;
+                currentTimeSpan.innerText = timeStr;
+                widgetCurrentTime.innerText = timeStr;
+                const durMin = Math.floor(duration / 60);
+                const durSec = Math.floor(duration % 60);
+                const durStr = `${durMin}:${durSec < 10 ? '0'+durSec : durSec}`;
+                durationSpan.innerText = durStr;
+                widgetDuration.innerText = durStr;
             }
-            window.lastSearchResults = favTracks;
-            currentPlaylist = favTracks;
-            renderTracks(favTracks);
-        } catch(e) {
-            console.error(e);
-            tracksGrid.innerHTML = '<div class="error-message">Ошибка загрузки избранного</div>';
         }
-    });
+    }, 500);
+}
+function stopProgressTimer() {
+    if (progressInterval) clearInterval(progressInterval);
+    progressInterval = null;
+}
+function updateWidgetAndMiniCover(track) {
+    if (track && track.coverUrl) {
+        widgetCover.style.backgroundImage = `url('${track.coverUrl}')`;
+        widgetCover.style.backgroundSize = 'cover';
+        widgetCover.innerHTML = '';
+        miniCover.style.backgroundImage = `url('${track.coverUrl}')`;
+        miniCover.style.backgroundSize = 'cover';
+        miniCover.innerHTML = '';
+    } else {
+        widgetCover.style.backgroundImage = '';
+        widgetCover.innerHTML = '♫';
+        miniCover.style.backgroundImage = '';
+        miniCover.innerHTML = '♫';
+    }
+    widgetTitle.innerText = track ? track.title : 'Не выбрано';
+    widgetArtist.innerText = track ? track.artist : 'Начните поиск';
+    trackNameSpan.innerText = track ? track.title : 'Не выбрано';
+    artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
+}
+function playTrack(track, index) {
+    if (!track || !track.videoId) { playNextTrack(); return; }
+    if (!player || !isPlayerReady) { setTimeout(() => playTrack(track, index), 300); return; }
+    currentPlaylist = window.lastSearchResults || [];
+    updateWidgetAndMiniCover(track);
+    progressFill.style.width = '0%';
+    widgetProgressFill.style.width = '0%';
+    currentTimeSpan.innerText = '0:00';
+    widgetCurrentTime.innerText = '0:00';
+    durationSpan.innerText = '0:00';
+    widgetDuration.innerText = '0:00';
+    player.loadVideoById(track.videoId);
+    player.playVideo();
+    if (index !== undefined) currentIndex = index;
+    else {
+        const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
+        if (found !== -1) currentIndex = found;
+    }
+    playBtn.textContent = '⏸';
+    widgetPlayPause.textContent = '⏸';
+    widget.classList.add('playing');
+}
+function playPause() {
+    if (!player || !isPlayerReady) return;
+    if (player.getPlayerState() === YT.PlayerState.PLAYING) player.pauseVideo();
+    else player.playVideo();
+}
+function playNextTrack() {
+    if (!currentPlaylist.length) return;
+    let nextIndex = currentIndex + 1;
+    if (nextIndex >= currentPlaylist.length) nextIndex = 0;
+    playTrack(currentPlaylist[nextIndex], nextIndex);
+}
+function playPrevTrack() {
+    if (!currentPlaylist.length) return;
+    let prevIndex = currentIndex - 1;
+    if (prevIndex < 0) prevIndex = currentPlaylist.length - 1;
+    playTrack(currentPlaylist[prevIndex], prevIndex);
+}
+playBtn.addEventListener('click', playPause);
+nextBtn.addEventListener('click', playNextTrack);
+prevBtn.addEventListener('click', playPrevTrack);
+widgetPlayPause.addEventListener('click', playPause);
+widgetNext.addEventListener('click', playNextTrack);
+widgetPrev.addEventListener('click', playPrevTrack);
+progressBar.addEventListener('click', (e) => {
+    if (!player || !isPlayerReady) return;
+    const rect = progressBar.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    const duration = player.getDuration();
+    if (duration > 0) player.seekTo(percent * duration, true);
+});
+widgetProgressBar.addEventListener('click', (e) => {
+    if (!player || !isPlayerReady) return;
+    const rect = widgetProgressBar.getBoundingClientRect();
+    const percent = (e.clientX - rect.left) / rect.width;
+    const duration = player.getDuration();
+    if (duration > 0) player.seekTo(percent * duration, true);
+});
+volumeSlider.addEventListener('input', (e) => {
+    if (player && isPlayerReady) player.setVolume(parseInt(e.target.value));
+});
 
-    searchTracks("top pop hits 2024");
+// --- Поиск через YouTube API ---
+let searchTimeout;
+window.lastSearchResults = [];
+async function searchTracks(query) {
+    if (!query.trim()) return;
+    if (!YOUTUBE_API_KEY || YOUTUBE_API_KEY === 'YOUR_YOUTUBE_API_KEY') {
+        tracksGrid.innerHTML = '<div class="error-message">⚠️ Не вставлен ключ YouTube API.</div>';
+        return;
+    }
+    resultsTitleSpan.innerText = `Результаты: "${query}"`;
+    tracksGrid.innerHTML = '<div class="loading">🔎 Поиск на YouTube...</div>';
+    try {
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${encodeURIComponent(query + ' song')}&type=video&key=${YOUTUBE_API_KEY}`;
+        const resp = await fetch(url);
+        const data = await resp.json();
+        if (!data.items || data.items.length === 0) throw new Error("Ничего не найдено");
+        const tracks = data.items.map(item => ({
+            videoId: item.id.videoId,
+            title: item.snippet.title,
+            artist: item.snippet.channelTitle,
+            coverUrl: item.snippet.thumbnails.high.url
+        }));
+        window.lastSearchResults = tracks;
+        currentPlaylist = tracks;
+        currentIndex = 0;
+        renderTracks(tracks);
+    } catch(e) {
+        console.error(e);
+        tracksGrid.innerHTML = `<div class="error-message">⚠️ Ошибка: ${e.message}</div>`;
+    }
+}
+function renderTracks(tracksList) {
+    if (!tracksList.length) {
+        tracksGrid.innerHTML = '<div class="loading">😔 Ничего не найдено</div>';
+        return;
+    }
+    const favSet = userFavorites;
+    tracksGrid.innerHTML = tracksList.map((track, idx) => `
+        <div class="track-card glass" data-video-id="${track.videoId}" data-index="${idx}">
+            <div class="track-cover" style="background-image: url('${track.coverUrl}'); background-size: cover;"></div>
+            <div class="track-info">
+                <div class="track-title">${escapeHtml(track.title)}</div>
+                <div class="track-artist">${escapeHtml(track.artist)}</div>
+            </div>
+            <button class="fav-btn ${favSet.has(track.videoId) ? 'active' : ''}" data-id="${track.videoId}" onclick="event.stopPropagation(); window.toggleFavorite('${track.videoId}', ${JSON.stringify({id: track.videoId, title: track.title, artist: track.artist}).replace(/"/g, '&quot;')})">❤️</button>
+        </div>
+    `).join('');
+    document.querySelectorAll('.track-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('fav-btn')) return;
+            const videoId = card.getAttribute('data-video-id');
+            const index = parseInt(card.getAttribute('data-index'));
+            const track = tracksList.find(t => t.videoId === videoId);
+            if (track) {
+                currentPlaylist = tracksList;
+                playTrack(track, index);
+            }
+        });
+    });
+}
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+}
+searchInput.addEventListener('input', (e) => {
+    if (searchTimeout) clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => searchTracks(e.target.value), 600);
+});
+document.getElementById('showFavBtn').addEventListener('click', async () => {
+    if (!firebaseAvailable || !currentUser) {
+        alert("Войдите в аккаунт");
+        window.showAuthModal();
+        return;
+    }
+    if (!db) return;
+    resultsTitleSpan.innerText = "❤️ Избранные треки";
+    tracksGrid.innerHTML = '<div class="loading">Загрузка...</div>';
+    try {
+        const { collection, getDocs } = await import('https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js');
+        const querySnapshot = await getDocs(collection(db, "favorite_tracks"));
+        const favTracks = [];
+        querySnapshot.forEach(doc => {
+            const data = doc.data();
+            if (data && userFavorites.has(data.id)) {
+                favTracks.push({ videoId: data.id, title: data.title, artist: data.artist, coverUrl: '' });
+            }
+        });
+        if (!favTracks.length) {
+            tracksGrid.innerHTML = '<div class="loading">У вас пока нет избранных треков. Добавьте их, нажав сердечко ❤️</div>';
+            return;
+        }
+        window.lastSearchResults = favTracks;
+        currentPlaylist = favTracks;
+        renderTracks(favTracks);
+    } catch(e) {
+        console.error(e);
+        tracksGrid.innerHTML = '<div class="error-message">Ошибка загрузки избранного</div>';
+    }
+});
+searchTracks("top pop hits 2024");
 
-    // --- Эффект курсора и свечения виджета ---
-    const glow = document.getElementById('cursorGlow');
-    const playerDiv = document.getElementById('miniPlayer');
-    const widgetDiv = document.getElementById('widget');
-
-    document.addEventListener('mousemove', (e) => {
-        glow.style.left = e.clientX + 'px';
-        glow.style.top = e.clientY + 'px';
-    });
-    playerDiv.addEventListener('mouseenter', () => {
-        document.body.classList.add('player-hover');
-        playerDiv.classList.add('blue-glow');
-    });
-    playerDiv.addEventListener('mouseleave', () => {
-        document.body.classList.remove('player-hover');
-        playerDiv.classList.remove('blue-glow');
-    });
-    widgetDiv.addEventListener('mouseenter', () => {
-        document.body.classList.add('widget-hover');
-        widgetDiv.style.borderColor = 'rgba(138, 92, 246, 0.8)';
-    });
-    widgetDiv.addEventListener('mouseleave', () => {
-        document.body.classList.remove('widget-hover');
-        widgetDiv.style.borderColor = 'rgba(255, 255, 255, 0.15)';
-    });
+// Эффекты курсора и свечения
+const glow = document.getElementById('cursorGlow');
+const playerDiv = document.getElementById('miniPlayer');
+const widgetDiv = document.getElementById('widget');
+document.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top = e.clientY + 'px';
+});
+playerDiv.addEventListener('mouseenter', () => {
+    document.body.classList.add('player-hover');
+    playerDiv.classList.add('blue-glow');
+});
+playerDiv.addEventListener('mouseleave', () => {
+    document.body.classList.remove('player-hover');
+    playerDiv.classList.remove('blue-glow');
+});
+widgetDiv.addEventListener('mouseenter', () => {
+    document.body.classList.add('widget-hover');
+    widgetDiv.style.borderColor = 'rgba(138,92,246,0.8)';
+});
+widgetDiv.addEventListener('mouseleave', () => {
+    document.body.classList.remove('widget-hover');
+    widgetDiv.style.borderColor = 'rgba(255,255,255,0.15)';
+});
 </script>
 </body>
 </html>
