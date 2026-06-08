@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Qwest Music — рабочий плеер</title>
+    <title>Qwest Music — идеальный плеер</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -160,16 +160,24 @@
         }
         .modal-content { background: #111216; border-radius: 32px; padding: 40px; width: 90%; max-width: 450px; border: 1px solid rgba(255,255,255,0.1); }
         .modal h2 { margin-bottom: 20px; font-size: 28px; }
-        .modal input { width: 100%; padding: 15px; margin-bottom: 15px; background: #1a1c23; border: 1px solid #2a2c33; border-radius: 20px; color: white; }
+        .modal input { width: 100%; padding: 15px; margin-bottom: 15px; background: #1a1c23; border: 1px solid #2a2c33; border-radius: 20px; color: white; font-size: 16px; }
         .close-modal { position: absolute; top: 20px; right: 30px; font-size: 40px; cursor: pointer; color: white; }
         .loading, .error-message { text-align: center; grid-column: 1/-1; }
         .error-message { color: #ff2d55; }
+        .toast {
+            position: fixed; bottom: 130px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(16px); color: white; padding: 10px 20px; border-radius: 60px; font-size: 0.85rem;
+            z-index: 10002; display: none; border: 1px solid rgba(255,255,255,0.2); pointer-events: none;
+            white-space: nowrap;
+        }
     </style>
     <script src="https://www.youtube.com/iframe_api"></script>
 </head>
 <body>
 
 <div id="cursorGlow"></div>
+<div id="toast" class="toast"></div>
+
 <header>
     <div class="container">
         <div class="nav">
@@ -290,6 +298,14 @@
     let currentUser = null;
     let userFavorites = new Set();
 
+    // Вспомогательная функция toast
+    const toast = document.getElementById('toast');
+    function showToast(msg, duration = 2000) {
+        toast.textContent = msg;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => { toast.style.display = 'none'; toast.style.opacity = '1'; }, 300); }, duration);
+    }
+
     // Авторизация
     window.closeAuthModal = () => document.getElementById('authModal').style.display = 'none';
     window.switchAuthMode = () => {
@@ -320,6 +336,7 @@
             window.closeAuthModal();
             document.getElementById('authEmail').value = '';
             document.getElementById('authPassword').value = '';
+            showToast('✅ Вход выполнен', 1500);
         } catch (error) {
             alert(`Ошибка: ${error.message}`);
         }
@@ -336,7 +353,7 @@
     }
     window.toggleFavorite = async (trackId, trackData) => {
         if (!firebaseAvailable || !currentUser) {
-            alert("Войдите в аккаунт");
+            showToast('🔒 Войдите в аккаунт, чтобы добавить в избранное', 2000);
             window.showAuthModal();
             return false;
         }
@@ -348,10 +365,12 @@
             if (isFav) {
                 await updateDoc(userRef, { favorites: arrayRemove(trackId) });
                 userFavorites.delete(trackId);
+                showToast('❤️ Удалено из избранного', 1000);
             } else {
                 await updateDoc(userRef, { favorites: arrayUnion(trackId) });
                 userFavorites.add(trackId);
                 await setDoc(doc(db, "favorite_tracks", trackId), trackData, { merge: true });
+                showToast('💾 Добавлено в избранное', 1000);
             }
             updateFavButtonsUI();
             return !isFav;
@@ -391,35 +410,45 @@
         updateAuthButton();
     }
 
-    // YouTube плеер (рабочая версия)
+    // YouTube плеер с правильной инициализацией и обходом autoplay
     window.onYouTubeIframeAPIReady = function() {
         player = new YT.Player('youtube-player', {
             height: '0', width: '0', videoId: '',
-            playerVars: { autoplay: 0, controls: 0, disablekb: 1, modestbranding: 1, rel: 0 },
+            playerVars: {
+                autoplay: 0,
+                controls: 0,
+                disablekb: 1,
+                modestbranding: 1,
+                rel: 0,
+                enablejsapi: 1,
+                origin: window.location.origin
+            },
             events: {
                 onReady: () => {
                     isPlayerReady = true;
                     console.log('YouTube готов');
                     if (volumeSlider) player.setVolume(parseInt(volumeSlider.value));
+                    showToast('🎵 Плеер готов', 1000);
                 },
-                onStateChange: (e) => {
+                onStateChange: (event) => {
                     if (!player) return;
-                    if (e.data === YT.PlayerState.PLAYING) {
+                    if (event.data === YT.PlayerState.PLAYING) {
                         playBtn.textContent = '⏸';
                         widgetPlayPause.textContent = '⏸';
                         widget.classList.add('playing');
                         startProgressTimer();
-                    } else if (e.data === YT.PlayerState.PAUSED) {
+                    } else if (event.data === YT.PlayerState.PAUSED) {
                         playBtn.textContent = '▶';
                         widgetPlayPause.textContent = '▶';
                         widget.classList.remove('playing');
                         stopProgressTimer();
-                    } else if (e.data === YT.PlayerState.ENDED) {
+                    } else if (event.data === YT.PlayerState.ENDED) {
                         playNextTrack();
                     }
                 },
                 onError: (error) => {
                     console.error('YouTube ошибка:', error.data);
+                    showToast('⚠️ Ошибка, пропускаем', 1500);
                     playNextTrack();
                 }
             }
@@ -472,9 +501,11 @@
         artistNameSpan.innerText = track ? track.artist : 'Начните поиск';
     }
 
-    function playTrack(track, index) {
+    // Главная функция воспроизведения с обходом autoplay
+    async function playTrack(track, index) {
         if (!track || !track.videoId) { playNextTrack(); return; }
         if (!player || !isPlayerReady) { setTimeout(() => playTrack(track, index), 300); return; }
+        
         currentPlaylist = window.lastSearchResults || [];
         updateWidgetAndMiniCover(track);
         progressFill.style.width = '0%';
@@ -483,16 +514,30 @@
         widgetCurrentTime.innerText = '0:00';
         durationSpan.innerText = '0:00';
         widgetDuration.innerText = '0:00';
-        player.loadVideoById(track.videoId);
-        player.playVideo();
+
+        // Устанавливаем индекс
         if (index !== undefined) currentIndex = index;
         else {
             const found = currentPlaylist.findIndex(t => t.videoId === track.videoId);
             if (found !== -1) currentIndex = found;
         }
+
+        // Обход autoplay: сначала mute, play, потом unMute
+        player.loadVideoById(track.videoId);
+        player.mute();
+        player.playVideo();
+        // Даём время на запуск и возвращаем звук
+        setTimeout(() => {
+            if (player && player.unMute) {
+                player.unMute();
+                player.setVolume(volumeSlider.value);
+            }
+        }, 500);
+        
         playBtn.textContent = '⏸';
         widgetPlayPause.textContent = '⏸';
         widget.classList.add('playing');
+        showToast(`🎵 ${track.title} — ${track.artist}`, 2000);
     }
 
     function playPause() {
@@ -544,10 +589,11 @@
     async function searchTracks(query) {
         if (!query.trim()) return;
         resultsTitleSpan.innerText = `Результаты: "${query}"`;
-        tracksGrid.innerHTML = '<div class="loading">🔎 Поиск...</div>';
+        tracksGrid.innerHTML = '<div class="loading">🔎 Поиск на YouTube...</div>';
         try {
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=12&q=${encodeURIComponent(query)}&type=video&key=${YOUTUBE_API_KEY}`;
             const resp = await fetch(url);
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
             const data = await resp.json();
             if (!data.items || data.items.length === 0) throw new Error('Ничего не найдено');
             const tracks = data.items.map(item => ({
@@ -560,6 +606,7 @@
             currentPlaylist = tracks;
             currentIndex = 0;
             renderTracks(tracks);
+            showToast(`🔍 Найдено ${tracks.length} треков`, 1500);
         } catch(e) {
             console.error(e);
             tracksGrid.innerHTML = `<div class="error-message">⚠️ Ошибка: ${e.message}</div>`;
@@ -567,7 +614,10 @@
     }
 
     function renderTracks(tracksList) {
-        if (!tracksList.length) { tracksGrid.innerHTML = '<div class="loading">😔 Ничего не найдено</div>'; return; }
+        if (!tracksList.length) {
+            tracksGrid.innerHTML = '<div class="loading">😔 Ничего не найдено</div>';
+            return;
+        }
         tracksGrid.innerHTML = tracksList.map((track, idx) => `
             <div class="track-card glass" data-video-id="${track.videoId}" data-index="${idx}">
                 <div class="track-cover" style="background-image: url('${track.coverUrl}'); background-size: cover;"></div>
@@ -604,7 +654,7 @@
 
     document.getElementById('showFavBtn').addEventListener('click', async () => {
         if (!firebaseAvailable || !currentUser) {
-            alert("Войдите в аккаунт");
+            showToast('🔒 Войдите в аккаунт, чтобы увидеть избранное', 2000);
             window.showAuthModal();
             return;
         }
@@ -631,7 +681,7 @@
 
     searchTracks("top hits 2025");
 
-    // Свечение
+    // Эффекты свечения
     const glow = document.getElementById('cursorGlow');
     const playerDiv = document.getElementById('miniPlayer');
     const widgetDiv = document.getElementById('widget');
