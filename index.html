@@ -101,11 +101,7 @@
             padding: 30px;
             border: 1px solid rgba(255,255,255,0.02);
             z-index: 1;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .container.hidden {
-            display: none;
+            transition: min-height 0.6s ease;
         }
 
         /* ===== PIN-ЭКРАН ===== */
@@ -119,7 +115,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 30px;
+            gap: 25px;
             padding: 40px 30px;
             border-radius: 48px;
             background: rgba(10, 8, 18, 0.25);
@@ -160,6 +156,7 @@
             font-weight: 500;
             color: rgba(255, 255, 255, 0.6);
             letter-spacing: 0.5px;
+            text-align: center;
         }
 
         .pin-display {
@@ -199,6 +196,11 @@
             animation: shake 0.4s ease;
         }
 
+        .pin-digit.success {
+            border-color: rgba(100, 200, 150, 0.5);
+            box-shadow: 0 0 30px rgba(100, 200, 150, 0.1);
+        }
+
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             20% { transform: translateX(-8px); }
@@ -213,9 +215,23 @@
             min-height: 24px;
             opacity: 0;
             transition: opacity 0.4s ease;
+            text-align: center;
         }
 
         .error-message.show {
+            opacity: 1;
+        }
+
+        .success-message {
+            color: rgba(100, 200, 150, 0.7);
+            font-size: 0.9rem;
+            min-height: 24px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            text-align: center;
+        }
+
+        .success-message.show {
             opacity: 1;
         }
 
@@ -276,7 +292,7 @@
         /* ===== ПРИЛОЖЕНИЕ ЗАМЕТОК ===== */
         .notes-app {
             width: 100%;
-            display: flex;
+            display: none;
             flex-direction: column;
             gap: 20px;
             opacity: 0;
@@ -285,6 +301,7 @@
         }
 
         .notes-app.show {
+            display: flex;
             opacity: 1;
             transform: translateY(0);
         }
@@ -295,6 +312,8 @@
             justify-content: space-between;
             align-items: center;
             padding: 0 4px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .notes-header .title {
@@ -306,7 +325,8 @@
 
         .header-actions {
             display: flex;
-            gap: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .header-btn {
@@ -357,6 +377,18 @@
         .header-btn.add:hover {
             background: rgba(50, 180, 120, 0.25);
             color: rgba(100, 220, 160, 0.9);
+        }
+
+        .header-btn.change-pin {
+            background: rgba(255, 200, 50, 0.1);
+            border-color: rgba(255, 200, 50, 0.08);
+            color: rgba(255, 200, 80, 0.6);
+            font-size: 0.8rem;
+        }
+
+        .header-btn.change-pin:hover {
+            background: rgba(255, 200, 50, 0.2);
+            color: rgba(255, 200, 80, 0.9);
         }
 
         /* Сетка заметок */
@@ -500,7 +532,7 @@
         }
 
         .note-editor {
-            background: rgba(20, 18, 30, 0.9);
+            background: rgba(20, 18, 30, 0.95);
             backdrop-filter: blur(20px);
             border-radius: 32px;
             padding: 32px;
@@ -601,13 +633,13 @@
             .note-card { min-height: 130px; padding: 12px; }
             .corner-light { width: 200px; height: 200px; filter: blur(60px); }
             .note-editor { padding: 24px; margin: 10px; }
+            .notes-header .title { font-size: 1.2rem; }
+            .header-btn { padding: 6px 12px; font-size: 0.8rem; }
         }
 
         @media (max-width: 400px) {
             .notes-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
             .note-card { min-height: 110px; padding: 10px; border-radius: 16px; }
-            .header-btn { padding: 6px 12px; font-size: 0.8rem; }
-            .notes-header .title { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -625,7 +657,7 @@
     <!-- ===== PIN-ЭКРАН ===== -->
     <div class="pin-screen" id="pinScreen">
         <div class="greeting" id="greeting">🔐</div>
-        <div class="pin-title">Введите код для входа</div>
+        <div class="pin-title" id="pinTitle">Введите код для входа</div>
         <div class="pin-display" id="pinDisplay">
             <div class="pin-digit" id="digit1"></div>
             <div class="pin-digit" id="digit2"></div>
@@ -633,6 +665,7 @@
             <div class="pin-digit" id="digit4"></div>
         </div>
         <div class="error-message" id="errorMessage">❌ Неверный код</div>
+        <div class="success-message" id="successMessage">✅ Пароль изменён!</div>
         <div class="numpad" id="numpad">
             <button class="numpad-btn" data-value="1">1</button>
             <button class="numpad-btn" data-value="2">2</button>
@@ -655,15 +688,14 @@
         <div class="notes-header">
             <span class="title">📝 Заметки</span>
             <div class="header-actions">
+                <button class="header-btn change-pin" id="changePinBtn">🔑 Сменить пароль</button>
                 <button class="header-btn add" id="addNoteBtn">+ Новая</button>
                 <button class="header-btn logout" id="logoutBtn">✕ Выйти</button>
             </div>
         </div>
 
         <!-- Сетка заметок -->
-        <div class="notes-grid" id="notesGrid">
-            <!-- Карточки будут добавляться сюда -->
-        </div>
+        <div class="notes-grid" id="notesGrid"></div>
     </div>
 
 </div>
@@ -672,7 +704,7 @@
 <div class="note-editor-overlay" id="noteEditorOverlay">
     <div class="note-editor">
         <div class="editor-title" id="editorTitle">Новая заметка</div>
-        <input type="text" id="noteTitleInput" placeholder="Заголовок..." />
+        <input type="text" id="noteTitleInput" placeholder="Заголовок..." maxlength="100" />
         <textarea id="noteContentInput" placeholder="Текст заметки..."></textarea>
         <div class="editor-actions">
             <button class="cancel-btn" id="editorCancelBtn">Отмена</button>
@@ -682,320 +714,594 @@
 </div>
 
 <script>
-    (function() {
-        // ===== PIN-КОД =====
-        const CORRECT_PIN = '2066';
-        let enteredPin = '';
-        let isLocked = false;
+(function() {
+    // ===== ХРАНИЛИЩЕ ПАРОЛЯ =====
+    const STORAGE_KEY = 'app_pin';
+    const NOTES_KEY = 'notes';
 
-        const digitEls = [
-            document.getElementById('digit1'),
-            document.getElementById('digit2'),
-            document.getElementById('digit3'),
-            document.getElementById('digit4')
-        ];
-        const errorMessage = document.getElementById('errorMessage');
-        const pinScreen = document.getElementById('pinScreen');
-        const notesApp = document.getElementById('notesApp');
-        const container = document.getElementById('container');
-        const greeting = document.getElementById('greeting');
+    function getStoredPin() {
+        try {
+            return localStorage.getItem(STORAGE_KEY) || '2066';
+        } catch {
+            return '2066';
+        }
+    }
 
-        // ===== ОГНИ =====
-        const lights = [
-            document.getElementById('light1'),
-            document.getElementById('light2'),
-            document.getElementById('light3'),
-            document.getElementById('light4')
-        ];
+    function setStoredPin(pin) {
+        try {
+            localStorage.setItem(STORAGE_KEY, pin);
+            return true;
+        } catch {
+            return false;
+        }
+    }
 
-        function animateLights() {
-            lights.forEach(light => light.classList.add('active', 'ultra-active'));
-            const i1 = Math.floor(Math.random() * lights.length);
-            let i2 = Math.floor(Math.random() * lights.length);
-            while (i2 === i1) i2 = Math.floor(Math.random() * lights.length);
+    let CURRENT_PIN = getStoredPin();
 
+    // ===== PIN-КОД =====
+    let enteredPin = '';
+    let isLocked = false;
+    let isChangingPin = false; // Режим смены пароля
+    let oldPinEntered = ''; // Для подтверждения старого пароля
+    let newPinEntered = ''; // Для нового пароля
+
+    const digitEls = [
+        document.getElementById('digit1'),
+        document.getElementById('digit2'),
+        document.getElementById('digit3'),
+        document.getElementById('digit4')
+    ];
+    const errorMessage = document.getElementById('errorMessage');
+    const successMessage = document.getElementById('successMessage');
+    const pinScreen = document.getElementById('pinScreen');
+    const notesApp = document.getElementById('notesApp');
+    const container = document.getElementById('container');
+    const greeting = document.getElementById('greeting');
+    const pinTitle = document.getElementById('pinTitle');
+
+    // ===== ОГНИ =====
+    const lights = [
+        document.getElementById('light1'),
+        document.getElementById('light2'),
+        document.getElementById('light3'),
+        document.getElementById('light4')
+    ];
+
+    let lightTimeout = null;
+
+    function animateLights() {
+        if (lightTimeout) {
+            clearTimeout(lightTimeout);
+            lightTimeout = null;
+        }
+
+        lights.forEach(light => {
+            light.className = 'corner-light';
+            const pos = light.id.replace('light', '');
+            light.classList.add(`pos-${pos}`);
+            light.classList.remove('active', 'ultra-active');
+        });
+
+        const i1 = Math.floor(Math.random() * lights.length);
+        let i2 = Math.floor(Math.random() * lights.length);
+        while (i2 === i1) i2 = Math.floor(Math.random() * lights.length);
+
+        const l1 = lights[i1];
+        const l2 = lights[i2];
+        
+        const from = parseInt(l1.id.replace('light', ''));
+        const to = parseInt(l2.id.replace('light', ''));
+        
+        l1.classList.add(`animate-${from}-to-${to}`);
+        l2.classList.add(`animate-${to}-to-${from}`);
+        l1.classList.add('active');
+        l2.classList.add('active');
+        
+        const bright = Math.random() > 0.5 ? l1 : l2;
+        bright.classList.add('ultra-active');
+
+        lightTimeout = setTimeout(() => {
             lights.forEach(light => {
                 light.className = 'corner-light';
                 const pos = light.id.replace('light', '');
                 light.classList.add(`pos-${pos}`);
+                light.classList.remove('active', 'ultra-active');
             });
+            lightTimeout = null;
+        }, 1300);
+    }
 
-            const l1 = lights[i1], l2 = lights[i2];
-            const from = parseInt(l1.id.replace('light', ''));
-            const to = parseInt(l2.id.replace('light', ''));
-            l1.classList.add(`animate-${from}-to-${to}`);
-            l2.classList.add(`animate-${to}-to-${from}`);
-            l1.classList.add('active');
-            l2.classList.add('active');
-            const bright = Math.random() > 0.5 ? l1 : l2;
-            bright.classList.add('ultra-active');
+    // ===== PIN-ЛОГИКА =====
+    function updatePinDisplay() {
+        const displayPin = isChangingPin ? 
+            (oldPinEntered.length < 4 ? oldPinEntered : newPinEntered) : 
+            enteredPin;
+        
+        const currentLength = isChangingPin ?
+            (oldPinEntered.length < 4 ? oldPinEntered.length : newPinEntered.length) :
+            enteredPin.length;
 
-            setTimeout(() => {
-                lights.forEach(light => {
-                    light.className = 'corner-light';
-                    const pos = light.id.replace('light', '');
-                    light.classList.add(`pos-${pos}`);
-                    light.classList.remove('active', 'ultra-active');
-                });
-            }, 1300);
+        for (let i = 0; i < 4; i++) {
+            const val = displayPin[i] || '';
+            digitEls[i].textContent = val;
+            digitEls[i].className = 'pin-digit';
+            if (val) digitEls[i].classList.add('filled');
+            if (i === currentLength && currentLength < 4) {
+                digitEls[i].classList.add('active');
+            }
         }
+        errorMessage.classList.remove('show');
+        successMessage.classList.remove('show');
+    }
 
-        // ===== PIN-ЛОГИКА =====
-        function updatePinDisplay() {
-            for (let i = 0; i < 4; i++) {
-                const val = enteredPin[i] || '';
-                digitEls[i].textContent = val;
-                digitEls[i].classList.remove('active', 'filled', 'error');
-                if (val) digitEls[i].classList.add('filled');
-                if (i === enteredPin.length && enteredPin.length < 4) {
-                    digitEls[i].classList.add('active');
+    function updatePinTitle() {
+        if (isChangingPin) {
+            if (oldPinEntered.length < 4) {
+                pinTitle.textContent = '🔑 Введите старый пароль';
+            } else {
+                pinTitle.textContent = '🔑 Введите новый пароль (4 цифры)';
+            }
+        } else {
+            pinTitle.textContent = 'Введите код для входа';
+        }
+    }
+
+    function checkPin() {
+        if (enteredPin.length !== 4) return;
+        
+        if (enteredPin === CURRENT_PIN) {
+            // ✅ Успешный вход
+            pinScreen.classList.add('hidden');
+            setTimeout(() => {
+                pinScreen.style.display = 'none';
+                notesApp.classList.add('show');
+                container.style.minHeight = '700px';
+                renderNotes();
+                animateLights();
+            }, 500);
+        } else {
+            // ❌ Неверный код
+            digitEls.forEach(d => { 
+                d.className = 'pin-digit error';
+            });
+            errorMessage.classList.add('show');
+            
+            setTimeout(() => {
+                enteredPin = '';
+                updatePinDisplay();
+                errorMessage.classList.remove('show');
+            }, 1200);
+        }
+    }
+
+    function checkOldPinForChange() {
+        if (oldPinEntered.length !== 4) return;
+        
+        if (oldPinEntered === CURRENT_PIN) {
+            // ✅ Старый пароль верный
+            oldPinEntered = '';
+            newPinEntered = '';
+            updatePinDisplay();
+            updatePinTitle();
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            animateLights();
+        } else {
+            // ❌ Неверный старый пароль
+            digitEls.forEach(d => { 
+                d.className = 'pin-digit error';
+            });
+            errorMessage.textContent = '❌ Неверный старый пароль';
+            errorMessage.classList.add('show');
+            
+            setTimeout(() => {
+                oldPinEntered = '';
+                newPinEntered = '';
+                updatePinDisplay();
+                updatePinTitle();
+                errorMessage.classList.remove('show');
+            }, 1200);
+        }
+    }
+
+    function confirmNewPin() {
+        if (newPinEntered.length !== 4) return;
+        
+        // Сохраняем новый пароль
+        if (setStoredPin(newPinEntered)) {
+            CURRENT_PIN = newPinEntered;
+            successMessage.textContent = '✅ Пароль успешно изменён!';
+            successMessage.classList.add('show');
+            digitEls.forEach(d => {
+                d.className = 'pin-digit success';
+            });
+            animateLights();
+            
+            // Выходим из режима смены пароля
+            setTimeout(() => {
+                isChangingPin = false;
+                oldPinEntered = '';
+                newPinEntered = '';
+                enteredPin = '';
+                updatePinDisplay();
+                updatePinTitle();
+                successMessage.classList.remove('show');
+                digitEls.forEach(d => d.className = 'pin-digit');
+            }, 2000);
+        } else {
+            errorMessage.textContent = '❌ Ошибка сохранения пароля';
+            errorMessage.classList.add('show');
+            setTimeout(() => {
+                newPinEntered = '';
+                updatePinDisplay();
+                errorMessage.classList.remove('show');
+            }, 1200);
+        }
+    }
+
+    function handleDigit(val) {
+        if (isLocked) return;
+        
+        animateLights();
+
+        if (isChangingPin) {
+            if (oldPinEntered.length < 4) {
+                oldPinEntered += val;
+                updatePinDisplay();
+                if (oldPinEntered.length === 4) {
+                    setTimeout(checkOldPinForChange, 300);
+                }
+            } else if (newPinEntered.length < 4) {
+                newPinEntered += val;
+                updatePinDisplay();
+                if (newPinEntered.length === 4) {
+                    setTimeout(confirmNewPin, 300);
                 }
             }
-            errorMessage.classList.remove('show');
-        }
-
-        function checkPin() {
-            if (enteredPin.length !== 4) return;
-            if (enteredPin === CORRECT_PIN) {
-                // ✅ Успешный вход
-                pinScreen.classList.add('hidden');
-                setTimeout(() => {
-                    pinScreen.style.display = 'none';
-                    notesApp.classList.add('show');
-                    container.style.minHeight = '700px';
-                    renderNotes();
-                }, 500);
-                animateLights();
-                console.log('✅ Доступ разрешён!');
-            } else {
-                // ❌ Неверный код
-                digitEls.forEach(d => { d.classList.add('error'); });
-                errorMessage.classList.add('show');
-                setTimeout(() => {
-                    digitEls.forEach(d => d.classList.remove('error'));
-                }, 600);
-                setTimeout(() => {
-                    enteredPin = '';
-                    updatePinDisplay();
-                }, 1000);
-            }
-        }
-
-        function handleDigit(val) {
-            if (isLocked) return;
+        } else {
             if (enteredPin.length >= 4) return;
-            animateLights();
             enteredPin += val;
             updatePinDisplay();
-            if (enteredPin.length === 4) checkPin();
+            if (enteredPin.length === 4) {
+                setTimeout(checkPin, 300);
+            }
         }
+    }
 
-        function handleDelete() {
-            if (isLocked) return;
+    function handleDelete() {
+        if (isLocked) return;
+        
+        animateLights();
+
+        if (isChangingPin) {
+            if (newPinEntered.length > 0) {
+                newPinEntered = newPinEntered.slice(0, -1);
+                updatePinDisplay();
+            } else if (oldPinEntered.length > 0) {
+                oldPinEntered = oldPinEntered.slice(0, -1);
+                updatePinDisplay();
+            }
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+        } else {
             if (enteredPin.length === 0) return;
-            animateLights();
             enteredPin = enteredPin.slice(0, -1);
             updatePinDisplay();
             errorMessage.classList.remove('show');
         }
+    }
 
-        // ===== НАЗНАЧЕНИЕ ОБРАБОТЧИКОВ PIN =====
-        document.querySelectorAll('.numpad-btn[data-value]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                handleDigit(btn.dataset.value);
-                btn.style.transform = 'scale(0.94)';
-                setTimeout(() => btn.style.transform = '', 150);
-            });
+    // ===== НАЗНАЧЕНИЕ ОБРАБОТЧИКОВ PIN =====
+    document.querySelectorAll('.numpad-btn[data-value]').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            handleDigit(this.dataset.value);
+            this.style.transform = 'scale(0.94)';
+            setTimeout(() => this.style.transform = '', 150);
         });
-        document.getElementById('deleteBtn').addEventListener('click', handleDelete);
+    });
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key >= '0' && e.key <= '9') { e.preventDefault(); handleDigit(e.key); }
-            else if (e.key === 'Backspace') { e.preventDefault(); handleDelete(); }
-            else if (e.key === 'Enter' && enteredPin.length === 4) { e.preventDefault(); checkPin(); }
-        });
+    document.getElementById('deleteBtn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        handleDelete();
+        this.style.transform = 'scale(0.94)';
+        setTimeout(() => this.style.transform = '', 150);
+    });
 
-        // Анимация появления PIN-экрана
-        setTimeout(() => {
-            greeting.classList.add('show');
-        }, 800);
-        setTimeout(() => {
-            greeting.classList.add('hide');
-            setTimeout(() => greeting.style.display = 'none', 600);
-        }, 1800);
-
-        updatePinDisplay();
-
-        // ===== ХРАНИЛИЩЕ ЗАМЕТОК (localStorage) =====
-        function getNotes() {
-            try {
-                return JSON.parse(localStorage.getItem('notes')) || [];
-            } catch { return []; }
+    // Клавиатура
+    document.addEventListener('keydown', (e) => {
+        if (e.key >= '0' && e.key <= '9') {
+            e.preventDefault();
+            handleDigit(e.key);
+        } else if (e.key === 'Backspace') {
+            e.preventDefault();
+            handleDelete();
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (isChangingPin) {
+                if (oldPinEntered.length === 4 && newPinEntered.length === 0) {
+                    // Пропускаем, проверка уже вызвана
+                } else if (oldPinEntered.length === 4 && newPinEntered.length === 4) {
+                    // Пропускаем, проверка уже вызвана
+                }
+            } else if (enteredPin.length === 4) {
+                checkPin();
+            }
         }
+    });
 
-        function saveNotes(notes) {
-            localStorage.setItem('notes', JSON.stringify(notes));
+    // Анимация появления PIN-экрана
+    setTimeout(() => {
+        greeting.classList.add('show');
+    }, 800);
+    setTimeout(() => {
+        greeting.classList.remove('show');
+        greeting.classList.add('hide');
+        setTimeout(() => greeting.style.display = 'none', 600);
+    }, 2000);
+
+    updatePinDisplay();
+    updatePinTitle();
+
+    // ===== ХРАНИЛИЩЕ ЗАМЕТОК =====
+    function getNotes() {
+        try {
+            const data = localStorage.getItem(NOTES_KEY);
+            return data ? JSON.parse(data) : [];
+        } catch (e) {
+            console.error('Ошибка чтения заметок:', e);
+            return [];
         }
+    }
 
-        // ===== РЕНДЕРИНГ ЗАМЕТОК =====
-        function renderNotes() {
-            const grid = document.getElementById('notesGrid');
-            const notes = getNotes();
-            grid.innerHTML = '';
+    function saveNotes(notes) {
+        try {
+            localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
+            return true;
+        } catch (e) {
+            console.error('Ошибка сохранения заметок:', e);
+            return false;
+        }
+    }
 
-            // Карточки заметок
+    // ===== РЕНДЕРИНГ ЗАМЕТОК =====
+    function renderNotes() {
+        const grid = document.getElementById('notesGrid');
+        const notes = getNotes();
+        grid.innerHTML = '';
+
+        if (notes.length === 0) {
+            const emptyMsg = document.createElement('div');
+            emptyMsg.style.cssText = `
+                grid-column: 1 / -1;
+                text-align: center;
+                color: rgba(255,255,255,0.2);
+                padding: 40px 20px;
+                font-size: 1rem;
+            `;
+            emptyMsg.textContent = 'Нет заметок. Нажмите "+ Новая" чтобы создать первую!';
+            grid.appendChild(emptyMsg);
+        } else {
             notes.forEach((note, index) => {
                 const card = document.createElement('div');
                 card.className = 'note-card';
                 card.innerHTML = `
-                    <div class="note-title">${note.title || 'Без названия'}</div>
-                    <div class="note-preview">${note.content || 'Пустая заметка'}</div>
+                    <div class="note-title">${escapeHtml(note.title || 'Без названия')}</div>
+                    <div class="note-preview">${escapeHtml(note.content || 'Пустая заметка')}</div>
                     <div class="note-date">${note.date || ''}</div>
                     <button class="delete-note" data-index="${index}">✕</button>
                 `;
-                // Открытие заметки
+                
                 card.addEventListener('click', (e) => {
                     if (e.target.classList.contains('delete-note')) return;
                     openEditor(index);
                 });
-                // Удаление заметки
-                card.querySelector('.delete-note').addEventListener('click', (e) => {
+                
+                const deleteBtn = card.querySelector('.delete-note');
+                deleteBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     if (confirm('Удалить заметку?')) {
-                        const notes = getNotes();
-                        notes.splice(index, 1);
-                        saveNotes(notes);
+                        const notesList = getNotes();
+                        notesList.splice(index, 1);
+                        saveNotes(notesList);
                         renderNotes();
                         animateLights();
                     }
                 });
+                
                 grid.appendChild(card);
             });
-
-            // Карточка "Добавить"
-            const addCard = document.createElement('div');
-            addCard.className = 'note-card add-card';
-            addCard.textContent = '+';
-            addCard.addEventListener('click', () => openEditor(null));
-            grid.appendChild(addCard);
         }
 
-        // ===== РЕДАКТОР ЗАМЕТОК =====
-        let editingIndex = null;
-        const overlay = document.getElementById('noteEditorOverlay');
-        const titleInput = document.getElementById('noteTitleInput');
-        const contentInput = document.getElementById('noteContentInput');
-        const editorTitle = document.getElementById('editorTitle');
+        const addCard = document.createElement('div');
+        addCard.className = 'note-card add-card';
+        addCard.textContent = '+';
+        addCard.addEventListener('click', () => openEditor(null));
+        grid.appendChild(addCard);
+    }
 
-        function openEditor(index) {
-            editingIndex = index;
-            const notes = getNotes();
-            if (index !== null && notes[index]) {
-                editorTitle.textContent = '✏️ Редактировать';
-                titleInput.value = notes[index].title || '';
-                contentInput.value = notes[index].content || '';
-            } else {
-                editorTitle.textContent = '📝 Новая заметка';
-                titleInput.value = '';
-                contentInput.value = '';
-            }
-            overlay.classList.add('show');
-            // Фокус на заголовок
-            setTimeout(() => titleInput.focus(), 300);
-            animateLights();
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ===== РЕДАКТОР ЗАМЕТОК =====
+    let editingIndex = null;
+    const overlay = document.getElementById('noteEditorOverlay');
+    const titleInput = document.getElementById('noteTitleInput');
+    const contentInput = document.getElementById('noteContentInput');
+    const editorTitle = document.getElementById('editorTitle');
+
+    function openEditor(index) {
+        editingIndex = index;
+        const notes = getNotes();
+        
+        if (index !== null && notes[index]) {
+            editorTitle.textContent = '✏️ Редактировать';
+            titleInput.value = notes[index].title || '';
+            contentInput.value = notes[index].content || '';
+        } else {
+            editorTitle.textContent = '📝 Новая заметка';
+            titleInput.value = '';
+            contentInput.value = '';
+        }
+        
+        overlay.classList.add('show');
+        setTimeout(() => titleInput.focus(), 300);
+        animateLights();
+    }
+
+    function closeEditor() {
+        overlay.classList.remove('show');
+        setTimeout(() => {
+            titleInput.value = '';
+            contentInput.value = '';
+            editingIndex = null;
+        }, 400);
+    }
+
+    function saveNote() {
+        const title = titleInput.value.trim() || 'Без названия';
+        const content = contentInput.value.trim() || 'Пустая заметка';
+        
+        const notes = getNotes();
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('ru-RU', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        const noteData = {
+            title: title,
+            content: content,
+            date: dateStr,
+            timestamp: now.getTime()
+        };
+
+        if (editingIndex !== null && editingIndex < notes.length) {
+            notes[editingIndex] = noteData;
+        } else {
+            notes.unshift(noteData);
         }
 
-        function closeEditor() {
-            overlay.classList.remove('show');
-            setTimeout(() => {
-                titleInput.value = '';
-                contentInput.value = '';
-                editingIndex = null;
-            }, 400);
-        }
-
-        function saveNote() {
-            const title = titleInput.value.trim() || 'Без названия';
-            const content = contentInput.value.trim() || 'Пустая заметка';
-            const notes = getNotes();
-
-            const noteData = {
-                title: title,
-                content: content,
-                date: new Date().toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' })
-            };
-
-            if (editingIndex !== null && notes[editingIndex]) {
-                notes[editingIndex] = noteData;
-            } else {
-                notes.unshift(noteData); // Новая заметка в начало
-            }
-
-            saveNotes(notes);
+        if (saveNotes(notes)) {
             renderNotes();
             closeEditor();
             animateLights();
             console.log('💾 Заметка сохранена!');
+        } else {
+            alert('Ошибка сохранения заметки!');
         }
+    }
 
-        // ===== ОБРАБОТЧИКИ РЕДАКТОРА =====
-        document.getElementById('addNoteBtn').addEventListener('click', () => openEditor(null));
-        document.getElementById('editorCancelBtn').addEventListener('click', closeEditor);
-        document.getElementById('editorSaveBtn').addEventListener('click', saveNote);
+    // ===== ОБРАБОТЧИКИ РЕДАКТОРА =====
+    document.getElementById('addNoteBtn').addEventListener('click', () => openEditor(null));
+    document.getElementById('editorCancelBtn').addEventListener('click', closeEditor);
+    document.getElementById('editorSaveBtn').addEventListener('click', saveNote);
 
-        // Закрытие по клику вне редактора
-        overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) closeEditor();
-        });
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeEditor();
+    });
 
-        // Сохранение по Ctrl+Enter
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.key === 'Enter' && overlay.classList.contains('show')) {
-                e.preventDefault();
-                saveNote();
-            }
-            if (e.key === 'Escape' && overlay.classList.contains('show')) {
-                closeEditor();
-            }
-        });
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'Enter' && overlay.classList.contains('show')) {
+            e.preventDefault();
+            saveNote();
+        }
+        if (e.key === 'Escape' && overlay.classList.contains('show')) {
+            closeEditor();
+        }
+    });
 
-        // ===== ВЫХОД =====
-        document.getElementById('logoutBtn').addEventListener('click', () => {
-            if (confirm('Выйти из заметок?')) {
-                notesApp.classList.remove('show');
+    // ===== СМЕНА ПАРОЛЯ =====
+    document.getElementById('changePinBtn').addEventListener('click', () => {
+        if (confirm('Сменить пароль? Потребуется ввести старый пароль.')) {
+            // Выходим из заметок и переключаемся в режим смены пароля
+            notesApp.classList.remove('show');
+            notesApp.style.display = 'none';
+            
+            setTimeout(() => {
+                pinScreen.style.display = 'flex';
+                pinScreen.classList.remove('hidden');
+                container.style.minHeight = '600px';
+                
+                // Включаем режим смены пароля
+                isChangingPin = true;
+                oldPinEntered = '';
+                newPinEntered = '';
+                enteredPin = '';
+                updatePinDisplay();
+                updatePinTitle();
+                errorMessage.classList.remove('show');
+                successMessage.classList.remove('show');
+                
+                // Показываем приветствие
+                greeting.style.display = 'block';
+                greeting.className = 'greeting';
                 setTimeout(() => {
-                    pinScreen.style.display = 'flex';
-                    pinScreen.classList.remove('hidden');
-                    container.style.minHeight = '600px';
-                    enteredPin = '';
-                    updatePinDisplay();
-                    // Показываем приветствие
-                    greeting.style.display = 'block';
-                    greeting.classList.remove('hide');
-                    setTimeout(() => {
-                        greeting.classList.add('show');
-                    }, 100);
-                    setTimeout(() => {
-                        greeting.classList.add('hide');
-                        setTimeout(() => greeting.style.display = 'none', 600);
-                    }, 1500);
-                }, 500);
+                    greeting.classList.add('show');
+                }, 100);
+                setTimeout(() => {
+                    greeting.classList.remove('show');
+                    greeting.classList.add('hide');
+                    setTimeout(() => greeting.style.display = 'none', 600);
+                }, 1500);
+                
                 animateLights();
-            }
-        });
-
-        // ===== ИНИЦИАЛИЗАЦИЯ =====
-        console.log('📝 Приложение заметок с localStorage');
-        console.log('🔑 Код: 2066');
-        console.log('💾 Данные хранятся в браузере');
-
-        // Если уже есть заметки, показать сколько
-        const existing = getNotes();
-        if (existing.length > 0) {
-            console.log(`📚 ${existing.length} заметок сохранено`);
+            }, 500);
         }
+    });
 
-    })();
+    // ===== ВЫХОД =====
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        if (confirm('Выйти из заметок?')) {
+            notesApp.classList.remove('show');
+            notesApp.style.display = 'none';
+            
+            setTimeout(() => {
+                pinScreen.style.display = 'flex';
+                pinScreen.classList.remove('hidden');
+                container.style.minHeight = '600px';
+                
+                // Сбрасываем режим смены пароля если он был активен
+                isChangingPin = false;
+                oldPinEntered = '';
+                newPinEntered = '';
+                enteredPin = '';
+                updatePinDisplay();
+                updatePinTitle();
+                errorMessage.classList.remove('show');
+                successMessage.classList.remove('show');
+                
+                greeting.style.display = 'block';
+                greeting.className = 'greeting';
+                setTimeout(() => {
+                    greeting.classList.add('show');
+                }, 100);
+                setTimeout(() => {
+                    greeting.classList.remove('show');
+                    greeting.classList.add('hide');
+                    setTimeout(() => greeting.style.display = 'none', 600);
+                }, 1500);
+                
+                animateLights();
+            }, 500);
+        }
+    });
+
+    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    console.log('📝 Приложение заметок с localStorage');
+    console.log(`🔑 Текущий пароль: ${CURRENT_PIN}`);
+    console.log('💾 Данные хранятся в браузере');
+    
+    const existing = getNotes();
+    console.log(`📚 ${existing.length} заметок сохранено`);
+
+})();
 </script>
 </body>
 </html>
