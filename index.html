@@ -767,6 +767,7 @@
     let isChangingPin = false;
     let oldPinEntered = '';
     let newPinEntered = '';
+    let changeStep = 'old'; // 'old' или 'new'
 
     const digitEls = [
         document.getElementById('digit1'),
@@ -840,7 +841,7 @@
         let currentLength = 0;
         
         if (isChangingPin) {
-            if (oldPinEntered.length < 4) {
+            if (changeStep === 'old') {
                 displayPin = oldPinEntered;
                 currentLength = oldPinEntered.length;
             } else {
@@ -867,7 +868,7 @@
 
     function updatePinTitle() {
         if (isChangingPin) {
-            if (oldPinEntered.length < 4) {
+            if (changeStep === 'old') {
                 pinTitle.textContent = '🔑 Введите старый пароль';
             } else {
                 pinTitle.textContent = '🔑 Введите новый пароль (4 цифры)';
@@ -905,11 +906,12 @@
         }
     }
 
-    function checkOldPinForChange() {
+    function checkOldPin() {
         if (oldPinEntered.length !== 4) return;
         
         if (oldPinEntered === CURRENT_PIN) {
-            // Старый пароль верный
+            // Старый пароль верный - переключаем на ввод нового
+            changeStep = 'new';
             oldPinEntered = '';
             newPinEntered = '';
             updatePinDisplay();
@@ -917,12 +919,14 @@
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
             animateLights();
-            // Подсветка успеха
+            
+            // Зелёная подсветка на секунду
             digitEls.forEach(d => {
                 d.className = 'pin-digit success';
             });
             setTimeout(() => {
                 digitEls.forEach(d => d.className = 'pin-digit');
+                updatePinDisplay();
             }, 500);
         } else {
             // Неверный старый пароль
@@ -935,6 +939,7 @@
             setTimeout(() => {
                 oldPinEntered = '';
                 newPinEntered = '';
+                changeStep = 'old';
                 updatePinDisplay();
                 updatePinTitle();
                 errorMessage.classList.remove('show');
@@ -958,6 +963,7 @@
             setTimeout(() => {
                 // Выходим из режима смены пароля
                 isChangingPin = false;
+                changeStep = 'old';
                 oldPinEntered = '';
                 newPinEntered = '';
                 enteredPin = '';
@@ -965,7 +971,6 @@
                 updatePinTitle();
                 successMessage.classList.remove('show');
                 digitEls.forEach(d => d.className = 'pin-digit');
-                // Возвращаемся к обычному экрану входа
                 pinTitle.textContent = 'Введите код для входа';
             }, 2000);
         } else {
@@ -985,17 +990,21 @@
         animateLights();
 
         if (isChangingPin) {
-            if (oldPinEntered.length < 4) {
-                oldPinEntered += val;
-                updatePinDisplay();
-                if (oldPinEntered.length === 4) {
-                    setTimeout(checkOldPinForChange, 400);
+            if (changeStep === 'old') {
+                if (oldPinEntered.length < 4) {
+                    oldPinEntered += val;
+                    updatePinDisplay();
+                    if (oldPinEntered.length === 4) {
+                        setTimeout(checkOldPin, 400);
+                    }
                 }
-            } else if (newPinEntered.length < 4) {
-                newPinEntered += val;
-                updatePinDisplay();
-                if (newPinEntered.length === 4) {
-                    setTimeout(confirmNewPin, 400);
+            } else {
+                if (newPinEntered.length < 4) {
+                    newPinEntered += val;
+                    updatePinDisplay();
+                    if (newPinEntered.length === 4) {
+                        setTimeout(confirmNewPin, 400);
+                    }
                 }
             }
         } else {
@@ -1014,12 +1023,16 @@
         animateLights();
 
         if (isChangingPin) {
-            if (newPinEntered.length > 0) {
-                newPinEntered = newPinEntered.slice(0, -1);
-                updatePinDisplay();
-            } else if (oldPinEntered.length > 0) {
-                oldPinEntered = oldPinEntered.slice(0, -1);
-                updatePinDisplay();
+            if (changeStep === 'new') {
+                if (newPinEntered.length > 0) {
+                    newPinEntered = newPinEntered.slice(0, -1);
+                    updatePinDisplay();
+                }
+            } else {
+                if (oldPinEntered.length > 0) {
+                    oldPinEntered = oldPinEntered.slice(0, -1);
+                    updatePinDisplay();
+                }
             }
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
@@ -1255,6 +1268,7 @@
     document.getElementById('changePinFromLockBtn').addEventListener('click', () => {
         // Переключаемся в режим смены пароля
         isChangingPin = true;
+        changeStep = 'old';
         oldPinEntered = '';
         newPinEntered = '';
         enteredPin = '';
@@ -1290,6 +1304,7 @@
                 
                 // Сбрасываем режим смены пароля если он был активен
                 isChangingPin = false;
+                changeStep = 'old';
                 oldPinEntered = '';
                 newPinEntered = '';
                 enteredPin = '';
