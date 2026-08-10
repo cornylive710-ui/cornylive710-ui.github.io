@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DeepSeek · Запуск</title>
+    <title>DeepSeek · Чат</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
@@ -336,6 +336,37 @@
             border: 1px solid rgba(255,255,255,0.02);
         }
 
+        .model-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 5px;
+        }
+
+        .model-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 6px 16px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .model-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+        }
+
+        .model-btn.active {
+            background: rgba(130, 70, 255, 0.2);
+            border-color: rgba(130, 70, 255, 0.3);
+            color: #d4c8ff;
+        }
+
         @media (max-width: 600px) {
             .launch-container { padding: 30px 16px; border-radius: 32px; }
             .input-wrapper { padding: 4px 4px 4px 16px; }
@@ -357,6 +388,11 @@
                 <input type="text" id="userInput" placeholder="Задайте вопрос..." autocomplete="off" />
                 <button id="sendBtn">→ Отправить</button>
             </div>
+            <div class="model-selector">
+                <button class="model-btn active" data-model="deepseek-ai/DeepSeek-V3">DeepSeek-V3</button>
+                <button class="model-btn" data-model="meta-llama/Llama-3.2-3B-Instruct">Llama 3.2</button>
+                <button class="model-btn" data-model="mistralai/Mistral-7B-Instruct-v0.3">Mistral 7B</button>
+            </div>
             <div class="hf-token-notice">
                 🔑 Бесплатный HF токен · ~30 запросов/час
             </div>
@@ -377,11 +413,32 @@
         const chatWrapper = document.getElementById('chatWrapper');
         const chatBox = document.getElementById('chatBox');
         const launchContainer = document.getElementById('launchContainer');
+        const modelBtns = document.querySelectorAll('.model-btn');
 
-        // === ВАШ HUGGING FACE ТОКЕН ===
+        // Ваш Hugging Face токен
         const HF_TOKEN = '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';
-        const MODEL = 'deepseek-ai/DeepSeek-V4-Flash-0731';
-        const API_URL = `https://api-inference.huggingface.co/models/${MODEL}`;
+        let currentModel = 'deepseek-ai/DeepSeek-V3';
+
+        // Обновляем выбор модели
+        modelBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                modelBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentModel = btn.dataset.model;
+                console.log('🔄 Модель изменена на:', currentModel);
+                // Очищаем чат при смене модели
+                chatBox.innerHTML = '';
+                // Возвращаем в начальное состояние
+                firstMessageSent = false;
+                inputArea.classList.remove('shrink');
+                chatWrapper.classList.remove('active');
+                launchContainer.classList.remove('expanded');
+                setTimeout(() => {
+                    inputArea.classList.add('show');
+                    userInput.focus();
+                }, 300);
+            });
+        });
 
         let firstMessageSent = false;
         let isWaiting = false;
@@ -469,10 +526,12 @@
             if (el) el.remove();
         }
 
-        async function askDeepSeek(prompt) {
+        async function askModel(prompt) {
             if (isWaiting) return;
             isWaiting = true;
             showTyping();
+
+            const API_URL = `https://api-inference.huggingface.co/models/${currentModel}`;
 
             try {
                 const response = await fetch(API_URL, {
@@ -482,9 +541,9 @@
                         'Authorization': `Bearer ${HF_TOKEN}`
                     },
                     body: JSON.stringify({
-                        inputs: `<|user|>\n${prompt}\n<|assistant|>\n`,
+                        inputs: prompt,
                         parameters: {
-                            max_new_tokens: 700,
+                            max_new_tokens: 500,
                             temperature: 0.7,
                             return_full_text: false
                         }
@@ -501,7 +560,7 @@
                     } else if (response.status === 429) {
                         errorMsg = '⚠️ Превышен лимит (бесплатный тариф ~30 запросов/час). Подождите.';
                     } else if (response.status === 503) {
-                        errorMsg = '⏳ Модель загружается (холодный старт). Подождите 1-2 минуты.';
+                        errorMsg = '⏳ Модель загружается. Подождите 1-2 минуты.';
                     } else {
                         try {
                             const errData = await response.json();
@@ -516,7 +575,9 @@
                 const data = await response.json();
                 
                 let reply = data?.generated_text || data?.[0]?.generated_text || 'Пустой ответ.';
-                reply = reply.replace(/<\|user\|>.*?<\|assistant\|>/s, '').trim();
+                
+                // Очищаем от возможных системных токенов
+                reply = reply.replace(/<\|assistant\|>/g, '').trim();
                 
                 addMessage('assistant', reply);
 
@@ -543,7 +604,7 @@
             userInput.value = '';
             userInput.focus();
 
-            await askDeepSeek(text);
+            await askModel(text);
         }
 
         sendBtn.addEventListener('click', handleSend);
@@ -560,8 +621,9 @@
             }
         });
 
-        console.log('✅ DeepSeek-V4-Flash-0731 готов к работе!');
+        console.log('✅ Модель:', currentModel);
         console.log('🔑 Токен:', HF_TOKEN.slice(0, 15) + '...');
+        console.log('💡 Доступные модели: DeepSeek-V3, Llama 3.2, Mistral 7B');
     })();
 </script>
 </body>
