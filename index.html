@@ -289,6 +289,36 @@
             color: rgba(255, 150, 150, 0.9);
         }
 
+        .pin-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 5px;
+        }
+
+        .pin-action-btn {
+            background: rgba(255, 200, 50, 0.08);
+            border: 1px solid rgba(255, 200, 50, 0.06);
+            border-radius: 50px;
+            padding: 8px 20px;
+            color: rgba(255, 200, 80, 0.5);
+            font-size: 0.8rem;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .pin-action-btn:hover {
+            background: rgba(255, 200, 50, 0.15);
+            border-color: rgba(255, 200, 50, 0.15);
+            color: rgba(255, 200, 80, 0.8);
+            transform: scale(1.03);
+        }
+
+        .pin-action-btn:active {
+            transform: scale(0.94);
+        }
+
         /* ===== ПРИЛОЖЕНИЕ ЗАМЕТОК ===== */
         .notes-app {
             width: 100%;
@@ -379,18 +409,6 @@
             color: rgba(100, 220, 160, 0.9);
         }
 
-        .header-btn.change-pin {
-            background: rgba(255, 200, 50, 0.1);
-            border-color: rgba(255, 200, 50, 0.08);
-            color: rgba(255, 200, 80, 0.6);
-            font-size: 0.8rem;
-        }
-
-        .header-btn.change-pin:hover {
-            background: rgba(255, 200, 50, 0.2);
-            color: rgba(255, 200, 80, 0.9);
-        }
-
         /* Сетка заметок */
         .notes-grid {
             display: grid;
@@ -437,6 +455,7 @@
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
+            word-break: break-word;
         }
 
         .note-card .note-preview {
@@ -449,6 +468,7 @@
             -webkit-line-clamp: 3;
             -webkit-box-orient: vertical;
             line-height: 1.4;
+            word-break: break-word;
         }
 
         .note-card .note-date {
@@ -635,6 +655,7 @@
             .note-editor { padding: 24px; margin: 10px; }
             .notes-header .title { font-size: 1.2rem; }
             .header-btn { padding: 6px 12px; font-size: 0.8rem; }
+            .pin-action-btn { padding: 6px 14px; font-size: 0.7rem; }
         }
 
         @media (max-width: 400px) {
@@ -680,6 +701,9 @@
             <button class="numpad-btn" data-value="0">0</button>
             <button class="numpad-btn delete" id="deleteBtn">⌫</button>
         </div>
+        <div class="pin-actions">
+            <button class="pin-action-btn" id="changePinFromLockBtn">🔑 Сменить пароль</button>
+        </div>
     </div>
 
     <!-- ===== ПРИЛОЖЕНИЕ ЗАМЕТОК ===== -->
@@ -688,7 +712,6 @@
         <div class="notes-header">
             <span class="title">📝 Заметки</span>
             <div class="header-actions">
-                <button class="header-btn change-pin" id="changePinBtn">🔑 Сменить пароль</button>
                 <button class="header-btn add" id="addNoteBtn">+ Новая</button>
                 <button class="header-btn logout" id="logoutBtn">✕ Выйти</button>
             </div>
@@ -741,9 +764,9 @@
     // ===== PIN-КОД =====
     let enteredPin = '';
     let isLocked = false;
-    let isChangingPin = false; // Режим смены пароля
-    let oldPinEntered = ''; // Для подтверждения старого пароля
-    let newPinEntered = ''; // Для нового пароля
+    let isChangingPin = false;
+    let oldPinEntered = '';
+    let newPinEntered = '';
 
     const digitEls = [
         document.getElementById('digit1'),
@@ -813,13 +836,21 @@
 
     // ===== PIN-ЛОГИКА =====
     function updatePinDisplay() {
-        const displayPin = isChangingPin ? 
-            (oldPinEntered.length < 4 ? oldPinEntered : newPinEntered) : 
-            enteredPin;
+        let displayPin = '';
+        let currentLength = 0;
         
-        const currentLength = isChangingPin ?
-            (oldPinEntered.length < 4 ? oldPinEntered.length : newPinEntered.length) :
-            enteredPin.length;
+        if (isChangingPin) {
+            if (oldPinEntered.length < 4) {
+                displayPin = oldPinEntered;
+                currentLength = oldPinEntered.length;
+            } else {
+                displayPin = newPinEntered;
+                currentLength = newPinEntered.length;
+            }
+        } else {
+            displayPin = enteredPin;
+            currentLength = enteredPin.length;
+        }
 
         for (let i = 0; i < 4; i++) {
             const val = displayPin[i] || '';
@@ -850,20 +881,20 @@
         if (enteredPin.length !== 4) return;
         
         if (enteredPin === CURRENT_PIN) {
-            // ✅ Успешный вход
             pinScreen.classList.add('hidden');
             setTimeout(() => {
                 pinScreen.style.display = 'none';
+                notesApp.style.display = 'flex';
                 notesApp.classList.add('show');
                 container.style.minHeight = '700px';
                 renderNotes();
                 animateLights();
             }, 500);
         } else {
-            // ❌ Неверный код
             digitEls.forEach(d => { 
                 d.className = 'pin-digit error';
             });
+            errorMessage.textContent = '❌ Неверный код';
             errorMessage.classList.add('show');
             
             setTimeout(() => {
@@ -878,7 +909,7 @@
         if (oldPinEntered.length !== 4) return;
         
         if (oldPinEntered === CURRENT_PIN) {
-            // ✅ Старый пароль верный
+            // Старый пароль верный
             oldPinEntered = '';
             newPinEntered = '';
             updatePinDisplay();
@@ -886,8 +917,15 @@
             errorMessage.classList.remove('show');
             successMessage.classList.remove('show');
             animateLights();
+            // Подсветка успеха
+            digitEls.forEach(d => {
+                d.className = 'pin-digit success';
+            });
+            setTimeout(() => {
+                digitEls.forEach(d => d.className = 'pin-digit');
+            }, 500);
         } else {
-            // ❌ Неверный старый пароль
+            // Неверный старый пароль
             digitEls.forEach(d => { 
                 d.className = 'pin-digit error';
             });
@@ -900,14 +938,14 @@
                 updatePinDisplay();
                 updatePinTitle();
                 errorMessage.classList.remove('show');
-            }, 1200);
+                digitEls.forEach(d => d.className = 'pin-digit');
+            }, 1500);
         }
     }
 
     function confirmNewPin() {
         if (newPinEntered.length !== 4) return;
         
-        // Сохраняем новый пароль
         if (setStoredPin(newPinEntered)) {
             CURRENT_PIN = newPinEntered;
             successMessage.textContent = '✅ Пароль успешно изменён!';
@@ -917,8 +955,8 @@
             });
             animateLights();
             
-            // Выходим из режима смены пароля
             setTimeout(() => {
+                // Выходим из режима смены пароля
                 isChangingPin = false;
                 oldPinEntered = '';
                 newPinEntered = '';
@@ -927,6 +965,8 @@
                 updatePinTitle();
                 successMessage.classList.remove('show');
                 digitEls.forEach(d => d.className = 'pin-digit');
+                // Возвращаемся к обычному экрану входа
+                pinTitle.textContent = 'Введите код для входа';
             }, 2000);
         } else {
             errorMessage.textContent = '❌ Ошибка сохранения пароля';
@@ -949,13 +989,13 @@
                 oldPinEntered += val;
                 updatePinDisplay();
                 if (oldPinEntered.length === 4) {
-                    setTimeout(checkOldPinForChange, 300);
+                    setTimeout(checkOldPinForChange, 400);
                 }
             } else if (newPinEntered.length < 4) {
                 newPinEntered += val;
                 updatePinDisplay();
                 if (newPinEntered.length === 4) {
-                    setTimeout(confirmNewPin, 300);
+                    setTimeout(confirmNewPin, 400);
                 }
             }
         } else {
@@ -963,7 +1003,7 @@
             enteredPin += val;
             updatePinDisplay();
             if (enteredPin.length === 4) {
-                setTimeout(checkPin, 300);
+                setTimeout(checkPin, 400);
             }
         }
     }
@@ -1018,13 +1058,7 @@
             handleDelete();
         } else if (e.key === 'Enter') {
             e.preventDefault();
-            if (isChangingPin) {
-                if (oldPinEntered.length === 4 && newPinEntered.length === 0) {
-                    // Пропускаем, проверка уже вызвана
-                } else if (oldPinEntered.length === 4 && newPinEntered.length === 4) {
-                    // Пропускаем, проверка уже вызвана
-                }
-            } else if (enteredPin.length === 4) {
+            if (!isChangingPin && enteredPin.length === 4) {
                 checkPin();
             }
         }
@@ -1217,43 +1251,30 @@
         }
     });
 
-    // ===== СМЕНА ПАРОЛЯ =====
-    document.getElementById('changePinBtn').addEventListener('click', () => {
-        if (confirm('Сменить пароль? Потребуется ввести старый пароль.')) {
-            // Выходим из заметок и переключаемся в режим смены пароля
-            notesApp.classList.remove('show');
-            notesApp.style.display = 'none';
-            
-            setTimeout(() => {
-                pinScreen.style.display = 'flex';
-                pinScreen.classList.remove('hidden');
-                container.style.minHeight = '600px';
-                
-                // Включаем режим смены пароля
-                isChangingPin = true;
-                oldPinEntered = '';
-                newPinEntered = '';
-                enteredPin = '';
-                updatePinDisplay();
-                updatePinTitle();
-                errorMessage.classList.remove('show');
-                successMessage.classList.remove('show');
-                
-                // Показываем приветствие
-                greeting.style.display = 'block';
-                greeting.className = 'greeting';
-                setTimeout(() => {
-                    greeting.classList.add('show');
-                }, 100);
-                setTimeout(() => {
-                    greeting.classList.remove('show');
-                    greeting.classList.add('hide');
-                    setTimeout(() => greeting.style.display = 'none', 600);
-                }, 1500);
-                
-                animateLights();
-            }, 500);
-        }
+    // ===== СМЕНА ПАРОЛЯ С ЭКРАНА БЛОКИРОВКИ =====
+    document.getElementById('changePinFromLockBtn').addEventListener('click', () => {
+        // Переключаемся в режим смены пароля
+        isChangingPin = true;
+        oldPinEntered = '';
+        newPinEntered = '';
+        enteredPin = '';
+        updatePinDisplay();
+        updatePinTitle();
+        errorMessage.classList.remove('show');
+        successMessage.classList.remove('show');
+        animateLights();
+        
+        // Показываем приветствие
+        greeting.style.display = 'block';
+        greeting.className = 'greeting';
+        setTimeout(() => {
+            greeting.classList.add('show');
+        }, 100);
+        setTimeout(() => {
+            greeting.classList.remove('show');
+            greeting.classList.add('hide');
+            setTimeout(() => greeting.style.display = 'none', 600);
+        }, 1500);
     });
 
     // ===== ВЫХОД =====
