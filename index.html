@@ -2,1340 +2,472 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Заметки · DeepSeek</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Заметки</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* ===== БАЗА ===== */
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{background:#0b0a0f;min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;padding:16px;background:radial-gradient(circle at 0% 0%,rgba(255,50,50,.15)0%,transparent 45%),radial-gradient(circle at 100% 0%,rgba(50,130,255,.2)0%,transparent 50%),radial-gradient(circle at 100% 100%,rgba(180,70,255,.2)0%,transparent 45%),radial-gradient(circle at 0% 100%,rgba(255,220,50,.15)0%,transparent 45%),#0f0e14;opacity:0;animation:a 1s forwards;animation-delay:.1s;position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent}
+        @keyframes a{0%{opacity:0}100%{opacity:1}}
 
-        body {
-            background: #0b0a0f;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            padding: 20px;
-            background: radial-gradient(circle at 0% 0%, rgba(255, 50, 50, 0.25) 0%, transparent 45%),
-                        radial-gradient(circle at 100% 0%, rgba(50, 130, 255, 0.3) 0%, transparent 50%),
-                        radial-gradient(circle at 100% 100%, rgba(180, 70, 255, 0.3) 0%, transparent 45%),
-                        radial-gradient(circle at 0% 100%, rgba(255, 220, 50, 0.2) 0%, transparent 45%),
-                        #0f0e14;
-            background-blend-mode: normal;
-            opacity: 0;
-            animation: bgAppear 1.2s ease forwards;
-            animation-delay: 0.1s;
-            position: relative;
-            overflow-x: hidden;
-        }
+        /* ===== ОГНИ (оптимизированные) ===== */
+        .l{position:fixed;width:180px;height:180px;border-radius:50%;pointer-events:none;filter:blur(60px);opacity:0;transition:opacity .6s,transform .8s;z-index:0;will-change:transform,opacity}
+        .l.active{opacity:.5;transition:opacity .3s,transform .6s}
+        .l.ultra{opacity:.8}
+        .l:nth-child(1){background:radial-gradient(circle,rgba(255,50,50,.3)0%,transparent 70%)}
+        .l:nth-child(2){background:radial-gradient(circle,rgba(50,130,255,.3)0%,transparent 70%)}
+        .l:nth-child(3){background:radial-gradient(circle,rgba(180,70,255,.3)0%,transparent 70%)}
+        .l:nth-child(4){background:radial-gradient(circle,rgba(255,220,50,.3)0%,transparent 70%)}
+        .l.p1{top:-80px;left:-80px}.l.p2{top:-80px;right:-80px}.l.p3{bottom:-80px;right:-80px}.l.p4{bottom:-80px;left:-80px}
 
-        @keyframes bgAppear {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        /* 🔥 ОГНИ ПО УГЛАМ 🔥 */
-        .corner-light {
-            position: fixed;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            pointer-events: none;
-            filter: blur(80px);
-            opacity: 0;
-            transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1),
-                        transform 1.2s cubic-bezier(0.23, 1, 0.32, 1),
-                        left 1.2s cubic-bezier(0.23, 1, 0.32, 1),
-                        top 1.2s cubic-bezier(0.23, 1, 0.32, 1);
-            z-index: 0;
-        }
-
-        .corner-light.active {
-            opacity: 0.7;
-        }
-        .corner-light.ultra-active {
-            opacity: 1;
-        }
-
-        .corner-light:nth-child(1) { background: radial-gradient(circle, rgba(255, 50, 50, 0.4) 0%, transparent 70%); }
-        .corner-light:nth-child(2) { background: radial-gradient(circle, rgba(50, 130, 255, 0.4) 0%, transparent 70%); }
-        .corner-light:nth-child(3) { background: radial-gradient(circle, rgba(180, 70, 255, 0.4) 0%, transparent 70%); }
-        .corner-light:nth-child(4) { background: radial-gradient(circle, rgba(255, 220, 50, 0.4) 0%, transparent 70%); }
-
-        .corner-light.pos-1 { top: -100px; left: -100px; }
-        .corner-light.pos-2 { top: -100px; right: -100px; }
-        .corner-light.pos-3 { bottom: -100px; right: -100px; }
-        .corner-light.pos-4 { bottom: -100px; left: -100px; }
-
-        .corner-light.animate-1-to-2 { top: -100px !important; left: -100px !important; right: auto !important; bottom: auto !important; transform: translate(200px, 0) scale(1.2); }
-        .corner-light.animate-1-to-3 { top: -100px !important; left: -100px !important; right: auto !important; bottom: auto !important; transform: translate(300px, 300px) scale(1.4); }
-        .corner-light.animate-1-to-4 { top: -100px !important; left: -100px !important; right: auto !important; bottom: auto !important; transform: translate(0, 300px) scale(1.2); }
-        .corner-light.animate-2-to-1 { top: -100px !important; right: -100px !important; left: auto !important; bottom: auto !important; transform: translate(-200px, 0) scale(1.2); }
-        .corner-light.animate-2-to-3 { top: -100px !important; right: -100px !important; left: auto !important; bottom: auto !important; transform: translate(0, 300px) scale(1.3); }
-        .corner-light.animate-2-to-4 { top: -100px !important; right: -100px !important; left: auto !important; bottom: auto !important; transform: translate(-300px, 300px) scale(1.4); }
-        .corner-light.animate-3-to-1 { bottom: -100px !important; right: -100px !important; top: auto !important; left: auto !important; transform: translate(-300px, -300px) scale(1.3); }
-        .corner-light.animate-3-to-2 { bottom: -100px !important; right: -100px !important; top: auto !important; left: auto !important; transform: translate(0, -300px) scale(1.4); }
-        .corner-light.animate-3-to-4 { bottom: -100px !important; right: -100px !important; top: auto !important; left: auto !important; transform: translate(-300px, 0) scale(1.2); }
-        .corner-light.animate-4-to-1 { bottom: -100px !important; left: -100px !important; top: auto !important; right: auto !important; transform: translate(0, -300px) scale(1.4); }
-        .corner-light.animate-4-to-2 { bottom: -100px !important; left: -100px !important; top: auto !important; right: auto !important; transform: translate(300px, -300px) scale(1.3); }
-        .corner-light.animate-4-to-3 { bottom: -100px !important; left: -100px !important; top: auto !important; right: auto !important; transform: translate(300px, 0) scale(1.2); }
-
-        /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
-        .container {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            min-height: 600px;
-            display: flex;
-            flex-direction: column;
-            border-radius: 48px;
-            background: rgba(10, 8, 18, 0.25);
-            backdrop-filter: blur(2px);
-            box-shadow: 0 30px 80px rgba(0,0,0,0.7);
-            padding: 30px;
-            border: 1px solid rgba(255,255,255,0.02);
-            z-index: 1;
-            transition: min-height 0.6s ease;
-        }
+        /* ===== КОНТЕЙНЕР ===== */
+        .c{position:relative;width:100%;max-width:900px;min-height:560px;display:flex;flex-direction:column;border-radius:40px;background:rgba(10,8,18,.2);backdrop-filter:blur(2px);box-shadow:0 30px 80px rgba(0,0,0,.6);padding:24px;border:1px solid rgba(255,255,255,.02);z-index:1;transition:min-height .5s}
 
         /* ===== PIN-ЭКРАН ===== */
-        .pin-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-            padding: 40px 30px;
-            border-radius: 48px;
-            background: rgba(10, 8, 18, 0.25);
-            backdrop-filter: blur(2px);
-            z-index: 10;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .pin-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(0.95);
-        }
-
-        .greeting {
-            font-weight: 600;
-            font-size: clamp(2.5rem, 8vw, 4rem);
-            color: rgba(255, 255, 255, 0.92);
-            text-shadow: 0 0 30px rgba(180, 70, 255, 0.3);
-            opacity: 0;
-            transform: scale(0.98) translateY(12px);
-            transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
-            pointer-events: none;
-            user-select: none;
-        }
-        .greeting.show {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-        }
-        .greeting.hide {
-            opacity: 0;
-            transform: scale(0.96) translateY(-20px);
-            transition: opacity 0.6s, transform 0.6s;
-        }
-
-        .pin-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.6);
-            letter-spacing: 0.5px;
-            text-align: center;
-        }
-
-        .pin-display {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-        }
-
-        .pin-digit {
-            width: 56px;
-            height: 68px;
-            background: rgba(20, 18, 30, 0.6);
-            backdrop-filter: blur(4px);
-            border-radius: 16px;
-            border: 2px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #f0edf5;
-            transition: border 0.3s, box-shadow 0.3s, transform 0.2s;
-        }
-
-        .pin-digit.active {
-            border-color: rgba(180, 70, 255, 0.4);
-            box-shadow: 0 0 30px rgba(130, 70, 255, 0.1);
-            transform: scale(1.02);
-        }
-
-        .pin-digit.filled {
-            border-color: rgba(100, 200, 150, 0.3);
-        }
-
-        .pin-digit.error {
-            border-color: rgba(255, 70, 70, 0.5);
-            animation: shake 0.4s ease;
-        }
-
-        .pin-digit.success {
-            border-color: rgba(100, 200, 150, 0.5);
-            box-shadow: 0 0 30px rgba(100, 200, 150, 0.1);
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-5px); }
-            80% { transform: translateX(5px); }
-        }
-
-        .error-message {
-            color: rgba(255, 80, 80, 0.7);
-            font-size: 0.9rem;
-            min-height: 24px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            text-align: center;
-        }
-
-        .error-message.show {
-            opacity: 1;
-        }
-
-        .success-message {
-            color: rgba(100, 200, 150, 0.7);
-            font-size: 0.9rem;
-            min-height: 24px;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            text-align: center;
-        }
-
-        .success-message.show {
-            opacity: 1;
-        }
-
-        .numpad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            width: 100%;
-            max-width: 280px;
-        }
-
-        .numpad-btn {
-            background: rgba(30, 28, 48, 0.5);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 18px 0;
-            font-size: 1.6rem;
-            font-weight: 500;
-            color: #f0edf5;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
-            user-select: none;
-        }
-
-        .numpad-btn:hover {
-            background: rgba(60, 55, 90, 0.5);
-            border-color: rgba(255, 255, 255, 0.12);
-            transform: scale(1.02);
-        }
-
-        .numpad-btn:active {
-            transform: scale(0.94);
-            background: rgba(130, 70, 255, 0.15);
-        }
-
-        .numpad-btn.empty {
-            background: transparent;
-            border: none;
-            cursor: default;
-            pointer-events: none;
-        }
-
-        .numpad-btn.delete {
-            background: rgba(180, 50, 50, 0.15);
-            border-color: rgba(180, 50, 50, 0.15);
-            color: rgba(255, 150, 150, 0.7);
-            font-size: 1.2rem;
-        }
-
-        .numpad-btn.delete:hover {
-            background: rgba(180, 50, 50, 0.25);
-            border-color: rgba(180, 50, 50, 0.25);
-            color: rgba(255, 150, 150, 0.9);
-        }
-
-        .pin-actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 5px;
-        }
-
-        .pin-action-btn {
-            background: rgba(255, 200, 50, 0.08);
-            border: 1px solid rgba(255, 200, 50, 0.06);
-            border-radius: 50px;
-            padding: 8px 20px;
-            color: rgba(255, 200, 80, 0.5);
-            font-size: 0.8rem;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-        }
-
-        .pin-action-btn:hover {
-            background: rgba(255, 200, 50, 0.15);
-            border-color: rgba(255, 200, 50, 0.15);
-            color: rgba(255, 200, 80, 0.8);
-            transform: scale(1.03);
-        }
-
-        .pin-action-btn:active {
-            transform: scale(0.94);
-        }
-
-        /* ===== ПРИЛОЖЕНИЕ ЗАМЕТОК ===== */
-        .notes-app {
-            width: 100%;
-            display: none;
-            flex-direction: column;
-            gap: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .notes-app.show {
-            display: flex;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Шапка */
-        .notes-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 4px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .notes-header .title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-            letter-spacing: -0.02em;
-        }
-
-        .header-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .header-btn {
-            background: rgba(30, 28, 48, 0.5);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 12px;
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.25s ease;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .header-btn:hover {
-            background: rgba(60, 55, 90, 0.5);
-            border-color: rgba(255, 255, 255, 0.12);
-            transform: scale(1.03);
-            color: #fff;
-        }
-
-        .header-btn:active {
-            transform: scale(0.94);
-        }
-
-        .header-btn.logout {
-            background: rgba(180, 50, 50, 0.15);
-            border-color: rgba(180, 50, 50, 0.1);
-            color: rgba(255, 150, 150, 0.6);
-        }
-
-        .header-btn.logout:hover {
-            background: rgba(180, 50, 50, 0.25);
-            color: rgba(255, 150, 150, 0.9);
-        }
-
-        .header-btn.add {
-            background: rgba(50, 180, 120, 0.15);
-            border-color: rgba(50, 180, 120, 0.1);
-            color: rgba(100, 220, 160, 0.7);
-        }
-
-        .header-btn.add:hover {
-            background: rgba(50, 180, 120, 0.25);
-            color: rgba(100, 220, 160, 0.9);
-        }
-
-        /* Сетка заметок */
-        .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 16px;
-            min-height: 200px;
-            padding: 4px 0;
-        }
-
-        /* Карточка заметки */
-        .note-card {
-            aspect-ratio: 1;
-            background: rgba(30, 28, 48, 0.4);
-            backdrop-filter: blur(4px);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            min-height: 160px;
-        }
-
-        .note-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            border-color: rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .note-card:active {
-            transform: scale(0.96);
-        }
-
-        .note-card .note-title {
-            font-weight: 600;
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 6px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            word-break: break-word;
-        }
-
-        .note-card .note-preview {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.4);
-            flex: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            line-height: 1.4;
-            word-break: break-word;
-        }
-
-        .note-card .note-date {
-            font-size: 0.7rem;
-            color: rgba(255, 255, 255, 0.2);
-            margin-top: 8px;
-            align-self: flex-end;
-        }
-
-        .note-card .delete-note {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(180, 50, 50, 0.15);
-            border: none;
-            color: rgba(255, 150, 150, 0.5);
-            font-size: 0.8rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            opacity: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .note-card:hover .delete-note {
-            opacity: 1;
-        }
-
-        .note-card .delete-note:hover {
-            background: rgba(180, 50, 50, 0.3);
-            color: rgba(255, 150, 150, 0.9);
-            transform: scale(1.1);
-        }
-
-        /* Пустая карточка (добавить) */
-        .note-card.add-card {
-            background: rgba(30, 28, 48, 0.2);
-            border: 2px dashed rgba(255, 255, 255, 0.06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: rgba(255, 255, 255, 0.15);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .note-card.add-card:hover {
-            border-color: rgba(100, 220, 160, 0.2);
-            color: rgba(100, 220, 160, 0.3);
-            transform: scale(1.02);
-            background: rgba(30, 28, 48, 0.3);
-        }
-
-        /* ===== РЕДАКТОР ЗАМЕТКИ (оверлей) ===== */
-        .note-editor-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.4s ease;
-            padding: 20px;
-        }
-
-        .note-editor-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .note-editor {
-            background: rgba(20, 18, 30, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 32px;
-            padding: 32px;
-            max-width: 500px;
-            width: 100%;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-        }
-
-        .note-editor-overlay.show .note-editor {
-            transform: scale(1) translateY(0);
-        }
-
-        .note-editor .editor-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 16px;
-        }
-
-        .note-editor input,
-        .note-editor textarea {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: 16px;
-            padding: 12px 16px;
-            color: #f0edf5;
-            font-size: 1rem;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            transition: border 0.2s;
-        }
-
-        .note-editor input:focus,
-        .note-editor textarea:focus {
-            border-color: rgba(130, 70, 255, 0.3);
-        }
-
-        .note-editor input {
-            margin-bottom: 12px;
-        }
-
-        .note-editor textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .note-editor .editor-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 16px;
-            justify-content: flex-end;
-        }
-
-        .note-editor .editor-actions button {
-            padding: 10px 24px;
-            border-radius: 50px;
-            border: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .note-editor .editor-actions .save-btn {
-            background: rgba(50, 180, 120, 0.2);
-            color: rgba(100, 220, 160, 0.8);
-            border: 1px solid rgba(50, 180, 120, 0.15);
-        }
-
-        .note-editor .editor-actions .save-btn:hover {
-            background: rgba(50, 180, 120, 0.3);
-            transform: scale(1.02);
-        }
-
-        .note-editor .editor-actions .cancel-btn {
-            background: rgba(180, 50, 50, 0.1);
-            color: rgba(255, 150, 150, 0.5);
-            border: 1px solid rgba(180, 50, 50, 0.05);
-        }
-
-        .note-editor .editor-actions .cancel-btn:hover {
-            background: rgba(180, 50, 50, 0.2);
-            transform: scale(1.02);
-        }
+        .ps{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:30px 24px;border-radius:40px;background:rgba(10,8,18,.2);backdrop-filter:blur(2px);z-index:10;transition:opacity .5s,transform .5s}
+        .ps.hidden{opacity:0;pointer-events:none;transform:scale(.96)}
+
+        .g{font-weight:600;font-size:clamp(2.2rem,7vw,3.5rem);color:rgba(255,255,255,.92);text-shadow:0 0 30px rgba(180,70,255,.2);opacity:0;transform:scale(.98) translateY(10px);transition:opacity .6s,transform .6s;pointer-events:none;user-select:none}
+        .g.show{opacity:1;transform:scale(1) translateY(0)}
+        .g.hide{opacity:0;transform:scale(.96) translateY(-15px)}
+
+        .pt{font-size:1rem;font-weight:500;color:rgba(255,255,255,.5);text-align:center}
+        .pd{display:flex;gap:10px;justify-content:center}
+        .pi{width:50px;height:60px;background:rgba(20,18,30,.5);border-radius:14px;border:2px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:600;color:#f0edf5;transition:border .25s,box-shadow .25s}
+        .pi.active{border-color:rgba(180,70,255,.3);box-shadow:0 0 20px rgba(130,70,255,.05)}
+        .pi.filled{border-color:rgba(100,200,150,.2)}
+        .pi.err{border-color:rgba(255,70,70,.4);animation:b .35s}
+        .pi.ok{border-color:rgba(100,200,150,.4);box-shadow:0 0 20px rgba(100,200,150,.05)}
+        @keyframes b{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+        .em,.sm{font-size:.85rem;min-height:20px;opacity:0;transition:opacity .3s;text-align:center}
+        .em.show{opacity:1;color:rgba(255,80,80,.6)}
+        .sm.show{opacity:1;color:rgba(100,200,150,.6)}
+
+        /* ===== КЛАВИАТУРА ===== */
+        .np{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%;max-width:260px}
+        .nb{background:rgba(30,28,48,.4);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:16px 0;font-size:1.5rem;font-weight:500;color:#f0edf5;cursor:pointer;transition:transform .12s,background .2s;font-family:'Inter',sans-serif;user-select:none;-webkit-touch-callout:none}
+        .nb:active{transform:scale(.92);background:rgba(130,70,255,.12)}
+        .nb.empty{background:transparent;border:none;pointer-events:none}
+        .nb.del{background:rgba(180,50,50,.12);border-color:rgba(180,50,50,.1);color:rgba(255,150,150,.5);font-size:1.1rem}
+
+        .pa{display:flex;gap:10px;margin-top:4px}
+        .pb{background:rgba(255,200,50,.06);border:1px solid rgba(255,200,50,.04);border-radius:50px;padding:6px 18px;color:rgba(255,200,80,.4);font-size:.75rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all .25s;backdrop-filter:blur(4px)}
+        .pb:active{transform:scale(.92)}
+
+        /* ===== ЗАМЕТКИ ===== */
+        .na{width:100%;display:none;flex-direction:column;gap:16px;opacity:0;transform:translateY(15px);transition:opacity .5s,transform .5s}
+        .na.show{display:flex;opacity:1;transform:translateY(0)}
+
+        .nh{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+        .nh .t{font-size:1.3rem;font-weight:600;color:rgba(255,255,255,.85)}
+        .ha{display:flex;gap:8px;flex-wrap:wrap}
+        .hb{background:rgba(30,28,48,.4);border:1px solid rgba(255,255,255,.04);border-radius:10px;padding:6px 14px;font-size:.8rem;font-weight:500;color:rgba(255,255,255,.6);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px}
+        .hb:active{transform:scale(.92)}
+        .hb.add{background:rgba(50,180,120,.1);border-color:rgba(50,180,120,.06);color:rgba(100,220,160,.6)}
+        .hb.out{background:rgba(180,50,50,.1);border-color:rgba(180,50,50,.06);color:rgba(255,150,150,.5)}
+
+        /* ===== СЕТКА ===== */
+        .ng{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;min-height:160px;padding:2px 0}
+        .nc{aspect-ratio:1;background:rgba(30,28,48,.3);border-radius:20px;border:1px solid rgba(255,255,255,.03);padding:14px;cursor:pointer;transition:transform .25s,box-shadow .25s;display:flex;flex-direction:column;position:relative;overflow:hidden;min-height:130px}
+        .nc:active{transform:scale(.94)}
+        .nc .nt{font-weight:600;font-size:.9rem;color:rgba(255,255,255,.85);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;word-break:break-word}
+        .nc .npv{font-size:.8rem;color:rgba(255,255,255,.35);flex:1;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;line-height:1.3}
+        .nc .nd{font-size:.65rem;color:rgba(255,255,255,.15);margin-top:6px;align-self:flex-end}
+        .nc .dn{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(180,50,50,.1);border:none;color:rgba(255,150,150,.4);font-size:.7rem;cursor:pointer;transition:all .2s;opacity:0;display:flex;align-items:center;justify-content:center}
+        .nc:hover .dn,.nc:active .dn{opacity:1}
+        .nc .dn:active{background:rgba(180,50,50,.2);transform:scale(.9)}
+        .nc.ac{background:rgba(30,28,48,.15);border:2px dashed rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:rgba(255,255,255,.1)}
+
+        /* ===== РЕДАКТОР ===== */
+        .eo{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .35s;padding:16px}
+        .eo.show{opacity:1;pointer-events:auto}
+        .ed{background:rgba(20,18,30,.92);backdrop-filter:blur(16px);border-radius:28px;padding:28px;max-width:460px;width:100%;border:1px solid rgba(255,255,255,.04);transform:scale(.92) translateY(15px);transition:transform .35s cubic-bezier(.23,1,.32,1)}
+        .eo.show .ed{transform:scale(1) translateY(0)}
+        .ed .et{font-size:1.1rem;font-weight:600;color:rgba(255,255,255,.85);margin-bottom:14px}
+        .ed input,.ed textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.04);border-radius:14px;padding:10px 14px;color:#f0edf5;font-size:.95rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s}
+        .ed input:focus,.ed textarea:focus{border-color:rgba(130,70,255,.2)}
+        .ed input{margin-bottom:10px}
+        .ed textarea{min-height:120px;resize:vertical}
+        .ed .ea{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+        .ed .ea button{padding:8px 20px;border-radius:50px;border:none;font-weight:500;font-size:.85rem;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+        .ed .ea .sv{background:rgba(50,180,120,.15);color:rgba(100,220,160,.7);border:1px solid rgba(50,180,120,.08)}
+        .ed .ea .sv:active{transform:scale(.92)}
+        .ed .ea .cn{background:rgba(180,50,50,.08);color:rgba(255,150,150,.4);border:1px solid rgba(180,50,50,.04)}
+        .ed .ea .cn:active{transform:scale(.92)}
 
         /* ===== АДАПТИВ ===== */
-        @media (max-width: 600px) {
-            .container { padding: 20px; border-radius: 32px; }
-            .pin-digit { width: 48px; height: 60px; font-size: 1.8rem; }
-            .numpad { max-width: 240px; gap: 8px; }
-            .numpad-btn { padding: 14px 0; font-size: 1.4rem; }
-            .notes-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-            .note-card { min-height: 130px; padding: 12px; }
-            .corner-light { width: 200px; height: 200px; filter: blur(60px); }
-            .note-editor { padding: 24px; margin: 10px; }
-            .notes-header .title { font-size: 1.2rem; }
-            .header-btn { padding: 6px 12px; font-size: 0.8rem; }
-            .pin-action-btn { padding: 6px 14px; font-size: 0.7rem; }
-        }
-
-        @media (max-width: 400px) {
-            .notes-grid { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
-            .note-card { min-height: 110px; padding: 10px; border-radius: 16px; }
-        }
+        @media(max-width:600px){.c{padding:16px;border-radius:32px;min-height:500px}.pi{width:44px;height:52px;font-size:1.6rem}.np{max-width:220px;gap:6px}.nb{padding:14px 0;font-size:1.3rem}.ng{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}.nc{min-height:110px;padding:10px;border-radius:16px}.ed{padding:20px}.l{width:140px;height:140px;filter:blur(50px)}.pb{font-size:.65rem;padding:4px 14px}}
+        @media(max-width:400px){.ng{grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}.nc{min-height:90px;padding:8px;border-radius:12px}.nc .nt{font-size:.8rem}.nc .npv{font-size:.7rem}.pi{width:38px;height:44px;font-size:1.3rem}.nb{padding:10px 0;font-size:1.1rem}}
     </style>
 </head>
 <body>
 
-<!-- 🔥 ОГНИ ПО УГЛАМ 🔥 -->
-<div class="corner-light pos-1" id="light1"></div>
-<div class="corner-light pos-2" id="light2"></div>
-<div class="corner-light pos-3" id="light3"></div>
-<div class="corner-light pos-4" id="light4"></div>
+<!-- 🔥 ОГНИ -->
+<div class="l p1" id="l1"></div>
+<div class="l p2" id="l2"></div>
+<div class="l p3" id="l3"></div>
+<div class="l p4" id="l4"></div>
 
 <!-- ===== ОСНОВНОЙ КОНТЕЙНЕР ===== -->
-<div class="container" id="container">
+<div class="c" id="c">
 
     <!-- ===== PIN-ЭКРАН ===== -->
-    <div class="pin-screen" id="pinScreen">
-        <div class="greeting" id="greeting">🔐</div>
-        <div class="pin-title" id="pinTitle">Введите код для входа</div>
-        <div class="pin-display" id="pinDisplay">
-            <div class="pin-digit" id="digit1"></div>
-            <div class="pin-digit" id="digit2"></div>
-            <div class="pin-digit" id="digit3"></div>
-            <div class="pin-digit" id="digit4"></div>
+    <div class="ps" id="ps">
+        <div class="g" id="g">🔐</div>
+        <div class="pt" id="pt">Введите код для входа</div>
+        <div class="pd" id="pd">
+            <div class="pi" id="d1"></div>
+            <div class="pi" id="d2"></div>
+            <div class="pi" id="d3"></div>
+            <div class="pi" id="d4"></div>
         </div>
-        <div class="error-message" id="errorMessage">❌ Неверный код</div>
-        <div class="success-message" id="successMessage">✅ Пароль изменён!</div>
-        <div class="numpad" id="numpad">
-            <button class="numpad-btn" data-value="1">1</button>
-            <button class="numpad-btn" data-value="2">2</button>
-            <button class="numpad-btn" data-value="3">3</button>
-            <button class="numpad-btn" data-value="4">4</button>
-            <button class="numpad-btn" data-value="5">5</button>
-            <button class="numpad-btn" data-value="6">6</button>
-            <button class="numpad-btn" data-value="7">7</button>
-            <button class="numpad-btn" data-value="8">8</button>
-            <button class="numpad-btn" data-value="9">9</button>
-            <button class="numpad-btn empty"></button>
-            <button class="numpad-btn" data-value="0">0</button>
-            <button class="numpad-btn delete" id="deleteBtn">⌫</button>
+        <div class="em" id="em">❌ Неверный код</div>
+        <div class="sm" id="sm">✅ Пароль изменён!</div>
+        <div class="np" id="np">
+            <button class="nb" data-v="1">1</button>
+            <button class="nb" data-v="2">2</button>
+            <button class="nb" data-v="3">3</button>
+            <button class="nb" data-v="4">4</button>
+            <button class="nb" data-v="5">5</button>
+            <button class="nb" data-v="6">6</button>
+            <button class="nb" data-v="7">7</button>
+            <button class="nb" data-v="8">8</button>
+            <button class="nb" data-v="9">9</button>
+            <button class="nb empty"></button>
+            <button class="nb" data-v="0">0</button>
+            <button class="nb del" id="del">⌫</button>
         </div>
-        <div class="pin-actions">
-            <button class="pin-action-btn" id="changePinFromLockBtn">🔑 Сменить пароль</button>
+        <div class="pa">
+            <button class="pb" id="cp">🔑 Сменить пароль</button>
         </div>
     </div>
 
-    <!-- ===== ПРИЛОЖЕНИЕ ЗАМЕТОК ===== -->
-    <div class="notes-app" id="notesApp">
-        <!-- Шапка -->
-        <div class="notes-header">
-            <span class="title">📝 Заметки</span>
-            <div class="header-actions">
-                <button class="header-btn add" id="addNoteBtn">+ Новая</button>
-                <button class="header-btn logout" id="logoutBtn">✕ Выйти</button>
+    <!-- ===== ЗАМЕТКИ ===== -->
+    <div class="na" id="na">
+        <div class="nh">
+            <span class="t">📝 Заметки</span>
+            <div class="ha">
+                <button class="hb add" id="add">+ Новая</button>
+                <button class="hb out" id="out">✕ Выйти</button>
             </div>
         </div>
-
-        <!-- Сетка заметок -->
-        <div class="notes-grid" id="notesGrid"></div>
+        <div class="ng" id="ng"></div>
     </div>
 
 </div>
 
-<!-- ===== РЕДАКТОР ЗАМЕТКИ (оверлей) ===== -->
-<div class="note-editor-overlay" id="noteEditorOverlay">
-    <div class="note-editor">
-        <div class="editor-title" id="editorTitle">Новая заметка</div>
-        <input type="text" id="noteTitleInput" placeholder="Заголовок..." maxlength="100" />
-        <textarea id="noteContentInput" placeholder="Текст заметки..."></textarea>
-        <div class="editor-actions">
-            <button class="cancel-btn" id="editorCancelBtn">Отмена</button>
-            <button class="save-btn" id="editorSaveBtn">💾 Сохранить</button>
+<!-- ===== РЕДАКТОР ===== -->
+<div class="eo" id="eo">
+    <div class="ed">
+        <div class="et" id="et">Новая заметка</div>
+        <input type="text" id="ti" placeholder="Заголовок..." maxlength="100" />
+        <textarea id="ci" placeholder="Текст заметки..."></textarea>
+        <div class="ea">
+            <button class="cn" id="ec">Отмена</button>
+            <button class="sv" id="es">💾 Сохранить</button>
         </div>
     </div>
 </div>
 
 <script>
-(function() {
-    // ===== ХРАНИЛИЩЕ ПАРОЛЯ =====
-    const STORAGE_KEY = 'app_pin';
-    const NOTES_KEY = 'notes';
+(function(){
+'use strict';
 
-    function getStoredPin() {
-        try {
-            return localStorage.getItem(STORAGE_KEY) || '2066';
-        } catch {
-            return '2066';
-        }
+// ===== ХРАНИЛИЩЕ =====
+const SK='app_pin', NK='notes';
+const gp=()=>localStorage.getItem(SK)||'2066';
+const sp=p=>{try{localStorage.setItem(SK,p);return 1}catch{return 0}};
+let CP=gp();
+
+// ===== DOM =====
+const D=document;
+const $=id=>D.getElementById(id);
+const d1=$('d1'),d2=$('d2'),d3=$('d3'),d4=$('d4'),digs=[d1,d2,d3,d4];
+const em=$('em'),sm=$('sm'),ps=$('ps'),na=$('na'),c=$('c'),g=$('g'),pt=$('pt');
+const l1=$('l1'),l2=$('l2'),l3=$('l3'),l4=$('l4'),ls=[l1,l2,l3,l4];
+const ng=$('ng'),eo=$('eo'),ti=$('ti'),ci=$('ci'),et=$('et');
+
+// ===== СОСТОЯНИЕ =====
+let pin='', lock=0, chPin=0, oldPin='', newPin='', step='old';
+let lt=null, editIdx=null;
+
+// ===== ОГНИ (оптимизированные) =====
+function animL(){
+    if(lt){clearTimeout(lt);lt=null}
+    ls.forEach(l=>{l.className='l';const p=l.id.replace('l','');l.classList.add('p'+p);l.classList.remove('active','ultra')});
+    const i1=Math.floor(Math.random()*4);
+    let i2=Math.floor(Math.random()*4);
+    while(i2===i1)i2=Math.floor(Math.random()*4);
+    const a=ls[i1],b=ls[i2];
+    a.classList.add('active');b.classList.add('active');
+    (Math.random()>.5?a:b).classList.add('ultra');
+    lt=setTimeout(()=>{
+        ls.forEach(l=>{l.className='l';const p=l.id.replace('l','');l.classList.add('p'+p);l.classList.remove('active','ultra')});
+        lt=null
+    },800)
+}
+
+// ===== ОБНОВЛЕНИЕ PIN =====
+function updPin(){
+    let dp='',len=0;
+    if(chPin){dp=step==='old'?oldPin:newPin;len=dp.length}
+    else{dp=pin;len=pin.length}
+    for(let i=0;i<4;i++){
+        const v=dp[i]||'';
+        digs[i].textContent=v;
+        digs[i].className='pi';
+        if(v)digs[i].classList.add('filled');
+        if(i===len&&len<4)digs[i].classList.add('active')
     }
+    em.classList.remove('show');sm.classList.remove('show')
+}
 
-    function setStoredPin(pin) {
-        try {
-            localStorage.setItem(STORAGE_KEY, pin);
-            return true;
-        } catch {
-            return false;
-        }
+function updTitle(){
+    pt.textContent=chPin?(step==='old'?'🔑 Введите старый пароль':'🔑 Введите новый пароль (4 цифры)'):'Введите код для входа'
+}
+
+// ===== ПРОВЕРКИ =====
+function chkPin(){
+    if(pin.length!==4)return;
+    if(pin===CP){
+        ps.classList.add('hidden');
+        setTimeout(()=>{
+            ps.style.display='none';
+            na.style.display='flex';
+            na.classList.add('show');
+            c.style.minHeight='660px';
+            rend();
+            animL()
+        },400)
+    }else{
+        digs.forEach(d=>d.className='pi err');
+        em.textContent='❌ Неверный код';
+        em.classList.add('show');
+        setTimeout(()=>{pin='';updPin();em.classList.remove('show')},1000)
     }
+}
 
-    let CURRENT_PIN = getStoredPin();
-
-    // ===== PIN-КОД =====
-    let enteredPin = '';
-    let isLocked = false;
-    let isChangingPin = false;
-    let oldPinEntered = '';
-    let newPinEntered = '';
-    let changeStep = 'old'; // 'old' или 'new'
-
-    const digitEls = [
-        document.getElementById('digit1'),
-        document.getElementById('digit2'),
-        document.getElementById('digit3'),
-        document.getElementById('digit4')
-    ];
-    const errorMessage = document.getElementById('errorMessage');
-    const successMessage = document.getElementById('successMessage');
-    const pinScreen = document.getElementById('pinScreen');
-    const notesApp = document.getElementById('notesApp');
-    const container = document.getElementById('container');
-    const greeting = document.getElementById('greeting');
-    const pinTitle = document.getElementById('pinTitle');
-
-    // ===== ОГНИ =====
-    const lights = [
-        document.getElementById('light1'),
-        document.getElementById('light2'),
-        document.getElementById('light3'),
-        document.getElementById('light4')
-    ];
-
-    let lightTimeout = null;
-
-    function animateLights() {
-        if (lightTimeout) {
-            clearTimeout(lightTimeout);
-            lightTimeout = null;
-        }
-
-        lights.forEach(light => {
-            light.className = 'corner-light';
-            const pos = light.id.replace('light', '');
-            light.classList.add(`pos-${pos}`);
-            light.classList.remove('active', 'ultra-active');
-        });
-
-        const i1 = Math.floor(Math.random() * lights.length);
-        let i2 = Math.floor(Math.random() * lights.length);
-        while (i2 === i1) i2 = Math.floor(Math.random() * lights.length);
-
-        const l1 = lights[i1];
-        const l2 = lights[i2];
-        
-        const from = parseInt(l1.id.replace('light', ''));
-        const to = parseInt(l2.id.replace('light', ''));
-        
-        l1.classList.add(`animate-${from}-to-${to}`);
-        l2.classList.add(`animate-${to}-to-${from}`);
-        l1.classList.add('active');
-        l2.classList.add('active');
-        
-        const bright = Math.random() > 0.5 ? l1 : l2;
-        bright.classList.add('ultra-active');
-
-        lightTimeout = setTimeout(() => {
-            lights.forEach(light => {
-                light.className = 'corner-light';
-                const pos = light.id.replace('light', '');
-                light.classList.add(`pos-${pos}`);
-                light.classList.remove('active', 'ultra-active');
-            });
-            lightTimeout = null;
-        }, 1300);
+function chkOld(){
+    if(oldPin.length!==4)return;
+    if(oldPin===CP){
+        step='new';
+        oldPin='';newPin='';
+        updPin();updTitle();
+        em.classList.remove('show');sm.classList.remove('show');
+        animL();
+        digs.forEach(d=>d.className='pi ok');
+        setTimeout(()=>{digs.forEach(d=>d.className='pi');updPin()},400)
+    }else{
+        digs.forEach(d=>d.className='pi err');
+        em.textContent='❌ Неверный старый пароль';
+        em.classList.add('show');
+        setTimeout(()=>{
+            oldPin='';newPin='';step='old';
+            updPin();updTitle();
+            em.classList.remove('show');
+            digs.forEach(d=>d.className='pi')
+        },1200)
     }
+}
 
-    // ===== PIN-ЛОГИКА =====
-    function updatePinDisplay() {
-        let displayPin = '';
-        let currentLength = 0;
-        
-        if (isChangingPin) {
-            if (changeStep === 'old') {
-                displayPin = oldPinEntered;
-                currentLength = oldPinEntered.length;
-            } else {
-                displayPin = newPinEntered;
-                currentLength = newPinEntered.length;
-            }
-        } else {
-            displayPin = enteredPin;
-            currentLength = enteredPin.length;
-        }
-
-        for (let i = 0; i < 4; i++) {
-            const val = displayPin[i] || '';
-            digitEls[i].textContent = val;
-            digitEls[i].className = 'pin-digit';
-            if (val) digitEls[i].classList.add('filled');
-            if (i === currentLength && currentLength < 4) {
-                digitEls[i].classList.add('active');
-            }
-        }
-        errorMessage.classList.remove('show');
-        successMessage.classList.remove('show');
+function chkNew(){
+    if(newPin.length!==4)return;
+    if(sp(newPin)){
+        CP=newPin;
+        sm.textContent='✅ Пароль изменён!';
+        sm.classList.add('show');
+        digs.forEach(d=>d.className='pi ok');
+        animL();
+        setTimeout(()=>{
+            chPin=0;step='old';oldPin='';newPin='';pin='';
+            updPin();updTitle();
+            sm.classList.remove('show');
+            digs.forEach(d=>d.className='pi');
+            pt.textContent='Введите код для входа'
+        },1800)
+    }else{
+        em.textContent='❌ Ошибка сохранения';
+        em.classList.add('show');
+        setTimeout(()=>{newPin='';updPin();em.classList.remove('show')},1000)
     }
+}
 
-    function updatePinTitle() {
-        if (isChangingPin) {
-            if (changeStep === 'old') {
-                pinTitle.textContent = '🔑 Введите старый пароль';
-            } else {
-                pinTitle.textContent = '🔑 Введите новый пароль (4 цифры)';
-            }
-        } else {
-            pinTitle.textContent = 'Введите код для входа';
+// ===== ОБРАБОТЧИКИ ЦИФР =====
+function hDig(v){
+    if(lock)return;
+    animL();
+    if(chPin){
+        if(step==='old'){
+            if(oldPin.length<4){oldPin+=v;updPin();if(oldPin.length===4)setTimeout(chkOld,350)}
+        }else{
+            if(newPin.length<4){newPin+=v;updPin();if(newPin.length===4)setTimeout(chkNew,350)}
         }
+    }else{
+        if(pin.length>=4)return;
+        pin+=v;updPin();
+        if(pin.length===4)setTimeout(chkPin,350)
     }
+}
 
-    function checkPin() {
-        if (enteredPin.length !== 4) return;
-        
-        if (enteredPin === CURRENT_PIN) {
-            pinScreen.classList.add('hidden');
-            setTimeout(() => {
-                pinScreen.style.display = 'none';
-                notesApp.style.display = 'flex';
-                notesApp.classList.add('show');
-                container.style.minHeight = '700px';
-                renderNotes();
-                animateLights();
-            }, 500);
-        } else {
-            digitEls.forEach(d => { 
-                d.className = 'pin-digit error';
-            });
-            errorMessage.textContent = '❌ Неверный код';
-            errorMessage.classList.add('show');
-            
-            setTimeout(() => {
-                enteredPin = '';
-                updatePinDisplay();
-                errorMessage.classList.remove('show');
-            }, 1200);
-        }
+function hDel(){
+    if(lock)return;
+    animL();
+    if(chPin){
+        if(step==='new'&&newPin.length>0){newPin=newPin.slice(0,-1);updPin()}
+        else if(step==='old'&&oldPin.length>0){oldPin=oldPin.slice(0,-1);updPin()}
+        em.classList.remove('show');sm.classList.remove('show')
+    }else{
+        if(!pin.length)return;
+        pin=pin.slice(0,-1);updPin();
+        em.classList.remove('show')
     }
+}
 
-    function checkOldPin() {
-        if (oldPinEntered.length !== 4) return;
-        
-        if (oldPinEntered === CURRENT_PIN) {
-            // Старый пароль верный - переключаем на ввод нового
-            changeStep = 'new';
-            oldPinEntered = '';
-            newPinEntered = '';
-            updatePinDisplay();
-            updatePinTitle();
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
-            animateLights();
-            
-            // Зелёная подсветка на секунду
-            digitEls.forEach(d => {
-                d.className = 'pin-digit success';
-            });
-            setTimeout(() => {
-                digitEls.forEach(d => d.className = 'pin-digit');
-                updatePinDisplay();
-            }, 500);
-        } else {
-            // Неверный старый пароль
-            digitEls.forEach(d => { 
-                d.className = 'pin-digit error';
-            });
-            errorMessage.textContent = '❌ Неверный старый пароль';
-            errorMessage.classList.add('show');
-            
-            setTimeout(() => {
-                oldPinEntered = '';
-                newPinEntered = '';
-                changeStep = 'old';
-                updatePinDisplay();
-                updatePinTitle();
-                errorMessage.classList.remove('show');
-                digitEls.forEach(d => d.className = 'pin-digit');
-            }, 1500);
-        }
-    }
-
-    function confirmNewPin() {
-        if (newPinEntered.length !== 4) return;
-        
-        if (setStoredPin(newPinEntered)) {
-            CURRENT_PIN = newPinEntered;
-            successMessage.textContent = '✅ Пароль успешно изменён!';
-            successMessage.classList.add('show');
-            digitEls.forEach(d => {
-                d.className = 'pin-digit success';
-            });
-            animateLights();
-            
-            setTimeout(() => {
-                // Выходим из режима смены пароля
-                isChangingPin = false;
-                changeStep = 'old';
-                oldPinEntered = '';
-                newPinEntered = '';
-                enteredPin = '';
-                updatePinDisplay();
-                updatePinTitle();
-                successMessage.classList.remove('show');
-                digitEls.forEach(d => d.className = 'pin-digit');
-                pinTitle.textContent = 'Введите код для входа';
-            }, 2000);
-        } else {
-            errorMessage.textContent = '❌ Ошибка сохранения пароля';
-            errorMessage.classList.add('show');
-            setTimeout(() => {
-                newPinEntered = '';
-                updatePinDisplay();
-                errorMessage.classList.remove('show');
-            }, 1200);
-        }
-    }
-
-    function handleDigit(val) {
-        if (isLocked) return;
-        
-        animateLights();
-
-        if (isChangingPin) {
-            if (changeStep === 'old') {
-                if (oldPinEntered.length < 4) {
-                    oldPinEntered += val;
-                    updatePinDisplay();
-                    if (oldPinEntered.length === 4) {
-                        setTimeout(checkOldPin, 400);
-                    }
-                }
-            } else {
-                if (newPinEntered.length < 4) {
-                    newPinEntered += val;
-                    updatePinDisplay();
-                    if (newPinEntered.length === 4) {
-                        setTimeout(confirmNewPin, 400);
-                    }
-                }
-            }
-        } else {
-            if (enteredPin.length >= 4) return;
-            enteredPin += val;
-            updatePinDisplay();
-            if (enteredPin.length === 4) {
-                setTimeout(checkPin, 400);
-            }
-        }
-    }
-
-    function handleDelete() {
-        if (isLocked) return;
-        
-        animateLights();
-
-        if (isChangingPin) {
-            if (changeStep === 'new') {
-                if (newPinEntered.length > 0) {
-                    newPinEntered = newPinEntered.slice(0, -1);
-                    updatePinDisplay();
-                }
-            } else {
-                if (oldPinEntered.length > 0) {
-                    oldPinEntered = oldPinEntered.slice(0, -1);
-                    updatePinDisplay();
-                }
-            }
-            errorMessage.classList.remove('show');
-            successMessage.classList.remove('show');
-        } else {
-            if (enteredPin.length === 0) return;
-            enteredPin = enteredPin.slice(0, -1);
-            updatePinDisplay();
-            errorMessage.classList.remove('show');
-        }
-    }
-
-    // ===== НАЗНАЧЕНИЕ ОБРАБОТЧИКОВ PIN =====
-    document.querySelectorAll('.numpad-btn[data-value]').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            handleDigit(this.dataset.value);
-            this.style.transform = 'scale(0.94)';
-            setTimeout(() => this.style.transform = '', 150);
-        });
-    });
-
-    document.getElementById('deleteBtn').addEventListener('click', function(e) {
+// ===== СОБЫТИЯ КЛАВИАТУРЫ =====
+D.querySelectorAll('.nb[data-v]').forEach(b=>{
+    b.addEventListener('click',function(e){
         e.stopPropagation();
-        handleDelete();
-        this.style.transform = 'scale(0.94)';
-        setTimeout(() => this.style.transform = '', 150);
-    });
+        hDig(this.dataset.v);
+        this.style.transform='scale(.92)';
+        setTimeout(()=>this.style.transform='',120)
+    })
+});
+$('del').addEventListener('click',function(e){
+    e.stopPropagation();hDel();
+    this.style.transform='scale(.92)';
+    setTimeout(()=>this.style.transform='',120)
+});
+D.addEventListener('keydown',e=>{
+    if(e.key>='0'&&e.key<='9'){e.preventDefault();hDig(e.key)}
+    else if(e.key==='Backspace'){e.preventDefault();hDel()}
+    else if(e.key==='Enter'&&!chPin&&pin.length===4){e.preventDefault();chkPin()}
+});
 
-    // Клавиатура
-    document.addEventListener('keydown', (e) => {
-        if (e.key >= '0' && e.key <= '9') {
-            e.preventDefault();
-            handleDigit(e.key);
-        } else if (e.key === 'Backspace') {
-            e.preventDefault();
-            handleDelete();
-        } else if (e.key === 'Enter') {
-            e.preventDefault();
-            if (!isChangingPin && enteredPin.length === 4) {
-                checkPin();
-            }
-        }
-    });
+// ===== ЗАМЕТКИ =====
+function getN(){try{const d=localStorage.getItem(NK);return d?JSON.parse(d):[]}catch{return[]}}
+function setN(n){try{localStorage.setItem(NK,JSON.stringify(n));return 1}catch{return 0}}
 
-    // Анимация появления PIN-экрана
-    setTimeout(() => {
-        greeting.classList.add('show');
-    }, 800);
-    setTimeout(() => {
-        greeting.classList.remove('show');
-        greeting.classList.add('hide');
-        setTimeout(() => greeting.style.display = 'none', 600);
-    }, 2000);
+function esc(t){const d=D.createElement('div');d.textContent=t;return d.innerHTML}
 
-    updatePinDisplay();
-    updatePinTitle();
-
-    // ===== ХРАНИЛИЩЕ ЗАМЕТОК =====
-    function getNotes() {
-        try {
-            const data = localStorage.getItem(NOTES_KEY);
-            return data ? JSON.parse(data) : [];
-        } catch (e) {
-            console.error('Ошибка чтения заметок:', e);
-            return [];
-        }
-    }
-
-    function saveNotes(notes) {
-        try {
-            localStorage.setItem(NOTES_KEY, JSON.stringify(notes));
-            return true;
-        } catch (e) {
-            console.error('Ошибка сохранения заметок:', e);
-            return false;
-        }
-    }
-
-    // ===== РЕНДЕРИНГ ЗАМЕТОК =====
-    function renderNotes() {
-        const grid = document.getElementById('notesGrid');
-        const notes = getNotes();
-        grid.innerHTML = '';
-
-        if (notes.length === 0) {
-            const emptyMsg = document.createElement('div');
-            emptyMsg.style.cssText = `
-                grid-column: 1 / -1;
-                text-align: center;
-                color: rgba(255,255,255,0.2);
-                padding: 40px 20px;
-                font-size: 1rem;
+function rend(){
+    const notes=getN();
+    ng.innerHTML='';
+    if(!notes.length){
+        const e=D.createElement('div');
+        e.style.cssText='grid-column:1/-1;text-align:center;color:rgba(255,255,255,.2);padding:30px 20px;font-size:.95rem';
+        e.textContent='Нет заметок. Нажмите "+ Новая" чтобы создать первую!';
+        ng.appendChild(e)
+    }else{
+        notes.forEach((n,i)=>{
+            const card=D.createElement('div');
+            card.className='nc';
+            card.innerHTML=`
+                <div class="nt">${esc(n.title||'Без названия')}</div>
+                <div class="npv">${esc(n.content||'Пустая заметка')}</div>
+                <div class="nd">${n.date||''}</div>
+                <button class="dn" data-idx="${i}">✕</button>
             `;
-            emptyMsg.textContent = 'Нет заметок. Нажмите "+ Новая" чтобы создать первую!';
-            grid.appendChild(emptyMsg);
-        } else {
-            notes.forEach((note, index) => {
-                const card = document.createElement('div');
-                card.className = 'note-card';
-                card.innerHTML = `
-                    <div class="note-title">${escapeHtml(note.title || 'Без названия')}</div>
-                    <div class="note-preview">${escapeHtml(note.content || 'Пустая заметка')}</div>
-                    <div class="note-date">${note.date || ''}</div>
-                    <button class="delete-note" data-index="${index}">✕</button>
-                `;
-                
-                card.addEventListener('click', (e) => {
-                    if (e.target.classList.contains('delete-note')) return;
-                    openEditor(index);
-                });
-                
-                const deleteBtn = card.querySelector('.delete-note');
-                deleteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (confirm('Удалить заметку?')) {
-                        const notesList = getNotes();
-                        notesList.splice(index, 1);
-                        saveNotes(notesList);
-                        renderNotes();
-                        animateLights();
-                    }
-                });
-                
-                grid.appendChild(card);
+            card.addEventListener('click',e=>{
+                if(e.target.classList.contains('dn'))return;
+                openE(i)
             });
-        }
-
-        const addCard = document.createElement('div');
-        addCard.className = 'note-card add-card';
-        addCard.textContent = '+';
-        addCard.addEventListener('click', () => openEditor(null));
-        grid.appendChild(addCard);
+            card.querySelector('.dn').addEventListener('click',e=>{
+                e.stopPropagation();
+                if(confirm('Удалить заметку?')){
+                    const n2=getN();
+                    n2.splice(i,1);
+                    setN(n2);
+                    rend();
+                    animL()
+                }
+            });
+            ng.appendChild(card)
+        })
     }
+    const add=D.createElement('div');
+    add.className='nc ac';
+    add.textContent='+';
+    add.addEventListener('click',()=>openE(null));
+    ng.appendChild(add)
+}
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+// ===== РЕДАКТОР =====
+function openE(i){
+    editIdx=i;
+    const notes=getN();
+    if(i!==null&&notes[i]){et.textContent='✏️ Редактировать';ti.value=notes[i].title||'';ci.value=notes[i].content||''}
+    else{et.textContent='📝 Новая заметка';ti.value='';ci.value=''}
+    eo.classList.add('show');
+    setTimeout(()=>ti.focus(),250);
+    animL()
+}
+
+function closeE(){
+    eo.classList.remove('show');
+    setTimeout(()=>{ti.value='';ci.value='';editIdx=null},300)
+}
+
+function saveN(){
+    const t=ti.value.trim()||'Без названия';
+    const c2=ci.value.trim()||'Пустая заметка';
+    const notes=getN();
+    const now=new Date();
+    const d=now.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit',hour:'2-digit',minute:'2-digit'});
+    const data={title:t,content:c2,date:d,timestamp:now.getTime()};
+    if(editIdx!==null&&editIdx<notes.length)notes[editIdx]=data;
+    else notes.unshift(data);
+    if(setN(notes)){rend();closeE();animL()}else alert('Ошибка сохранения!')
+}
+
+$('add').addEventListener('click',()=>openE(null));
+$('ec').addEventListener('click',closeE);
+$('es').addEventListener('click',saveN);
+eo.addEventListener('click',e=>{if(e.target===eo)closeE()});
+D.addEventListener('keydown',e=>{
+    if(e.ctrlKey&&e.key==='Enter'&&eo.classList.contains('show')){e.preventDefault();saveN()}
+    if(e.key==='Escape'&&eo.classList.contains('show')){closeE()}
+});
+
+// ===== СМЕНА ПАРОЛЯ =====
+$('cp').addEventListener('click',()=>{
+    chPin=1;step='old';oldPin='';newPin='';pin='';
+    updPin();updTitle();
+    em.classList.remove('show');sm.classList.remove('show');
+    animL();
+    g.style.display='block';g.className='g';
+    setTimeout(()=>g.classList.add('show'),100);
+    setTimeout(()=>{g.classList.remove('show');g.classList.add('hide');setTimeout(()=>g.style.display='none',500)},1300)
+});
+
+// ===== ВЫХОД =====
+$('out').addEventListener('click',()=>{
+    if(confirm('Выйти из заметок?')){
+        na.classList.remove('show');na.style.display='none';
+        setTimeout(()=>{
+            ps.style.display='flex';ps.classList.remove('hidden');
+            c.style.minHeight='560px';
+            chPin=0;step='old';oldPin='';newPin='';pin='';
+            updPin();updTitle();
+            em.classList.remove('show');sm.classList.remove('show');
+            g.style.display='block';g.className='g';
+            setTimeout(()=>g.classList.add('show'),100);
+            setTimeout(()=>{g.classList.remove('show');g.classList.add('hide');setTimeout(()=>g.style.display='none',500)},1300);
+            animL()
+        },400)
     }
+});
 
-    // ===== РЕДАКТОР ЗАМЕТОК =====
-    let editingIndex = null;
-    const overlay = document.getElementById('noteEditorOverlay');
-    const titleInput = document.getElementById('noteTitleInput');
-    const contentInput = document.getElementById('noteContentInput');
-    const editorTitle = document.getElementById('editorTitle');
-
-    function openEditor(index) {
-        editingIndex = index;
-        const notes = getNotes();
-        
-        if (index !== null && notes[index]) {
-            editorTitle.textContent = '✏️ Редактировать';
-            titleInput.value = notes[index].title || '';
-            contentInput.value = notes[index].content || '';
-        } else {
-            editorTitle.textContent = '📝 Новая заметка';
-            titleInput.value = '';
-            contentInput.value = '';
-        }
-        
-        overlay.classList.add('show');
-        setTimeout(() => titleInput.focus(), 300);
-        animateLights();
-    }
-
-    function closeEditor() {
-        overlay.classList.remove('show');
-        setTimeout(() => {
-            titleInput.value = '';
-            contentInput.value = '';
-            editingIndex = null;
-        }, 400);
-    }
-
-    function saveNote() {
-        const title = titleInput.value.trim() || 'Без названия';
-        const content = contentInput.value.trim() || 'Пустая заметка';
-        
-        const notes = getNotes();
-        const now = new Date();
-        const dateStr = now.toLocaleDateString('ru-RU', { 
-            day: '2-digit', 
-            month: '2-digit', 
-            year: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-
-        const noteData = {
-            title: title,
-            content: content,
-            date: dateStr,
-            timestamp: now.getTime()
-        };
-
-        if (editingIndex !== null && editingIndex < notes.length) {
-            notes[editingIndex] = noteData;
-        } else {
-            notes.unshift(noteData);
-        }
-
-        if (saveNotes(notes)) {
-            renderNotes();
-            closeEditor();
-            animateLights();
-            console.log('💾 Заметка сохранена!');
-        } else {
-            alert('Ошибка сохранения заметки!');
-        }
-    }
-
-    // ===== ОБРАБОТЧИКИ РЕДАКТОРА =====
-    document.getElementById('addNoteBtn').addEventListener('click', () => openEditor(null));
-    document.getElementById('editorCancelBtn').addEventListener('click', closeEditor);
-    document.getElementById('editorSaveBtn').addEventListener('click', saveNote);
-
-    overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) closeEditor();
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.key === 'Enter' && overlay.classList.contains('show')) {
-            e.preventDefault();
-            saveNote();
-        }
-        if (e.key === 'Escape' && overlay.classList.contains('show')) {
-            closeEditor();
-        }
-    });
-
-    // ===== СМЕНА ПАРОЛЯ С ЭКРАНА БЛОКИРОВКИ =====
-    document.getElementById('changePinFromLockBtn').addEventListener('click', () => {
-        // Переключаемся в режим смены пароля
-        isChangingPin = true;
-        changeStep = 'old';
-        oldPinEntered = '';
-        newPinEntered = '';
-        enteredPin = '';
-        updatePinDisplay();
-        updatePinTitle();
-        errorMessage.classList.remove('show');
-        successMessage.classList.remove('show');
-        animateLights();
-        
-        // Показываем приветствие
-        greeting.style.display = 'block';
-        greeting.className = 'greeting';
-        setTimeout(() => {
-            greeting.classList.add('show');
-        }, 100);
-        setTimeout(() => {
-            greeting.classList.remove('show');
-            greeting.classList.add('hide');
-            setTimeout(() => greeting.style.display = 'none', 600);
-        }, 1500);
-    });
-
-    // ===== ВЫХОД =====
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-        if (confirm('Выйти из заметок?')) {
-            notesApp.classList.remove('show');
-            notesApp.style.display = 'none';
-            
-            setTimeout(() => {
-                pinScreen.style.display = 'flex';
-                pinScreen.classList.remove('hidden');
-                container.style.minHeight = '600px';
-                
-                // Сбрасываем режим смены пароля если он был активен
-                isChangingPin = false;
-                changeStep = 'old';
-                oldPinEntered = '';
-                newPinEntered = '';
-                enteredPin = '';
-                updatePinDisplay();
-                updatePinTitle();
-                errorMessage.classList.remove('show');
-                successMessage.classList.remove('show');
-                
-                greeting.style.display = 'block';
-                greeting.className = 'greeting';
-                setTimeout(() => {
-                    greeting.classList.add('show');
-                }, 100);
-                setTimeout(() => {
-                    greeting.classList.remove('show');
-                    greeting.classList.add('hide');
-                    setTimeout(() => greeting.style.display = 'none', 600);
-                }, 1500);
-                
-                animateLights();
-            }, 500);
-        }
-    });
-
-    // ===== ИНИЦИАЛИЗАЦИЯ =====
-    console.log('📝 Приложение заметок с localStorage');
-    console.log(`🔑 Текущий пароль: ${CURRENT_PIN}`);
-    console.log('💾 Данные хранятся в браузере');
-    
-    const existing = getNotes();
-    console.log(`📚 ${existing.length} заметок сохранено`);
+// ===== ИНИЦИАЛИЗАЦИЯ =====
+setTimeout(()=>{g.classList.add('show')},700);
+setTimeout(()=>{g.classList.remove('show');g.classList.add('hide');setTimeout(()=>g.style.display='none',500)},1800);
+updPin();updTitle();
+console.log('📝 Заметки · Оптимизированная версия');
+console.log('🔑 Пароль:',CP);
+console.log('📚',getN().length,'заметок');
 
 })();
 </script>
